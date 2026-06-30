@@ -8,36 +8,53 @@ Every agent (Cursor, Claude, Codex, or otherwise) reads this before starting wor
 ## The Loop
 
 ```
-[Linear issue created — thin title + one sentence]
-    → Sharad triages and prioritizes on mobile
-    → Sharad assigns issue to an agent
-    → Builder Agent reads docs/project.md in the repo
-    → Builder Agent posts a proposal as a Linear comment and waits
-    → Sharad thumbs-up (or corrects) on mobile
-    → Builder Agent implements and opens a PR on GitHub
-    → Reviewer Agent checks PR automatically
-    → Reviewer Agent decides: trivial → merge | needs-approval → post Slack with Vercel preview URL
-    → Sharad taps Vercel preview on phone, approves merge via Linear comment
-    → Reviewer Agent merges PR
-    → Vercel auto-deploys to production
+[Issue lands in Backlog — thin title + one sentence]
+    → Sharad reviews priority on mobile
+    → Sharad assigns to an agent (still in Backlog)
+    → Agent enters SPEC MODE: drafts spec as Linear comment, asks questions
+    → Back-and-forth in Linear comments until spec is right
+    → SHARAD moves issue to Todo (this is the only build trigger)
+    → Agent sees Todo → enters BUILD MODE → codes → opens PR
+    → Vercel auto-generates preview URL on PR
+    → Slack notifies Sharad with preview URL
+    → Sharad taps URL on phone — reviews visually, not code
+    → Sharad comments "approved" on Linear issue
+    → Agent merges PR
+    → Vercel deploys to production
+    → Agent runs openspec archive, moves issue to Done
 ```
 
-Sharad's only inputs: triage priority, proposal thumbs-up, and visual merge approval. No code editor ever.
+**The only action that starts coding: Sharad moves status to Todo.**
+**The only review surface: Vercel preview URL on Sharad's phone.**
 
 ---
 
-## The Spec Layer: OpenSpec + docs/project.md
+## Status Meanings and Who Controls Each
 
-Every repo uses OpenSpec for spec-driven development. It keeps one living spec that stays in sync with what's actually built — the archive step after every PR is what prevents drift.
+| Status | Meaning | Who can move here |
+|---|---|---|
+| Backlog | Idea exists, spec being drafted | Agent (creates), Sharad (from triage) |
+| Todo | Spec approved — build it | **Sharad only. Agents never move here.** |
+| In Progress | Agent is actively coding | Agent (auto, when it starts after Todo) |
+| In Review | PR open, Vercel preview ready | Agent (auto, on PR creation) |
+| Done | Merged and live in production | Agent (auto, after merge) |
 
-**Setup (agent does this once per repo, not Sharad):**
+**Agents are permitted to move: Backlog → In Progress → In Review → Done.**
+**Agents are never permitted to move anything to Todo. That is Sharad's gate.**
+
+---
+
+## The Spec Layer: OpenSpec
+
+Every repo uses OpenSpec to keep a living spec in sync with what's actually built.
+
+**Setup (agent does this once per repo, on first task):**
 ```bash
-# Agent runs this in the cloud container on first task
 npm install --save-dev @fission-ai/openspec@latest
 npx openspec init   # select cursor as assistant
 ```
 
-OpenSpec creates `openspec/project.md` — the project's constitution. The agent populates it on init using the template below. Every future proposal inherits this context.
+This creates `openspec/project.md` — the project's constitution. The agent populates it on init.
 
 **`openspec/project.md` template:**
 ```markdown
@@ -54,135 +71,187 @@ OpenSpec creates `openspec/project.md` — the project's constitution. The agent
 - Language: TypeScript
 
 ## Non-Negotiables
-- <Architecture or design rules the agent must never break>
-- Every PR must include a Vercel preview URL in the description
+- <Rules the agent must never break>
+- Every PR must include a Vercel preview URL
 - No new dependencies without proposing first
 
 ## Out of Scope
-<What this product will never do — keeps the agent focused>
+<What this product will never do>
 ```
 
-**The three agent commands:**
-- `npx openspec propose "<issue title>"` — generates proposal.md, design.md, tasks.md before any code
-- `npx openspec apply` — implements after Sharad confirms
-- `npx openspec archive` — folds the delta back into the living spec after PR merges
-
-Sharad never runs these. The agent runs them. The living spec stays accurate because archive runs after every single merge.
+**Three commands — all run by the agent, never Sharad:**
+- `npx openspec propose "<title>"` — generates proposal.md, design.md, tasks.md
+- `npx openspec apply` — implements the approved spec
+- `npx openspec archive` — folds delta back into openspec/project.md after merge
 
 ---
 
 ## Roles
 
 ### Role 1: Builder Agent
-**Who uses this:** Cursor (primary), Claude, Codex
+**Who:** Cursor (primary), Claude, Codex
 
 **Triggered by:** Linear issue assigned to the agent
 
-**Step 1 — Propose, don't build yet:**
-1. Read the Linear issue title and description
-2. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest` (skip if already in package.json)
-3. Run `npx openspec propose "<issue title>"` — generates proposal.md, design.md, tasks.md in the repo
-4. Read those generated files to form your plan
-5. Post a comment on the Linear issue in this exact format:
+---
+
+#### SPEC MODE — when issue status is Backlog
+
+This is the only thing the agent does while an issue is in Backlog. No code.
+
+1. Read the issue title and description
+2. Read `openspec/project.md` for project context
+3. Run `npx openspec propose "<issue title>"` to generate structured spec artifacts
+4. Post a comment on the Linear issue in this format:
 
 ```
-Planning to build: [one sentence — what you understood the task to be]
+Here's my understanding of what we're building:
 
-Tech approach: [key implementation choices]
+What: [one sentence]
 
-Tasks:
+How: [key technical choices]
+
+Tasks I'm planning:
 - [ ] task 1
 - [ ] task 2
 - [ ] task 3
 
-Assumptions: [anything you assumed that Sharad might want to correct]
+Questions / assumptions:
+- [anything that might be wrong or needs Sharad's input]
 
-Reply with ✅ to start building, or correct anything above.
+Reply to refine this, or move to Todo when the spec looks right.
 ```
 
-4. **Stop. Wait for Sharad's reply before writing any code.**
+5. When Sharad replies — update the issue description with the refined spec, ask follow-up questions if needed.
+6. Keep iterating in comments until Sharad is satisfied.
+7. **Do not write any code. Do not create any branch. Wait for Todo status.**
 
-**Step 2 — Build (after confirmation):**
-1. Run `npx openspec apply` — implement all tasks from the approved proposal
+---
+
+#### BUILD MODE — when issue status changes to Todo
+
+Status changed to Todo = spec is approved = build it now.
+
+1. Run `npx openspec apply` — implement all tasks from the approved spec
 2. Open a PR using the repo's `.github/pull_request_template.md`
-3. PR description must include: what was built, Vercel preview URL, how to verify in 3 steps
-4. Update the Linear issue status to `In Review`
+3. PR description must include: what was built, **Vercel preview URL**, how to verify in 3 steps
+4. Move Linear issue to `In Review`
 
-**Never:**
-- Start coding before the proposal is confirmed
+**Vercel preview URL is the most important thing in the PR.** It is what Sharad reviews. Without it, the review cannot happen.
+
+---
+
+**Never (ever):**
+- Write code while issue is in Backlog
+- Move an issue to Todo
 - Merge your own PR
-- Add dependencies not in `openspec/project.md` without proposing first
-- Communicate with Sharad via files — always via Linear comments
+- Push directly to main
+- Add dependencies not in `openspec/project.md` without a new spec proposal
 
 ---
 
 ### Role 2: Reviewer Agent
-**Who uses this:** Cursor, Claude
+**Who:** Cursor, Claude
 
 **Triggered by:** PR opened on GitHub
 
 **Decision tree:**
 ```
 Is CI green?
-  No → Comment on the PR with what failed. Do not merge.
+  No  → Comment on PR with what failed. Do not merge. Notify Slack.
   Yes →
-    Is this trivial? (copy fix, config tweak, style-only, single-line change)
+    Is this a trivial change? (typo, copy, config, single-line)
       Yes → Merge immediately.
-            Post to Slack: "[Project] ✅ [issue title] merged. Vercel deploying."
-      No →
+            Post to Slack: "[Project] ✅ [feature] merged. Deploying."
+      No  →
             Post to #[project-slack-channel]:
-              "PR ready for your review: [PR title]
-               Preview: [Vercel URL]
+              "Ready for your review:
+               Feature: [title]
+               Preview: [Vercel URL] ← tap this
                What changed: [2 sentences]
-               CI: green ✅
-               Tap to approve: [Linear issue link]"
-            Wait for Sharad to comment "approved" or "LGTM" on the Linear issue
-            On approval → merge PR
+               CI: ✅ green
+               Approve: reply 'approved' on [Linear issue link]"
+
+            Wait for Sharad to comment "approved" on the Linear issue.
+            On approval → merge PR.
 ```
 
 **After merge:**
-1. Run `npx openspec archive` — folds the delta back into the living spec in openspec/project.md
-2. Post to Slack: "[Project] 🚀 [feature] is live on prod. [Vercel prod URL]"
+1. Run `npx openspec archive`
+2. Post to Slack: "🚀 [feature] is live. [Vercel prod URL]"
 3. Move Linear issue to `Done`
 
-**Do not:**
-- Merge anything with failing CI
-- Ask Sharad for code-level feedback — he reviews the preview, not the diff
-- Leave a PR open for more than 24 hours without a Slack update
+**Never:**
+- Merge with failing CI
+- Ask Sharad for code feedback — only visual review via preview URL
+- Leave a PR open 24h+ without a Slack update
 
 ---
 
 ### Role 3: Idea-Generation Agent
-**Who uses this:** Cursor Automations (weekly cron), Claude
+**Who:** Cursor Automations (weekly cron), Claude
 
-**Triggered by:** Monday 9am cron, or on-demand request
+**Triggered by:** Monday 9am cron, or on-demand
 
 **What it does:**
-1. Reads `openspec/project.md` — the product vision and constraints
+1. Reads `openspec/project.md` — vision and what's planned
 2. Reads the current codebase — what's actually built
-3. Compares gaps between what's planned and what exists
-4. Creates Linear issues for each meaningful gap:
+3. Finds meaningful gaps
+4. Creates Linear issues with:
    - Status: `Backlog`
    - Label: `spec-needed`
    - Title: `[Feature] <name>` or `[Bug] <what's broken>`
-   - Description: 2-3 sentences on what the gap is and why it matters
+   - Description: 2-3 sentences on the gap and why it matters
+   - Priority: suggested (Sharad overrides)
 
 **Rules:**
-- Never create issues past `Backlog` status — Sharad is the filter
-- Search Linear before creating — no duplicates
-- Max 5 issues per run (quality over quantity)
-- No implementation detail in the issue — that happens at proposal time
+- Never create issues with status beyond `Backlog`
+- Search Linear first — no duplicates
+- Max 5 issues per run
+- No implementation detail — that happens in spec mode
 
 ---
 
-## Rules That Always Apply (All Agents)
+## Cursor Background Rules (Required Setup)
 
-1. **Linear comments and Slack are your only communication channels.** Sharad is on mobile. He does not open files or code editors.
-2. **Always propose before building.** No exceptions, even for small changes.
-3. **CI must be green before merge.** No override, no exceptions.
-4. **Every PR follows `.github/pull_request_template.md`.** No freeform descriptions.
-5. **When genuinely unsure, ask via Linear comment.** Don't guess and build 200 lines of wrong code.
-6. **Never push directly to `main`.** Always branch + PR.
+**These must be added to Cursor Settings → Rules → Background Rules.**
+Without this, Cursor ignores the two-phase behavior and starts coding immediately.
+
+```
+TWO-PHASE BEHAVIOR — read before every task:
+
+PHASE 1 — SPEC MODE (issue status = Backlog):
+- DO NOT write any code
+- DO NOT create any branch
+- Read the issue and openspec/project.md
+- Run: npx openspec propose "<issue title>"
+- Post a spec draft as a comment on the Linear issue
+- Iterate in comments until Sharad is satisfied
+- Wait for Sharad to move status to Todo
+
+PHASE 2 — BUILD MODE (issue status = Todo):
+- Spec is approved. Build it now.
+- Run: npx openspec apply
+- Open a GitHub PR with Vercel preview URL in the description
+- Move Linear issue to In Review
+
+ALWAYS:
+- Never move an issue to Todo — only Sharad does that
+- Never merge your own PR
+- Never push directly to main
+- Communicate only via Linear comments and Slack
+```
+
+---
+
+## Rules That Always Apply
+
+1. **Status Todo is Sharad's exclusive build trigger.** Agents never set this.
+2. **Backlog = spec conversation only.** No code, no branches.
+3. **Vercel preview URL in every PR.** This is what Sharad reviews.
+4. **Linear comments and Slack only.** No files, no code editors.
+5. **CI must be green before merge.** No override.
+6. **Never push to main directly.** Always branch + PR.
 
 ---
 
@@ -190,10 +259,10 @@ Is CI green?
 
 | Project | Repo | Linear Project | Slack Channel | Vercel |
 |---|---|---|---|---|
-| Resume Website | rohrasharad-ship-it/resume-website | Resume Website | #resume-website | sharad.pm |
+| Resume Website | rohrasharad-ship-it/resume-website | Resume Website | #resume-website | meet-sharad.vercel.app |
 | AI Workspace (PM OS) | rohrasharad-ship-it/AI-Workspace | PM OS | #pm-ops | — |
 
-*Add each new project here when it's onboarded to the loop.*
+*Add each new project via `/init-project` skill.*
 
 ---
 
@@ -201,23 +270,21 @@ Is CI green?
 
 | Feeder | What it does | Phase |
 |---|---|---|
-| Spec-drift agent | Compares docs/project.md vs actual code, files missing features | 2 |
-| Bug/error agent | Reads Vercel runtime errors, files issues for prod problems | 2 |
-| Capture agent | Slack one-liner or voice note → clean Triage issue | 3 |
-| Market/feature agent | Reads project vision + does research, proposes unseen features | 4 |
-
-**Phase 1:** Get the basic loop working on resume-website with manually created issues.
+| Spec-drift agent | Compares openspec/project.md vs actual code, files gaps | 2 |
+| Bug/error agent | Reads Vercel runtime errors, files prod issues | 2 |
+| Capture agent | Slack one-liner → clean Backlog issue | 3 |
+| Market/feature agent | Reads vision + research, proposes unseen features | 4 |
 
 ---
 
 ## What Sharad Reviews vs What the Agent Decides
 
-| Sharad reviews | Agent decides |
+| Sharad | Agent |
 |---|---|
-| Proposal plan in Linear comment (thumbs-up or correction) | Implementation approach |
-| Visual preview on Vercel (does it look right?) | File structure, naming |
-| Issue priority in Linear | Which tasks to parallelize |
-| Merge approval via Linear comment | Code style, linting, test coverage |
-| Whether a feature enters the current cycle | Formatting, tooling choices |
+| Issue priority in Linear | Implementation approach |
+| Spec direction (via Linear comments) | File structure, naming, tooling |
+| Moving issue to Todo (the build trigger) | Which tasks to parallelize |
+| Visual preview on Vercel (does it look right?) | Code style, linting |
+| "approved" comment on Linear issue | Test coverage approach |
 
-Sharad is a product judge. If the preview looks right and CI is green, that is sufficient to merge.
+Sharad reviews product outcomes. If the preview looks right and CI is green, approve it.
