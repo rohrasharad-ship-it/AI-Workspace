@@ -96,7 +96,22 @@ This creates `openspec/project.md` — the project's constitution.
 **Who:** Cursor (primary), Claude, Codex
 **Triggered by:** Assigned to issue with status Todo + "spec approved" comment from Sharad
 
-**On trigger:**
+**If assigned to an issue in Backlog status:**
+Do not build. Post this comment on the Linear issue and stop:
+
+```
+⚠️ Spec not confirmed.
+
+This issue is still in Backlog. I can't start building until the spec is approved.
+
+Please review and refine the spec with me in the comments below, then:
+1. Move this issue to Todo
+2. Comment "spec approved, start building"
+
+I'll start the moment I see both.
+```
+
+**On trigger (status = Todo + "spec approved" comment):**
 1. Read the full Linear issue: description is the spec, comments are context
 2. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest`
 3. Run `npx openspec propose "<issue title>"`
@@ -166,6 +181,12 @@ If `review-required`:
 6. Comment on Linear issue: "Updated — preview refreshed at same URL"
 7. Wait for next "approved" or more feedback
 
+**Reviewer spillover — gaps noticed during PR review:**
+If you notice a gap that is out of scope for the current PR (missing error state, no empty state, accessibility issue, missing mobile handling), do not block the PR. Instead:
+1. File a new Linear issue: Backlog status, `spec-needed` label, clear title and 2-sentence description
+2. Comment on the current PR: "Noticed [gap] — filed SHA-XX to track separately. Not blocking this PR."
+3. Continue with the current PR review normally.
+
 **Never:**
 - Merge with failing CI
 - Show Sharad code — only preview URLs
@@ -226,6 +247,10 @@ SPEC PHASE — when I am @mentioned on a Backlog issue (not assigned):
 - Reply in the Linear comment with my understanding, questions, suggestions
 - Update the issue description with the agreed spec when conversation concludes
 
+IF ASSIGNED TO A BACKLOG ISSUE — do not build:
+- Post this comment on the Linear issue: "⚠️ Spec not confirmed. This issue is in Backlog. Please refine the spec with me in comments, then move to Todo and comment 'spec approved, start building'."
+- Stop. Do not write code. Do not create a branch.
+
 BUILD PHASE — when I am assigned to an issue with status Todo:
 - Read the full issue: description = spec, comments = context
 - Install OpenSpec if needed: npm install --save-dev @fission-ai/openspec@latest
@@ -276,12 +301,17 @@ ALWAYS:
 
 ## Idea Feeder Sources (setup order)
 
-| Feeder | What it does | Phase |
-|---|---|---|
-| Spec-drift agent | Compares openspec/project.md vs code, files gaps | 2 |
-| Bug/error agent | Reads Vercel runtime errors, files prod issues | 2 |
-| Capture agent | Slack one-liner → clean Backlog issue | 3 |
-| Market/feature agent | Reads vision + research, proposes new features | 4 |
+| Feeder | What it does | Trigger | Setup phase |
+|---|---|---|---|
+| Spec-drift agent | Reads openspec/project.md vs actual code, files issues for what's specced but unbuilt | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | 2 |
+| Bug/error agent | Reads Vercel runtime errors + logs, files issues for what's breaking in prod | Daily cron — **Sharad sets up in Cursor Automations** | 2 |
+| Reviewer spillover | Reviewer notices a gap during PR review, files new Backlog issue, doesn't block the PR | Per-PR (built into Reviewer Agent role) | Already in loop |
+| Capture agent | Sharad drops a Slack message or voice note → becomes a clean Backlog issue | On-demand — **Sharad sets up Slack workflow** | 3 |
+| Market/feature agent | Reads project vision + does light research, proposes features not yet imagined | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | 4 |
+
+**Phase 1:** Basic loop only — manually created issues.
+**Phase 2:** Add spec-drift + bug/error crons in Cursor Automations. Simple, high-value.
+**Phase 3+:** Capture agent and market agent after Phase 2 is stable.
 
 ---
 
