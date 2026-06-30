@@ -11,19 +11,50 @@ Every agent (Cursor, Claude, Codex, or otherwise) reads this before starting wor
 [Linear issue created — thin title + one sentence]
     → Sharad triages and prioritizes on mobile
     → Sharad assigns issue to an agent
-    → Builder Agent runs /opsx:propose
-    → Builder Agent posts proposal summary as a Linear comment
+    → Builder Agent reads docs/project.md in the repo
+    → Builder Agent posts a proposal as a Linear comment and waits
     → Sharad thumbs-up (or corrects) on mobile
-    → Builder Agent runs /opsx:apply → opens PR on GitHub
+    → Builder Agent implements and opens a PR on GitHub
     → Reviewer Agent checks PR automatically
     → Reviewer Agent decides: trivial → merge | needs-approval → post Slack with Vercel preview URL
     → Sharad taps Vercel preview on phone, approves merge via Linear comment
     → Reviewer Agent merges PR
     → Vercel auto-deploys to production
-    → /opsx:archive folds the change into the living spec
 ```
 
 Sharad's only inputs: triage priority, proposal thumbs-up, and visual merge approval. No code editor ever.
+
+---
+
+## The Spec File: docs/project.md
+
+Every repo has a single file at `docs/project.md`. This is the project's constitution — no CLI, no tool, just a markdown file committed to the repo. The agent reads it before writing a single line of code.
+
+**Template** (copy this into each new repo's `docs/project.md` and fill it in):
+
+```markdown
+# Project: <Name>
+
+## What This Is
+<One sentence: what the product does and who it's for>
+
+## Tech Stack
+- Framework: 
+- Styling: 
+- Backend/DB: 
+- Hosting: Vercel
+- Language: TypeScript
+
+## Non-Negotiables
+- <Architecture or design rules the agent must never break>
+- Every PR must include a Vercel preview URL in the description
+- No new dependencies without proposing first
+
+## Out of Scope
+<What this product will never do — keeps the agent focused>
+```
+
+This file is what prevents agents from drifting or making up architecture. Keep it updated as the project evolves.
 
 ---
 
@@ -35,40 +66,38 @@ Sharad's only inputs: triage priority, proposal thumbs-up, and visual merge appr
 **Triggered by:** Linear issue assigned to the agent
 
 **Step 1 — Propose, don't build yet:**
-1. Read the Linear issue
-2. Read `openspec/project.md` in the target repo
-3. Run `/opsx:propose "<issue title>"`
-4. Read the generated `proposal.md`, `design.md`, `tasks.md`
-5. Post a Linear comment on the issue in this format:
+1. Read the Linear issue title and description
+2. Read `docs/project.md` in the repo for context
+3. Post a comment on the Linear issue in this exact format:
 
 ```
-Planning to build: [one sentence what you understood]
+Planning to build: [one sentence — what you understood the task to be]
 
-Tech approach: [key choices]
+Tech approach: [key implementation choices]
 
 Tasks:
 - [ ] task 1
 - [ ] task 2
 - [ ] task 3
 
-Assumptions: [anything you assumed that could be wrong]
+Assumptions: [anything you assumed that Sharad might want to correct]
 
 Reply with ✅ to start building, or correct anything above.
 ```
 
-6. **Wait for Sharad's reply before running `/opsx:apply`.**
+4. **Stop. Wait for Sharad's reply before writing any code.**
 
 **Step 2 — Build (after confirmation):**
-1. Run `/opsx:apply`
-2. Implement all tasks
-3. Open a PR using the repo's `.github/pull_request_template.md`
-4. PR description must include: what was built, Vercel preview URL, how to verify in 3 steps
-5. Update Linear issue status to `In Review`
+1. Implement all tasks from the approved plan
+2. Open a PR using the repo's `.github/pull_request_template.md`
+3. PR description must include: what was built, Vercel preview URL, how to verify in 3 steps
+4. Update the Linear issue status to `In Review`
 
 **Never:**
-- Start coding before the proposal confirmation
+- Start coding before the proposal is confirmed
 - Merge your own PR
-- Add dependencies not mentioned in `openspec/project.md` without a new proposal
+- Add dependencies not in `docs/project.md` without proposing first
+- Communicate with Sharad via files — always via Linear comments
 
 ---
 
@@ -80,29 +109,29 @@ Reply with ✅ to start building, or correct anything above.
 **Decision tree:**
 ```
 Is CI green?
-  No → Post comment: what failed, what Sharad should know. Do not merge.
+  No → Comment on the PR with what failed. Do not merge.
   Yes →
-    Is this trivial? (copy fix, config tweak, style-only, single-line)
-      Yes → Merge immediately. Post to Slack: "[Project] [issue title] merged to main. Vercel deploying."
+    Is this trivial? (copy fix, config tweak, style-only, single-line change)
+      Yes → Merge immediately.
+            Post to Slack: "[Project] ✅ [issue title] merged. Vercel deploying."
       No →
-        Post to #[project-slack-channel]:
-          "PR ready for your review: [PR title]
-           Preview: [Vercel URL]
-           What changed: [2 sentences]
-           CI: green ✅
-           Tap to approve: [Linear issue link]"
-        Wait for Sharad to comment "approved" or "LGTM" on the Linear issue
-        On approval → merge PR
+            Post to #[project-slack-channel]:
+              "PR ready for your review: [PR title]
+               Preview: [Vercel URL]
+               What changed: [2 sentences]
+               CI: green ✅
+               Tap to approve: [Linear issue link]"
+            Wait for Sharad to comment "approved" or "LGTM" on the Linear issue
+            On approval → merge PR
 ```
 
 **After merge:**
-1. Run `/opsx:archive` in the repo
-2. Post to Slack: "[Project] [feature] is live on prod. [Vercel prod URL]"
-3. Move Linear issue to `Done`
+1. Post to Slack: "[Project] 🚀 [feature] is live on prod. [Vercel prod URL]"
+2. Move Linear issue to `Done`
 
 **Do not:**
 - Merge anything with failing CI
-- Ask for code-level feedback from Sharad — he reviews the preview, not the diff
+- Ask Sharad for code-level feedback — he reviews the preview, not the diff
 - Leave a PR open for more than 24 hours without a Slack update
 
 ---
@@ -110,74 +139,58 @@ Is CI green?
 ### Role 3: Idea-Generation Agent
 **Who uses this:** Cursor Automations (weekly cron), Claude
 
-**Triggered by:** Monday 9am cron, or on-demand
+**Triggered by:** Monday 9am cron, or on-demand request
 
 **What it does:**
-1. Reads `openspec/project.md` — the product vision and what's planned
-2. Reads current codebase — what's actually built
-3. Reads recent Vercel runtime errors — what's broken
-4. Compares gaps
-5. Creates Linear issues for each gap with:
-   - Status: `Triage`
+1. Reads `docs/project.md` — the product vision and constraints
+2. Reads the current codebase — what's actually built
+3. Compares gaps between what's planned and what exists
+4. Creates Linear issues for each meaningful gap:
+   - Status: `Backlog`
    - Label: `spec-needed`
-   - Title: `[Feature] <descriptive name>` or `[Bug] <what's broken>`
+   - Title: `[Feature] <name>` or `[Bug] <what's broken>`
    - Description: 2-3 sentences on what the gap is and why it matters
 
-**Rule:** Never create issues beyond `Triage`. Sharad is the filter. Generate, don't prioritize.
-
-**Do not:**
-- Create duplicate issues (search Linear before creating)
-- Create more than 5 issues per run (quality over quantity)
-- Add implementation details — that happens at proposal time
+**Rules:**
+- Never create issues past `Backlog` status — Sharad is the filter
+- Search Linear before creating — no duplicates
+- Max 5 issues per run (quality over quantity)
+- No implementation detail in the issue — that happens at proposal time
 
 ---
 
 ## Rules That Always Apply (All Agents)
 
-1. **Communicate through Linear and Slack, never through files.** Sharad reads comments on mobile, not markdown files.
-2. **One proposal before every build.** No exceptions, even for tiny features.
-3. **CI must be green before merge.** No override.
+1. **Linear comments and Slack are your only communication channels.** Sharad is on mobile. He does not open files or code editors.
+2. **Always propose before building.** No exceptions, even for small changes.
+3. **CI must be green before merge.** No override, no exceptions.
 4. **Every PR follows `.github/pull_request_template.md`.** No freeform descriptions.
 5. **When genuinely unsure, ask via Linear comment.** Don't guess and build 200 lines of wrong code.
-6. **Never push directly to `main`.** Always a branch + PR.
+6. **Never push directly to `main`.** Always branch + PR.
 
 ---
 
 ## Project Index
 
-| Project | Repo | Linear Project | Slack Channel | Vercel URL |
+| Project | Repo | Linear Project | Slack Channel | Vercel |
 |---|---|---|---|---|
 | Resume Website | rohrasharad-ship-it/resume-website | Resume Website | #resume-website | sharad.pm |
 | AI Workspace (PM OS) | rohrasharad-ship-it/AI-Workspace | PM OS | #pm-ops | — |
 
-*Add each new project here when it's onboarded.*
+*Add each new project here when it's onboarded to the loop.*
 
 ---
 
-## Idea Feeder Sources (in order of setup priority)
+## Idea Feeder Sources (setup order)
 
-| Feeder | What it does | When to add |
+| Feeder | What it does | Phase |
 |---|---|---|
-| Spec-drift agent | Compares project.md vs actual code, files missing features | Phase 2 |
-| Bug/error agent | Reads Vercel runtime errors, files issues for prod problems | Phase 2 |
-| Capture agent | Voice note / Slack one-liner → clean Triage issue | Phase 3 |
-| Reviewer spillover | PR reviewer notices a gap → new Triage issue, PR still merges | Phase 3 |
-| Market/feature agent | Reads vision + does research, proposes features you haven't thought of | Phase 4 |
+| Spec-drift agent | Compares docs/project.md vs actual code, files missing features | 2 |
+| Bug/error agent | Reads Vercel runtime errors, files issues for prod problems | 2 |
+| Capture agent | Slack one-liner or voice note → clean Triage issue | 3 |
+| Market/feature agent | Reads project vision + does research, proposes unseen features | 4 |
 
-**Phase 1 goal: get the basic loop working on resume-website without any of these feeders. Sharad manually creates the first 5 issues.**
-
----
-
-## OpenSpec Quick Reference
-
-```bash
-openspec init              # run once per project, select cursor as assistant
-/opsx:propose "<name>"     # builder runs this first, before any code
-/opsx:apply                # builder runs this after Sharad confirms
-/opsx:archive              # reviewer runs this after merge
-```
-
-The `openspec/project.md` file is the project's constitution. Write it manually after init. Every proposal inherits its context. An agent without a good `project.md` will drift.
+**Phase 1:** Get the basic loop working on resume-website with manually created issues.
 
 ---
 
@@ -185,10 +198,10 @@ The `openspec/project.md` file is the project's constitution. Write it manually 
 
 | Sharad reviews | Agent decides |
 |---|---|
-| Proposal plan (thumbs-up or correction) | Implementation approach |
+| Proposal plan in Linear comment (thumbs-up or correction) | Implementation approach |
 | Visual preview on Vercel (does it look right?) | File structure, naming |
 | Issue priority in Linear | Which tasks to parallelize |
-| Merge approval | Code style, test coverage |
-| Whether a feature enters a cycle | Linting, formatting |
+| Merge approval via Linear comment | Code style, linting, test coverage |
+| Whether a feature enters the current cycle | Formatting, tooling choices |
 
 Sharad is a product judge. If the preview looks right and CI is green, that is sufficient to merge.
