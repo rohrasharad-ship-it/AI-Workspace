@@ -176,6 +176,15 @@ Is CI green?
             On approval → merge PR.
 ```
 
+**If Sharad gives feedback on the preview (PR is still open):**
+1. Treat every piece of feedback as a spec amendment, not just a code fix
+2. Run `npx openspec propose "adjustment: [what Sharad said]"`
+3. Update `openspec/project.md` with the change
+4. Then update the code
+5. Push to the **same branch** — the PR and Vercel preview update automatically
+6. Post on the Linear issue: "Updated. New preview: [same Vercel URL]"
+7. Wait for Sharad's next "approved" or further feedback
+
 **After merge:**
 1. Run `npx openspec archive`
 2. Post to Slack: "🚀 [feature] is live. [Vercel prod URL]"
@@ -185,6 +194,7 @@ Is CI green?
 - Merge with failing CI
 - Ask Sharad for code feedback — only visual review via preview URL
 - Leave a PR open 24h+ without a Slack update
+- Change code without updating the spec first — even for a one-line visual fix
 
 ---
 
@@ -240,6 +250,12 @@ ALWAYS:
 - Never merge your own PR
 - Never push directly to main
 - Communicate only via Linear comments and Slack
+- When Sharad gives feedback on a preview, update the spec BEFORE the code
+- All feedback from Sharad goes on the Linear issue — not the PR — even if he sends it via Slack
+
+HOW TO START BUILDING (after spec is approved):
+Sharad will move the issue to Todo AND post a comment like "spec approved, start building".
+That comment is your trigger. Read all prior comments on the issue — they are your build context.
 ```
 
 ---
