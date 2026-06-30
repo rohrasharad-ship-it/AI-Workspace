@@ -26,12 +26,20 @@ Sharad's only inputs: triage priority, proposal thumbs-up, and visual merge appr
 
 ---
 
-## The Spec File: docs/project.md
+## The Spec Layer: OpenSpec + docs/project.md
 
-Every repo has a single file at `docs/project.md`. This is the project's constitution — no CLI, no tool, just a markdown file committed to the repo. The agent reads it before writing a single line of code.
+Every repo uses OpenSpec for spec-driven development. It keeps one living spec that stays in sync with what's actually built — the archive step after every PR is what prevents drift.
 
-**Template** (copy this into each new repo's `docs/project.md` and fill it in):
+**Setup (agent does this once per repo, not Sharad):**
+```bash
+# Agent runs this in the cloud container on first task
+npm install --save-dev @fission-ai/openspec@latest
+npx openspec init   # select cursor as assistant
+```
 
+OpenSpec creates `openspec/project.md` — the project's constitution. The agent populates it on init using the template below. Every future proposal inherits this context.
+
+**`openspec/project.md` template:**
 ```markdown
 # Project: <Name>
 
@@ -54,7 +62,12 @@ Every repo has a single file at `docs/project.md`. This is the project's constit
 <What this product will never do — keeps the agent focused>
 ```
 
-This file is what prevents agents from drifting or making up architecture. Keep it updated as the project evolves.
+**The three agent commands:**
+- `npx openspec propose "<issue title>"` — generates proposal.md, design.md, tasks.md before any code
+- `npx openspec apply` — implements after Sharad confirms
+- `npx openspec archive` — folds the delta back into the living spec after PR merges
+
+Sharad never runs these. The agent runs them. The living spec stays accurate because archive runs after every single merge.
 
 ---
 
@@ -67,8 +80,10 @@ This file is what prevents agents from drifting or making up architecture. Keep 
 
 **Step 1 — Propose, don't build yet:**
 1. Read the Linear issue title and description
-2. Read `docs/project.md` in the repo for context
-3. Post a comment on the Linear issue in this exact format:
+2. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest` (skip if already in package.json)
+3. Run `npx openspec propose "<issue title>"` — generates proposal.md, design.md, tasks.md in the repo
+4. Read those generated files to form your plan
+5. Post a comment on the Linear issue in this exact format:
 
 ```
 Planning to build: [one sentence — what you understood the task to be]
@@ -88,7 +103,7 @@ Reply with ✅ to start building, or correct anything above.
 4. **Stop. Wait for Sharad's reply before writing any code.**
 
 **Step 2 — Build (after confirmation):**
-1. Implement all tasks from the approved plan
+1. Run `npx openspec apply` — implement all tasks from the approved proposal
 2. Open a PR using the repo's `.github/pull_request_template.md`
 3. PR description must include: what was built, Vercel preview URL, how to verify in 3 steps
 4. Update the Linear issue status to `In Review`
@@ -96,7 +111,7 @@ Reply with ✅ to start building, or correct anything above.
 **Never:**
 - Start coding before the proposal is confirmed
 - Merge your own PR
-- Add dependencies not in `docs/project.md` without proposing first
+- Add dependencies not in `openspec/project.md` without proposing first
 - Communicate with Sharad via files — always via Linear comments
 
 ---
@@ -126,8 +141,9 @@ Is CI green?
 ```
 
 **After merge:**
-1. Post to Slack: "[Project] 🚀 [feature] is live on prod. [Vercel prod URL]"
-2. Move Linear issue to `Done`
+1. Run `npx openspec archive` — folds the delta back into the living spec in openspec/project.md
+2. Post to Slack: "[Project] 🚀 [feature] is live on prod. [Vercel prod URL]"
+3. Move Linear issue to `Done`
 
 **Do not:**
 - Merge anything with failing CI
@@ -142,7 +158,7 @@ Is CI green?
 **Triggered by:** Monday 9am cron, or on-demand request
 
 **What it does:**
-1. Reads `docs/project.md` — the product vision and constraints
+1. Reads `openspec/project.md` — the product vision and constraints
 2. Reads the current codebase — what's actually built
 3. Compares gaps between what's planned and what exists
 4. Creates Linear issues for each meaningful gap:
