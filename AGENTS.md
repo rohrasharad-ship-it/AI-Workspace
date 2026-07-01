@@ -107,6 +107,12 @@ not left as-is with OpenSpec layered awkwardly on top. Natural capability
 boundaries are usually the site's own sections (hero, journey/timeline, about,
 contact, voice-agent, etc.) — split along those lines, don't invent new ones.
 
+When bootstrapping a new project, do **not** start from empty placeholder
+stubs if the app already has shipped features. First inspect the codebase,
+identify what is already built, and write those existing capabilities into the
+baseline OpenSpec files. New issues are for gaps beyond that baseline, not for
+re-describing working behavior.
+
 **`openspec/project.md` template (agent fills this on init):**
 ```markdown
 # Project: <Name>

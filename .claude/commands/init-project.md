@@ -7,6 +7,7 @@ Initialize a new project into the AI-first PM loop. Run this once per new repo.
 1. Asks you for the project details
 2. Creates AGENTS.md and .github/pull_request_template.md in the target GitHub repo
 3. Initializes OpenSpec properly with per-capability spec files — NOT a flat spec doc
+   and NOT empty placeholder stubs if the project already has shipped features
 4. Creates a Linear project for it
 5. Adds the project to the Project Index in AI-Workspace/AGENTS.md
 
@@ -74,10 +75,15 @@ openspec/specs/<capability-2>/spec.md
 `openspec/project.md` uses the template from AI-Workspace/AGENTS.md's "The Spec
 Layer: OpenSpec" section, including the `## Capabilities` index listing each
 capability name and its file path. Each `openspec/specs/<capability>/spec.md`
-can start as a short stub (a few sentences of what that capability is/does) —
-it gets filled in properly as real spec conversations happen on real issues.
-The point at this stage is the STRUCTURE existing from day one, not complete
-content — a project that starts with the right shape never needs the
+must describe the capability that already exists in the codebase if that
+feature is already shipped. Inspect the repo first, then convert the live
+product into the baseline spec. If a capability is genuinely new or not yet
+implemented, the file can start as a short stub, but do not leave shipped
+behavior undocumented.
+
+The point at this stage is the STRUCTURE existing from day one and the
+current product faithfully captured in OpenSpec — not placeholder content. A
+project that starts with the right shape and the right baseline never needs the
 retrofit resume-website needed.
 
 ### Step D — Create Linear project
