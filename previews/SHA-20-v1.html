@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SHA-20 — Interactive Prioritization Sandbox (preview)</title>
+<style>
+  body { margin:0; font-family: 'DM Sans', Arial, sans-serif; background:#111111; color:#F5EDE0; }
+  .frame { max-width: 720px; margin: 40px auto; padding: 40px; }
+  .note { font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8A8A; margin-bottom: 24px; }
+  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 28px; }
+  .card h3 { margin: 0 0 4px 0; font-size: 22px; }
+  .card .sub { font-family: 'DM Mono', monospace; font-size: 12px; color:#8A8A8A; margin-bottom: 24px; }
+  .slider-row { margin-bottom: 18px; }
+  .slider-row label { display:flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color:#F5EDE0; }
+  .slider-row .track { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.12); position: relative; }
+  .slider-row .fill { position:absolute; left:0; top:0; height:100%; border-radius:3px; background:#E8351A; }
+  .slider-row .fill.reach { width: 70%; }
+  .slider-row .fill.impact { width: 85%; }
+  .slider-row .fill.confidence { width: 60%; }
+  .slider-row .fill.effort { width: 40%; }
+  .score { margin-top: 20px; font-size: 40px; font-weight: 700; color:#E8351A; }
+  .score-label { font-family: 'DM Mono', monospace; font-size: 12px; color:#8A8A8A; }
+  .decision { margin-top: 16px; font-size: 13px; color:#F5EDE0; opacity: 0.85; border-left: 3px solid #E8351A; padding-left: 14px; }
+  .callout { margin-top: 24px; max-width: 560px; border-left: 3px solid #E8351A; padding: 12px 20px; background: rgba(232,53,26,0.08); font-size: 14px; color:#F5EDE0; }
+</style>
+</head>
+<body>
+  <div class="frame">
+    <div class="note">Static mockup — embedded inside a Journey era's professional zone. Sliders shown at a fixed position, not draggable.</div>
+    <div class="card">
+      <h3>Impact Analytics · Q3 roadmap call</h3>
+      <div class="sub">RICE SANDBOX — DRAG TO RECALCULATE (STATIC IN THIS PREVIEW)</div>
+      <div class="slider-row"><label><span>Reach</span><span>7 / 10</span></label><div class="track"><div class="fill reach"></div></div></div>
+      <div class="slider-row"><label><span>Impact</span><span>8.5 / 10</span></label><div class="track"><div class="fill impact"></div></div></div>
+      <div class="slider-row"><label><span>Confidence</span><span>6 / 10</span></label><div class="track"><div class="fill confidence"></div></div></div>
+      <div class="slider-row"><label><span>Effort</span><span>4 / 10</span></label><div class="track"><div class="fill effort"></div></div></div>
+      <div class="score-label">RICE SCORE</div>
+      <div class="score">89</div>
+      <div class="decision">Textbook score said "build it." Sharad shipped a scoped-down version instead — the effort estimate didn't account for a data migration that later added 3 weeks.</div>
+    </div>
+    <div class="callout">
+      Recruiter drags real sliders on the real page; the score and Sharad's actual
+      call — including where it diverged from the "textbook" answer — play out live.
+    </div>
+  </div>
+</body>
+</html>
