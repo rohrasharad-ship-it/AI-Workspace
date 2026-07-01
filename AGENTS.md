@@ -158,6 +158,56 @@ silently reading everything).
 
 ---
 
+## Visual Specs: When Text Isn't Enough
+
+PMs today pitch features with a prototype, not a document. This project follows
+the same rule: **any time an agent proposes something with a meaningful visual
+or motion component — whether during an active spec conversation (Role 3) or
+while auto-generating a brand-new idea (Role 4, spec-drift or market/feature) —
+it attaches a visual, not just text.** Sharad should never have to imagine what
+"the emoji tilts 20 degrees on scroll" or "add a rocket sticker near the hero
+CTA" looks like from a sentence.
+
+**Skip this entirely** for changes with no visual/UI component — logic, config,
+copy-only changes, backend behavior. Text is genuinely enough there; don't
+manufacture a visual to check a box.
+
+**Mechanism (same for every use, only the effort tier changes):**
+1. Build a **single standalone HTML/CSS/JS file** — no framework, no build step,
+   just the element/interaction in question, or a rough page-outline showing
+   roughly where it would sit. Do not touch the real project repo.
+2. Save it to `rohrasharad-ship-it/AI-Workspace`, path `previews/<issue-id>-v<n>.html`
+   (e.g. `previews/SHA-13-v1.html`)
+3. Push to a branch named `preview/<issue-id>-v<n>` (e.g. `preview/SHA-13-v1`).
+   **Do not open a PR** — Vercel deploys a preview for any pushed branch, PR or not.
+4. Before pushing, **delete the previous iteration's branch** for this issue
+   (`git push origin --delete preview/<issue-id>-v<n-1>`). Only one preview
+   branch should ever exist per issue at a time.
+5. Look up the deployment URL for the new branch. **The Vercel project's output
+   directory is the repo root**, so the bare deployment URL just shows the
+   placeholder homepage — link the actual file path:
+   `<deployment-url>/previews/<issue-id>-v<n>.html`. Paste that full path
+   alongside the spec text, not the bare deployment URL.
+6. **When the idea is dropped or the spec is finalized** (`agent-ready` label,
+   or Sharad rejects it in triage), delete the remaining preview branch. No
+   preview branch should survive past that point.
+
+**Two effort tiers — same mechanism, different investment:**
+
+| Tier | When | Effort |
+|---|---|---|
+| **Full** | Role 3 — Sharad is already actively discussing this issue with you | Build the real interaction if motion matters (e.g. an actual scroll-linked emoji tilt) — this is a live candidate for building |
+| **Minimal** | Role 4 — you're auto-generating a brand-new idea Sharad hasn't seen yet | A single static frame is enough: show the emoji itself, roughly where it would sit on the page, or a plain annotated mockup. No interactivity, no polish. Most auto-generated ideas get triaged out — don't over-invest before Sharad has even looked at it. |
+
+**Branch safety — never touch `main`:** only ever run
+`git push origin --delete preview/<issue-id>-v<n>` — a fully qualified branch
+name with the `preview/` prefix. Never run a bare or wildcard delete command.
+`main` is additionally protected at the GitHub level against deletion, but
+agents must never attempt to delete anything other than a `preview/*` branch
+they created themselves.
+
+---
+
 ## Roles
 
 ### Role 1: Builder Agent
@@ -277,72 +327,43 @@ When @mentioned on an issue labeled `spec-needed`:
    - What you understand the feature to be
    - Questions or concerns about the approach
    - Alternative approaches if relevant
-   - **A spec-preview link, if the feature is visual or motion-based** (see below)
+   - **A spec-preview link, if the feature is visual or motion-based** — see
+     "Visual Specs" below, **full-effort tier** (Sharad is actively engaged already)
 4. **Only update the issue description when Sharad explicitly says so** — e.g. "update the issue with this", "finalize the spec", "go ahead and lock this in". Until he says that, keep discussing in comments only.
 5. The updated description is what the builder agent will read when assigned
 
 Do not write code in the real project repo. Do not run openspec commands during spec phase.
 Do not update the issue description on your own judgment that "agreement was reached" — wait for Sharad's explicit word.
 
-**Spec previews — when text isn't enough:**
-
-Text specs are fine for logic, config, or copy changes. They fail for anything
-visual or motion-based (animation, interaction, layout) — Sharad can't evaluate
-"the emoji tilts 20 degrees on scroll" from a sentence. For those cases, build a
-tiny live preview instead of describing it:
-
-1. Only do this for features that are visual, interactive, or motion-based.
-   Skip it entirely for logic/config/copy-only changes — text is enough there.
-2. Build a **single standalone HTML/CSS/JS file** — no framework, no build step,
-   just the one element/interaction in question. Do not touch the real project
-   repo or build the surrounding page. This is a scratch demo, not a feature.
-3. Save it to `rohrasharad-ship-it/AI-Workspace`, path `previews/<issue-id>-v<n>.html`
-   (e.g. `previews/SHA-13-v1.html`)
-4. Push to a branch named `preview/<issue-id>-v<n>` (e.g. `preview/SHA-13-v1`).
-   **Do not open a PR** — Vercel deploys a preview for any pushed branch, PR or not.
-5. Before pushing, **delete the previous iteration's branch** for this issue
-   (`git push origin --delete preview/<issue-id>-v<n-1>`). Only one preview
-   branch should ever exist per issue at a time.
-6. Look up the deployment URL for the new branch. **The Vercel project's output
-   directory is the repo root**, so the bare deployment URL just shows the
-   placeholder homepage — link the actual file path:
-   `<deployment-url>/previews/<issue-id>-v<n>.html`. Paste that full path in
-   the Linear comment alongside your spec text, not the bare deployment URL.
-7. **When the spec is finalized** (label swapped to `agent-ready`, or Sharad
-   abandons this direction), delete the remaining preview branch as your first
-   action. No preview branch should survive past the spec phase.
-
-**Branch safety — never touch `main`:** only ever run
-`git push origin --delete preview/<issue-id>-v<n>` — a fully qualified branch
-name with the `preview/` prefix. Never run a bare or wildcard delete command.
-`main` is additionally protected at the GitHub level against deletion, but
-agents must never attempt to delete anything other than a `preview/*` branch
-they created themselves.
-
 ---
 
-### Role 4: Idea-Generation Agents (Phase 2 — cron-triggered)
+### Role 4: Idea-Generation Agents (cron-triggered)
 
-Two scheduled agents keep the Backlog self-filling so Sharad triages instead of
-inventing work from scratch. Both are set up as **Cursor Automations** against
-the project repo. Both obey the same guardrails:
+Three scheduled agents keep the Backlog self-filling so Sharad triages instead
+of inventing work from scratch. All three are set up as **Cursor Automations**
+against the project repo. All three obey the same guardrails:
 
 - Create issues only as `Backlog` + `spec-needed` — **never `agent-ready`**
 - Search Linear first — skip anything already tracked (open or recently closed)
-- Max 5 issues per run; if nothing real is found, create nothing
+- Max 5 issues per run (4c: max 3 — see below); if nothing real is found, create nothing
 - No implementation detail — that belongs to the later spec conversation
 - Suggest a priority; Sharad overrides
+- **If the proposed issue has a meaningful visual/UI component, attach a visual
+  preview per the "Visual Specs" section above, minimal-effort tier, and link
+  it in the issue description alongside the text.** This applies to all three
+  variants below, not just 4c — a spec-drift gap like "add a rocket sticker
+  near the hero CTA" needs a visual just as much as a market/feature idea does.
 
 **4a — Spec-Drift Agent** (weekly, Monday 9am)
 Exact prompt to paste into the Cursor Automation:
 ```
 You are the Spec-Drift Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly.
+follow its guardrails exactly, including the Visual Specs rule.
 
 Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
-1. Read openspec/project.md (or SPEC.md if OpenSpec isn't initialized yet) to
-   see what is planned/specced.
+1. Read openspec/project.md and every file under openspec/specs/ to see what
+   is planned/specced.
 2. Read the current codebase to see what is actually built.
 3. Find meaningful gaps — planned things missing or only half-built. Ignore
    cosmetic nitpicks.
@@ -350,7 +371,9 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 5. Create up to 5 issues for real gaps: status Backlog, label spec-needed,
    title "[Feature] <name>", 2-3 sentence description of the gap and why it
    matters, suggested priority.
-6. If nothing meaningful is found, create nothing.
+6. If the gap has a visual/UI component, attach a minimal-effort visual
+   preview (see Visual Specs section) and link it in the issue description.
+7. If nothing meaningful is found, create nothing.
 ```
 Tools to enable: repo (automatic), Linear (create + search issues).
 
@@ -359,7 +382,7 @@ Exact prompt to paste into the Cursor Automation:
 ```
 You are the Bug/Error Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly.
+follow its guardrails exactly, including the Visual Specs rule.
 
 Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
 1. Read the Vercel production runtime logs/errors from the last 24 hours.
@@ -370,11 +393,52 @@ Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
    "[Bug] <what's broken>", 2-3 sentence description with the error and when it
    fires. Priority High if it hits a core flow (voice agent, hero, contact),
    Medium otherwise.
-5. If the site is clean, create nothing.
+5. If the bug is visual (layout, overlap, broken animation), attach a
+   minimal-effort visual preview showing the problem.
+6. If the site is clean, create nothing.
 ```
 Tools to enable: repo (automatic), Linear (create + search issues), Vercel
 (read deployment logs — add a Vercel API token as an automation secret if
 Cursor has no native Vercel integration in your setup).
+
+**4c — Market/Feature Agent** (weekly, Monday 9am — the "suggest brand-new specs" cron)
+Unlike 4a/4b, this agent isn't looking for gaps against an existing plan — it's
+proposing features nobody has written down yet, based on the product's vision
+and what similar products do well. Because these are more speculative, cap at
+3 issues per run, not 5, and always attach a visual — a brand-new idea pitched
+as a paragraph of text is exactly the "document instead of prototype" problem
+this whole section exists to avoid.
+
+Exact prompt to paste into the Cursor Automation:
+```
+You are the Market/Feature Idea-Generation Agent from
+rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
+follow its guardrails exactly, including the Visual Specs rule.
+
+Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
+1. Read openspec/project.md in full — the vision, non-negotiables, and
+   Out of Scope section. Never propose anything listed as Out of Scope.
+2. Read every file under openspec/specs/ to understand what already exists,
+   so you don't re-propose something already built or already tracked.
+3. Based on the stated vision (a PM's portfolio that itself demonstrates
+   product thinking) and how strong portfolio/personal sites differentiate
+   themselves, propose up to 3 features not yet in the spec or Linear. If web
+   search is available, use it lightly for inspiration; otherwise reason from
+   the stated vision and design philosophy alone.
+4. Search the Linear "Resume Website" project first; skip anything already
+   proposed or tracked, including things filed by the spec-drift agent.
+5. Create up to 3 issues: status Backlog, label spec-needed, title
+   "[Feature] <name>", 2-3 sentence description of the idea and why it fits
+   the portfolio's differentiation goals, suggested priority (default Medium
+   or Low — these are speculative, not confirmed gaps).
+6. Every issue from this agent has a visual/UI component almost by definition
+   — attach a minimal-effort visual preview (see Visual Specs section) and
+   link it in the issue description. Do not skip this step for this agent.
+7. If nothing genuinely differentiated comes to mind, create nothing —
+   do not invent filler ideas to hit the cap.
+```
+Tools to enable: repo (automatic), Linear (create + search issues), web search
+(optional — if unavailable, the agent reasons from project.md alone).
 
 ---
 
@@ -465,17 +529,16 @@ during active iteration, not a permanent architecture.
 
 ## Idea Feeder Sources (setup order)
 
-| Feeder | What it does | Trigger | Setup phase |
+| Feeder | What it does | Trigger | Status |
 |---|---|---|---|
-| Spec-drift agent | Reads openspec/project.md vs actual code, files issues for what's specced but unbuilt | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | 2 |
-| Bug/error agent | Reads Vercel runtime errors + logs, files issues for what's breaking in prod | Daily cron — **Sharad sets up in Cursor Automations** | 2 |
+| Spec-drift agent (4a) | Reads openspec/specs/ vs actual code, files issues for what's specced but unbuilt | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | Active |
+| Bug/error agent (4b) | Reads Vercel runtime errors + logs, files issues for what's breaking in prod | Daily cron — **Sharad sets up in Cursor Automations** | Active |
+| Market/feature agent (4c) | Reads project vision, proposes brand-new features not yet in the spec or Linear, always with a visual | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | Active |
 | Spillover | Agent notices a gap while building or reviewing, files a new Backlog issue, doesn't block current work | Per-issue (built into Roles 1 & 2) | Already in loop |
-| Capture agent | Sharad drops a Slack message or voice note → becomes a clean Backlog issue | On-demand — **Sharad sets up Slack workflow** | 3 |
-| Market/feature agent | Reads project vision + does light research, proposes features not yet imagined | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | 4 |
+| Capture agent | Sharad drops a Slack message or voice note → becomes a clean Backlog issue | On-demand — **Sharad sets up Slack workflow** | Not yet built |
 
-**Phase 1:** Basic loop only — manually created issues. ✅ Done.
-**Phase 2 (active):** Spec-drift (weekly) + bug/error (daily) crons — exact prompts in Role 4.
-**Phase 3+:** Capture agent and market agent after Phase 2 is stable.
+**Done:** Manual issues, spec-drift, bug/error, market/feature — all three crons have exact prompts in Role 4.
+**Remaining:** Capture agent — the only feeder left. Low priority, build when the others feel routine.
 
 ---
 
