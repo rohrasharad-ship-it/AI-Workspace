@@ -52,19 +52,16 @@ BUILD PHASE
   If agent-ready → proceed:
     Clean up any leftover preview/<issue-id>-* branch from the spec phase
     Read full issue: finalized description = spec, comments = context
-    Run OpenSpec, implement, open PR
+    Run OpenSpec, implement
+    Run the build and the existing test suite — do not open a PR if either fails
+    Open PR
     Wait for Vercel preview URL on the PR (~60s)
-    Decide: trivial change or significant change?
-      TRIVIAL (copy, config, meta, styling, bug fix <50 lines):
-        Enable GitHub auto-merge → merges itself when checks are green
-        Slack: "⚡ Auto-merged: [feature]. Live: [prod URL]"
-        Run openspec archive, move issue to Done
-      SIGNIFICANT (new component/page/flow, notable UI change):
-        Move issue to In Review
-        Slack: "🔍 [feature] ready. Preview: [URL]. Approve with '@<agent> approved' on [Linear link]"
-        STOP. The session ends here — nothing watches for approval automatically.
+    Move issue to In Review
+    Slack: "🔍 [feature] ready. Preview: [URL]. Approve with '@<agent> approved' on [Linear link]"
+    STOP. The session ends here — nothing watches for approval automatically.
+    (No auto-merge, no size-based exception. Every PR waits, always.)
 
-APPROVAL (significant changes only)
+APPROVAL (every PR — no exceptions for size or type)
   Sharad taps the preview URL on his phone, reviews visually
   Either:
     Feedback → comments on the Linear issue (spec change first, then code — see Role 2)
@@ -243,35 +240,42 @@ I'll start the moment I see the agent-ready label.
 3. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest`
 4. Run `npx openspec propose "<issue title>"` (base it on the finalized description)
 5. Run `npx openspec apply` — implement
-6. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
-7. Wait up to 90 seconds for Vercel to post the preview URL to the PR
-8. **Decide trivial vs significant, then act — no separate reviewer, no extra labels:**
+6. **Test before opening anything — do not skip this even for a small change:**
+   - Run the project's build command (e.g. `npm run build`). If it fails, fix
+     it before proceeding. Do not open a PR with a build that doesn't compile.
+   - Run the existing test suite if one exists (e.g. `npm run test:qa` for
+     resume-website's Playwright suite). If tests fail, fix them or, if you
+     genuinely cannot, stop and flag Sharad on the Linear issue rather than
+     opening a PR with known-failing tests.
+   - This is a gate, not a suggestion — a PR should never reach Sharad in a
+     state you haven't already verified builds and passes its own tests.
+7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
+8. Wait up to 90 seconds for Vercel to post the preview URL to the PR
+9. Move issue to `In Review`
+10. Post the Slack message below
+11. **Stop.** This session ends here for every PR, regardless of size — a
+    typo fix and a new page both wait the same way. Sharad's `@<agent>
+    approved` comment re-wakes an agent to finish the merge (see Role 2).
+    Nothing merges or auto-completes without that explicit comment.
 
-   **TRIVIAL** (copy edit, config, meta tags, styling tweak, bug fix under 50 lines):
-   - Enable GitHub native auto-merge on the PR (merges automatically once checks pass)
-   - Once merged: run `npx openspec archive`, move issue to `Done`
-   - Slack: `⚡ Auto-merged: [title]. Live: [prod URL]`
-
-   **SIGNIFICANT** (new visible component, new page, new user flow, notable UI change):
-   - Move issue to `In Review`
-   - Slack: the review post below
-   - **Stop.** This session ends. Sharad's `@<agent> approved` comment re-wakes an
-     agent to finish the merge (see Role 2). Nothing watches automatically.
-
-**Slack post (significant / needs review):**
+**Slack post (every PR, no exceptions):**
 ```
 🔍 Ready for your review
 Feature: [issue title]
 Preview: [Vercel preview URL] ← tap this
 What changed: [2 sentences]
-Checks: ✅ passing
+Checks: ✅ build passing, tests passing
 Approve: comment "@<agent> approved" on [Linear issue URL]
 ```
 
 **Never:**
 - Write any code on an issue labeled `spec-needed` — check the label every time, regardless of status
 - Add or remove the `agent-ready` label yourself — only Sharad does that
-- Merge a significant PR without Sharad's "approved" — only auto-merge the trivial class
+- Open a PR without first confirming the build succeeds and existing tests pass
+- Merge any PR without Sharad's explicit "approved" comment — there is no
+  size-based exception, no auto-merge, ever
+- Move any issue to `Done` yourself — that only happens as a direct result of
+  Sharad's approval (see Role 2)
 - Push directly to main
 - Change code without updating the spec first
 - Leave a `preview/*` branch alive once you start building
@@ -280,11 +284,11 @@ Approve: comment "@<agent> approved" on [Linear issue URL]
 
 ### Role 2: Review & Merge (on approval)
 **Who:** Cursor, Claude — whichever agent Sharad @mentions
-**Triggered by:** Sharad commenting on the Linear issue while a significant PR is open
+**Triggered by:** Sharad commenting on the Linear issue while any PR is open
 
-There is no always-on autonomous reviewer — that would add cost with no clean
-trigger for a solo setup. Instead, the open PR simply waits. Sharad's comment on
-the Linear issue re-wakes an agent to act. His comment is one of two kinds:
+There is no always-on autonomous reviewer, and no auto-merge path — every PR,
+regardless of size, waits for Sharad. The open PR simply sits until he
+comments. His comment is one of two kinds:
 
 **A. Feedback ("make the button red", "the animation is too fast"):**
 1. Every piece of feedback = spec amendment first
@@ -310,7 +314,7 @@ in a comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
 
 **Never:**
 - Merge with failing checks
-- Merge a significant PR without an explicit "approved" from Sharad
+- Merge any PR without an explicit "approved" comment from Sharad — no exceptions for size or type
 - Show Sharad code — only preview URLs
 - Change code without updating the spec first
 
@@ -500,13 +504,14 @@ further — not to paste more rules in.
 1. **Assignment wakes an agent; the `agent-ready` label decides whether it builds.** Status is never the gate — Linear auto-flips it to In Progress on assignment.
 2. **`spec-needed` = discuss only, no code.** `agent-ready` = build.
 3. **Only Sharad adds or removes the `agent-ready` label.**
-4. **Only trivial changes self-merge.** Significant changes wait for Sharad's "@<agent> approved".
+4. **Every PR waits for Sharad's explicit "@<agent> approved" before merging.** No auto-merge, no size-based exception — a typo fix and a new feature both wait the same way.
 5. **Vercel preview URL is the only review surface.** Sharad never sees code.
 6. **All Sharad feedback goes on the Linear issue** — not the PR, even if he sends it via Slack.
 7. **Spec update before code change** — always, even for a one-line fix.
 8. **Checks (Vercel build + any CI) must be green before any merge.**
 9. **Never push to main directly. Never delete anything but a `preview/*` branch you created.**
 10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
+11. **Build must succeed and existing tests must pass before any PR opens.** This is checked by the builder, not assumed.
 
 ---
 
@@ -581,7 +586,7 @@ during active iteration, not a permanent architecture.
 |---|---|
 | @mentions agents on `spec-needed` issues to refine spec | Draft spec, ask questions, update issue description (only when asked) |
 | Swaps label to `agent-ready`, then assigns (assignment wakes the agent) | Check label first, refuse if `spec-needed`, build if `agent-ready` |
-| Views Vercel preview URL on phone | Decide trivial (self-merge) vs significant (wait for approval) |
+| Views Vercel preview URL on phone | Verify build + tests pass before opening any PR |
 | Comments feedback on Linear issue | Update spec then code, refresh preview |
 | Comments "@<agent> approved" | Merge, archive spec, move to Done, notify Slack |
 | Overrides issue priority | Everything else |
