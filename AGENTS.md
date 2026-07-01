@@ -207,10 +207,11 @@ When @mentioned on a Backlog issue:
    - What you understand the feature to be
    - Questions or concerns about the approach
    - Alternative approaches if relevant
-4. When the conversation reaches agreement, **update the issue description** with the final spec
+4. **Only update the issue description when Sharad explicitly says so** — e.g. "update the issue with this", "finalize the spec", "go ahead and lock this in". Until he says that, keep discussing in comments only.
 5. The updated description is what the builder agent will read when assigned
 
 Do not write code. Do not create branches. Do not run openspec commands.
+Do not update the issue description on your own judgment that "agreement was reached" — wait for Sharad's explicit word.
 
 ---
 
@@ -237,42 +238,25 @@ Do not write code. Do not create branches. Do not run openspec commands.
 
 ---
 
-## Cursor Background Rules (paste into Cursor Settings → Rules)
+## Cursor Rules (Optional Safety Net — Not Required Right Now)
+
+AGENTS.md is the single source of truth and is a convention Cursor, Claude, and
+Codex all read automatically at the start of a session — including cloud/background
+sessions triggered by Linear assignment. Duplicating the full ruleset into Cursor
+Settings → Rules creates a second copy that will drift the moment this file changes.
+Don't do that.
+
+If — and only if — Cursor's automation-triggered agent is ever observed skipping
+AGENTS.md (this has not been confirmed; the one time it happened, AGENTS.md didn't
+exist in the repo yet), add exactly this one line as a fallback in Cursor Settings → Rules:
 
 ```
-SPEC PHASE — when I am @mentioned on a Backlog issue (not assigned):
-- Do NOT write code
-- Do NOT create branches
-- Read the issue and openspec/project.md
-- Reply in the Linear comment with my understanding, questions, suggestions
-- Update the issue description with the agreed spec when conversation concludes
-
-IF ASSIGNED TO A BACKLOG ISSUE — do not build:
-- Post this comment on the Linear issue: "⚠️ Spec not confirmed. This issue is in Backlog. Please refine the spec with me in comments, then move to Todo and comment 'spec approved, start building'."
-- Stop. Do not write code. Do not create a branch.
-
-BUILD PHASE — when I am assigned to an issue with status Todo:
-- Read the full issue: description = spec, comments = context
-- Install OpenSpec if needed: npm install --save-dev @fission-ai/openspec@latest
-- Run: npx openspec propose "<title>" then npx openspec apply
-- Open a GitHub PR with Vercel preview URL in the description
-- Wait for Vercel preview URL (up to 90s) from PR checks
-- Self-label the Linear issue: review-required or auto-merge
-- Post to Slack with preview URL if review-required
-- Move issue to In Review
-
-FEEDBACK DURING REVIEW — when Sharad comments on the Linear issue while PR is open:
-- Update spec first (npx openspec propose "adjustment: ...")
-- Then update code
-- Push to same branch — preview auto-refreshes
-
-ALWAYS:
-- Never move an issue to Todo — only Sharad does that
-- Never merge my own PR
-- Never push directly to main
-- All communication via Linear comments and Slack
-- Spec update before code change — always
+Before starting any task, read and follow AGENTS.md in the repo root. Treat it as
+mandatory instructions, not optional context.
 ```
+
+Nothing more. If it still gets skipped after that, that's a signal to investigate
+further — not to paste more rules in.
 
 ---
 
@@ -285,6 +269,44 @@ ALWAYS:
 5. **Spec update before code change** — always, even for a one-line fix.
 6. **CI must be green before any merge.**
 7. **Never push to main directly.**
+
+---
+
+## Distribution: One AGENTS.md, Not Copy-Pasted
+
+This file lives once, in `rohrasharad-ship-it/AI-Workspace`. Every project repo
+gets a **thin pointer file** instead of a full copy — while this process is still
+evolving, staying in one place beats syncing N copies by hand.
+
+**Thin `AGENTS.md` template for a new project repo:**
+```markdown
+# Agent Instructions — <Project Name>
+
+STEP 0 — before doing anything else: fetch and follow the full process from
+rohrasharad-ship-it/AI-Workspace/AGENTS.md (main branch). Treat it as mandatory,
+not optional context. This file only adds project-specific facts.
+
+## Project Facts
+- Repo: <owner/repo>
+- Linear project: <name>
+- Slack channel: <#channel>
+- Tech stack: <one line>
+```
+
+**Why this works:** an agent's GitHub tool (or a raw-content web fetch, if the
+AI-Workspace repo is public) can pull that file in under a second for roughly
+800-1000 tokens — negligible, and it happens once per task, not per turn.
+
+**One requirement:** AI-Workspace must be reachable by whatever agent is doing
+the fetch. Since this file has no secrets in it, keep AI-Workspace **public** so
+any agent (Cursor cloud agent, Claude, Codex via GitHub Action) can fetch it with
+zero special repo grants. If AI-Workspace must stay private, use a git submodule
+in each project repo instead — more setup, but works without a public repo.
+
+**When to stop pointing and start copying:** once this process is stable and
+you're no longer editing it weekly, bake a static copy into each repo. Fetching
+a stable file forever is unnecessary overhead — the pointer is a convenience
+during active iteration, not a permanent architecture.
 
 ---
 
