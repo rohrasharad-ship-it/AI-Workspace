@@ -232,11 +232,37 @@ When @mentioned on an issue labeled `spec-needed`:
    - What you understand the feature to be
    - Questions or concerns about the approach
    - Alternative approaches if relevant
+   - **A spec-preview link, if the feature is visual or motion-based** (see below)
 4. **Only update the issue description when Sharad explicitly says so** — e.g. "update the issue with this", "finalize the spec", "go ahead and lock this in". Until he says that, keep discussing in comments only.
 5. The updated description is what the builder agent will read when assigned
 
-Do not write code. Do not create branches. Do not run openspec commands.
+Do not write code in the real project repo. Do not run openspec commands during spec phase.
 Do not update the issue description on your own judgment that "agreement was reached" — wait for Sharad's explicit word.
+
+**Spec previews — when text isn't enough:**
+
+Text specs are fine for logic, config, or copy changes. They fail for anything
+visual or motion-based (animation, interaction, layout) — Sharad can't evaluate
+"the emoji tilts 20 degrees on scroll" from a sentence. For those cases, build a
+tiny live preview instead of describing it:
+
+1. Only do this for features that are visual, interactive, or motion-based.
+   Skip it entirely for logic/config/copy-only changes — text is enough there.
+2. Build a **single standalone HTML/CSS/JS file** — no framework, no build step,
+   just the one element/interaction in question. Do not touch the real project
+   repo or build the surrounding page. This is a scratch demo, not a feature.
+3. Save it to `rohrasharad-ship-it/AI-Workspace`, path `previews/<issue-id>-v<n>.html`
+   (e.g. `previews/SHA-13-v1.html`)
+4. Push to a branch named `preview/<issue-id>-v<n>` (e.g. `preview/SHA-13-v1`).
+   **Do not open a PR** — Vercel deploys a preview for any pushed branch, PR or not.
+5. Before pushing, **delete the previous iteration's branch** for this issue
+   (`git push origin --delete preview/<issue-id>-v<n-1>`). Only one preview
+   branch should ever exist per issue at a time.
+6. Look up the deployment URL for the new branch and paste it in the Linear
+   comment alongside your spec text.
+7. **When the spec is finalized** (label swapped to `agent-ready`, or Sharad
+   abandons this direction), delete the remaining preview branch as your first
+   action. No preview branch should survive past the spec phase.
 
 ---
 
@@ -341,7 +367,7 @@ during active iteration, not a permanent architecture.
 | Project | Repo | Linear Project | Slack Channel | Vercel Prod |
 |---|---|---|---|---|
 | Resume Website | rohrasharad-ship-it/resume-website | Resume Website | #resume-website | meet-sharad.vercel.app |
-| AI Workspace (PM OS) | rohrasharad-ship-it/AI-Workspace | PM OS | #pm-ops | — |
+| AI Workspace (PM OS) | rohrasharad-ship-it/AI-Workspace | PM OS | #pm-ops | ai-workspace.vercel.app (spec-preview sandbox — set up once via Vercel dashboard "Add New Project", see Spec Previews section) |
 
 *Add new projects via `/init-project` skill.*
 
