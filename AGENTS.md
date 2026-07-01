@@ -55,9 +55,11 @@ BUILD PHASE
     Run OpenSpec, implement
     Run the build and the existing test suite — do not open a PR if either fails
     Open PR
-    Wait for Vercel preview URL on the PR (~60s)
-    Move issue to In Review
-    Slack: "🔍 [feature] ready. Preview: [URL]. Approve with '@<agent> approved' on [Linear link]"
+    Move issue to In Review IMMEDIATELY — never gated on Vercel or anything else
+    Poll for the real Vercel preview URL (not just build success) — up to ~2 min
+    Slack as soon as the URL is known: "🔍 [feature] ready. Preview: [URL]. Approve with '@<agent> approved' on [Linear link]"
+    (If no URL after ~2 min, post anyway with the PR link — never go silent)
+    Once the build finishes, do Visual Self-QA against the real preview; fix and note any issue found
     STOP. The session ends here — nothing watches for approval automatically.
     (No auto-merge, no size-based exception. Every PR waits, always.)
 
@@ -317,23 +319,45 @@ I'll start the moment I see the agent-ready label.
    - If tests are run and fail, fix them or, if you genuinely cannot, stop and
      flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
 7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
-8. Wait up to 90 seconds for Vercel to post the preview URL to the PR
-9. **Visual Self-QA — mandatory (see the section above for the exact
-   mechanism):** screenshot the changed area on the real preview URL, desktop
-   and mobile, actually look at both, fix anything that looks wrong, then
-   attach both screenshots to the Linear issue.
-10. Move issue to `In Review`
-11. Post the Slack message below
-12. **Stop.** This session ends here for every PR, regardless of size — a
+8. **Move issue to `In Review` immediately — do this now, not after anything
+   below.** This must never depend on Vercel, screenshots, or anything else
+   succeeding. A PR existing is enough to justify this status. If everything
+   after this step fails or the session ends unexpectedly, the status change
+   has already happened.
+9. **Get the preview URL as soon as it's knowable — do not wait for the
+   build to finish:**
+   - Vercel assigns the preview URL the moment the deployment is *created*,
+     not when the build succeeds. Poll the PR's checks / the Vercel bot's PR
+     comment every ~10-15 seconds, up to about 2 minutes total, and grab the
+     real public `*.vercel.app` URL (not a Vercel dashboard/inspector link
+     that requires login) as soon as it appears — even while the check still
+     shows pending/building.
+   - **Post the Slack message below as soon as you have that URL.** Note "still
+     building, give it a minute" in the message if the check hasn't reached
+     success yet. Do not hold the message back waiting for full completion.
+   - **If you truly cannot get a real preview URL after ~2 minutes of
+     polling, do not go silent.** Post to Slack and comment on the Linear
+     issue anyway: "PR opened, preview link pending — check directly: [PR URL]."
+     Silence is the failure mode to avoid; a slightly late or missing preview
+     link is recoverable, no notification at all is not.
+10. Once the build actually finishes (not just the URL existing), do **Visual
+    Self-QA — mandatory** (see the section above for the exact mechanism):
+    screenshot the changed area on the real preview URL, desktop and mobile,
+    actually look at both, attach both screenshots to the Linear issue.
+    - If something looks wrong, fix it, push to the same branch, and post a
+      follow-up comment on the Linear issue: "Found and fixed [X] during
+      self-QA — preview refreshed at the same URL." Do not re-post to Slack
+      for this; the issue comment is enough.
+11. **Stop.** This session ends here for every PR, regardless of size — a
     typo fix and a new page both wait the same way. Sharad's `@<agent>
     approved` comment re-wakes an agent to finish the merge (see Role 2).
     Nothing merges or auto-completes without that explicit comment.
 
-**Slack post (every PR, no exceptions):**
+**Slack post (every PR, no exceptions — send as soon as the preview URL is known):**
 ```
 🔍 Ready for your review
 Feature: [issue title]
-Preview: [Vercel preview URL] ← tap this
+Preview: [Vercel preview URL] ← tap this (note if still building)
 What changed: [2 sentences]
 Checks: ✅ build passing, tests passing
 Approve: comment "@<agent> approved" on [Linear issue URL]
@@ -608,6 +632,8 @@ further — not to paste more rules in.
 10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
 11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
 12. **Visual Self-QA is mandatory for Role 1 and all of Role 4** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
+13. **Moving an issue to `In Review` happens immediately when a PR opens — never gated on Vercel, screenshots, or anything downstream.** A step failing later must not silently undo or block what already succeeded earlier.
+14. **Never go silent.** If the preview URL can't be obtained after reasonable polling, post what you have (the PR link) rather than posting nothing at all.
 
 ---
 
