@@ -258,11 +258,21 @@ tiny live preview instead of describing it:
 5. Before pushing, **delete the previous iteration's branch** for this issue
    (`git push origin --delete preview/<issue-id>-v<n-1>`). Only one preview
    branch should ever exist per issue at a time.
-6. Look up the deployment URL for the new branch and paste it in the Linear
-   comment alongside your spec text.
+6. Look up the deployment URL for the new branch. **The Vercel project's output
+   directory is the repo root**, so the bare deployment URL just shows the
+   placeholder homepage — link the actual file path:
+   `<deployment-url>/previews/<issue-id>-v<n>.html`. Paste that full path in
+   the Linear comment alongside your spec text, not the bare deployment URL.
 7. **When the spec is finalized** (label swapped to `agent-ready`, or Sharad
    abandons this direction), delete the remaining preview branch as your first
    action. No preview branch should survive past the spec phase.
+
+**Branch safety — never touch `main`:** only ever run
+`git push origin --delete preview/<issue-id>-v<n>` — a fully qualified branch
+name with the `preview/` prefix. Never run a bare or wildcard delete command.
+`main` is additionally protected at the GitHub level against deletion, but
+agents must never attempt to delete anything other than a `preview/*` branch
+they created themselves.
 
 ---
 
