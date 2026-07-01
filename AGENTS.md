@@ -5,27 +5,44 @@ Every agent (Cursor, Claude, Codex, or otherwise) reads this before starting wor
 
 ---
 
+## Important: Status Is Not the Gate — Labels Are
+
+Linear automatically flips an issue's status to "In Progress" the instant you
+assign it to an agent — that's core to how Linear's native agent-assignment
+feature works, and it is not configurable. This means **status can never be
+used as the spec-approval gate**: by the time an agent's session starts, status
+has already moved away from Backlog, whether or not the spec is actually ready.
+
+**The real gate is the label:**
+- `spec-needed` — spec not yet approved. Agent must refuse to build.
+- `agent-ready` — spec approved by Sharad. Agent may build.
+
+Status is cosmetic from here on — it reflects what Linear's automation does,
+not a signal agents act on.
+
 ## The Loop
 
 ```
-SPEC PHASE (issue in Backlog — no agent assignment yet)
+SPEC PHASE (issue labeled spec-needed — no agent assignment yet)
   Sharad @mentions an agent in a Linear comment: "@cursor what do you think about..."
   Agent replies in comments, refines the spec
   Back-and-forth until Sharad is satisfied
-  Agent updates the issue DESCRIPTION with the final agreed spec
+  Agent updates the issue DESCRIPTION only when Sharad explicitly says so
   No code. No branches. No assignment.
 
 BUILD TRIGGER
-  Sharad moves issue to Todo
+  Sharad swaps the label from spec-needed to agent-ready
   Sharad assigns to Cursor (or Claude/Codex)
-  Sharad comments: "spec approved, start building"
-  ← this comment is the actual trigger
+  ← the agent-ready label is the actual trigger, not the assignment or status
 
 BUILD PHASE
+  Agent's first action on any assignment: check the label, not the status
+  If label is spec-needed → refuse (see Role 1) and stop
+  If label is agent-ready → proceed
   Agent reads full issue: description + all comments = build context
   Agent runs OpenSpec, implements, opens PR
   Agent waits for Vercel to post preview URL to PR (60s)
-  Agent self-labels issue: auto-merge or review-required
+  Agent self-labels the PR outcome: auto-merge or review-required (separate from the spec-gate label)
   Agent posts to Slack with result
 
 REVIEW (if review-required)
@@ -94,24 +111,30 @@ This creates `openspec/project.md` — the project's constitution.
 
 ### Role 1: Builder Agent
 **Who:** Cursor (primary), Claude, Codex
-**Triggered by:** Assigned to issue with status Todo + "spec approved" comment from Sharad
+**Triggered by:** Assigned to an issue
 
-**If assigned to an issue in Backlog status:**
+**FIRST ACTION ON ANY ASSIGNMENT — check the label, never the status:**
+Status will already say "In Progress" by the time you read this — that is
+Linear's automatic behavior on assignment, not a signal that the spec is ready.
+Ignore it. Check labels instead.
+
+**If the issue is labeled `spec-needed` (not `agent-ready`):**
 Do not build. Post this comment on the Linear issue and stop:
 
 ```
 ⚠️ Spec not confirmed.
 
-This issue is still in Backlog. I can't start building until the spec is approved.
+This issue is still labeled spec-needed — the spec hasn't been approved yet.
+I can't start building.
 
 Please review and refine the spec with me in the comments below, then:
-1. Move this issue to Todo
-2. Comment "spec approved, start building"
+1. Swap the label from spec-needed to agent-ready
+2. Re-assign me (or just comment to ping me again)
 
-I'll start the moment I see both.
+I'll start the moment I see the agent-ready label.
 ```
 
-**On trigger (status = Todo + "spec approved" comment):**
+**If the issue is labeled `agent-ready`:**
 1. Read the full Linear issue: description is the spec, comments are context
 2. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest`
 3. Run `npx openspec propose "<issue title>"`
@@ -119,7 +142,9 @@ I'll start the moment I see both.
 5. Open a PR using `.github/pull_request_template.md`
 6. Wait up to 90 seconds for Vercel to post the preview URL to the PR
 7. Extract the Vercel preview URL from the PR checks
-8. Self-label the Linear issue based on what was built:
+8. Add a **second, separate label** to the Linear issue based on what was built
+   (this is independent of the spec-gate label — the issue will have both
+   `agent-ready` and one of these):
    - `review-required` if: new visible component, new page, significant UI change, new user flow
    - `auto-merge` if: copy edit, config, meta tags, bug fix under 50 lines, styling tweak
 9. Post to Linear issue and Slack (see templates below)
@@ -142,8 +167,8 @@ Live: [Vercel prod URL]
 ```
 
 **Never:**
-- Write any code while issue is in Backlog — spec phase only, via @mentions in comments
-- Move an issue to Todo — only Sharad does that
+- Write any code on an issue labeled `spec-needed` — check the label every time, regardless of status
+- Add or remove the `agent-ready` label yourself — only Sharad does that
 - Merge your own PR
 - Push directly to main
 - Change code without updating the spec first
@@ -196,11 +221,11 @@ If you notice a gap that is out of scope for the current PR (missing error state
 ---
 
 ### Role 3: Spec Conversation Agent
-**Who:** Cursor, Claude — @mentioned in Linear comments during Backlog phase
+**Who:** Cursor, Claude — @mentioned in Linear comments while issue is labeled `spec-needed`
 
 **This role has no assignment. It is triggered by @mentions in Linear comments.**
 
-When @mentioned on a Backlog issue:
+When @mentioned on an issue labeled `spec-needed`:
 1. Read the issue title, description, and all prior comments
 2. Read `openspec/project.md` from the repo for project context
 3. Reply in the Linear comment thread:
@@ -225,13 +250,13 @@ Do not update the issue description on your own judgment that "agreement was rea
 3. Finds meaningful gaps (missing features, broken things, spec drift)
 4. Creates Linear issues:
    - Status: `Backlog`
-   - Label: `spec-needed`
+   - Label: `spec-needed` (never `agent-ready` — that's Sharad's call only)
    - Title: `[Feature] <name>` or `[Bug] <what's broken>`
    - Description: 2-3 sentences — what the gap is and why it matters
    - Priority: suggested (Sharad overrides)
 
 **Rules:**
-- Never create issues past Backlog
+- Never label an issue `agent-ready` — only Sharad adds that label
 - Search Linear first — no duplicates
 - Max 5 issues per run
 - No implementation detail in the issue — that belongs in the spec conversation
@@ -262,13 +287,14 @@ further — not to paste more rules in.
 
 ## Rules That Always Apply
 
-1. **Backlog = spec conversation only.** @mentions, no assignment, no code.
-2. **Todo + "spec approved" comment = build trigger.**
-3. **Vercel preview URL is the only review surface.** Sharad never sees code.
-4. **All Sharad feedback goes on the Linear issue** — not the PR, even if he sends it via Slack.
-5. **Spec update before code change** — always, even for a one-line fix.
-6. **CI must be green before any merge.**
-7. **Never push to main directly.**
+1. **The `agent-ready` label is the only build gate — never status.** Linear auto-flips status to In Progress on assignment; that is not spec approval.
+2. **`spec-needed` = discuss only, no code.** `agent-ready` = build.
+3. **Only Sharad adds or removes the `agent-ready` label.**
+4. **Vercel preview URL is the only review surface.** Sharad never sees code.
+5. **All Sharad feedback goes on the Linear issue** — not the PR, even if he sends it via Slack.
+6. **Spec update before code change** — always, even for a one-line fix.
+7. **CI must be green before any merge.**
+8. **Never push to main directly.**
 
 ---
 
@@ -341,8 +367,8 @@ during active iteration, not a permanent architecture.
 
 | Sharad | Agents |
 |---|---|
-| @mentions agents in Backlog comments to refine spec | Draft spec, ask questions, update issue description |
-| Moves issue to Todo (the only build trigger) | Build, PR, self-label, post preview |
+| @mentions agents on `spec-needed` issues to refine spec | Draft spec, ask questions, update issue description (only when asked) |
+| Swaps label to `agent-ready` (the only build gate) | Check label first, refuse if `spec-needed`, build if `agent-ready` |
 | Views Vercel preview URL on phone | Decide auto-merge vs review-required |
 | Comments feedback on Linear issue | Update spec then code, refresh preview |
 | Comments "approved" | Merge, archive spec, notify Slack |
