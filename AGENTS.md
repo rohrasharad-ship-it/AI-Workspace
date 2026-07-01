@@ -246,15 +246,21 @@ I'll start the moment I see the agent-ready label.
 3. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest`
 4. Run `npx openspec propose "<issue title>"` (base it on the finalized description)
 5. Run `npx openspec apply` — implement
-6. **Test before opening anything — do not skip this even for a small change:**
-   - Run the project's build command (e.g. `npm run build`). If it fails, fix
-     it before proceeding. Do not open a PR with a build that doesn't compile.
-   - Run the existing test suite if one exists (e.g. `npm run test:qa` for
-     resume-website's Playwright suite). If tests fail, fix them or, if you
-     genuinely cannot, stop and flag Sharad on the Linear issue rather than
-     opening a PR with known-failing tests.
-   - This is a gate, not a suggestion — a PR should never reach Sharad in a
-     state you haven't already verified builds and passes its own tests.
+6. **Test proportionally — not a full suite for every change, but never skip
+   the build check:**
+   - **Always** run the project's build command (e.g. `npm run build`). If it
+     fails, fix it before proceeding. This alone catches the worst failure
+     mode (site doesn't compile) and costs seconds, not tokens — never skip it.
+   - **If** an existing test suite is present in the repo (e.g. `test:qa`) —
+     run it **only when the change plausibly touches shared or critical
+     surface**: navigation, layout, design-system-level styling, or anything
+     used across multiple capabilities. A copy tweak or a single isolated
+     component doesn't need the full suite run against it.
+   - **Never require a project to have a test suite.** If none exists, the
+     build check alone is the gate — do not create a test suite as a
+     side-effect of a task, and do not block on its absence.
+   - If tests are run and fail, fix them or, if you genuinely cannot, stop and
+     flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
 7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
 8. Wait up to 90 seconds for Vercel to post the preview URL to the PR
 9. Move issue to `In Review`
@@ -517,7 +523,7 @@ further — not to paste more rules in.
 8. **Checks (Vercel build + any CI) must be green before any merge.**
 9. **Never push to main directly. Never delete anything but a `preview/*` branch you created.**
 10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
-11. **Build must succeed and existing tests must pass before any PR opens.** This is checked by the builder, not assumed.
+11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
 
 ---
 
