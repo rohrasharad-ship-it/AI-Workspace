@@ -304,8 +304,9 @@ the Linear issue re-wakes an agent to act. His comment is one of two kinds:
 **Spillover — gaps noticed while building or reviewing:**
 If you notice a gap out of scope for the current issue (missing error state, no
 empty state, accessibility, mobile handling), don't block. File a new Linear
-issue (`Backlog`, `spec-needed`, title + 2-sentence description) and note it in
-a comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
+issue (`Backlog`, `spec-needed`, title + 2-sentence description — see the
+**New Issue Conventions** rule below for assignee and title format) and note it
+in a comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
 
 **Never:**
 - Merge with failing checks
@@ -337,6 +338,23 @@ Do not update the issue description on your own judgment that "agreement was rea
 
 ---
 
+## New Issue Conventions (applies to every issue any agent creates, anywhere)
+
+Whether it's Role 2's spillover, Role 4's crons, or any future issue-creating
+path — every new Linear issue follows both of these, no exceptions:
+
+1. **Assignee is always Sharad Rohra.** Never assign an agent directly at
+   creation time, and never set a `delegate`. Sharad decides who (if anyone)
+   works the issue, and when — that decision happens later, not at creation.
+2. **Title starts with one relevant emoji, then the rest of the title as
+   usual.** e.g. `🎬 [Feature] Project video card shell`, `📱 [Feature] Mobile
+   QA pass`, `🔗 [Feature] LinkedIn Open Graph meta tags`. One emoji is enough
+   — pick the single most relevant one, don't decorate the whole title with
+   several. Sharad is visual; he wants to recognize an issue type at a glance
+   in a list, not read a sentence to know what it's about.
+
+---
+
 ### Role 4: Idea-Generation Agents (cron-triggered)
 
 Three scheduled agents keep the Backlog self-filling so Sharad triages instead
@@ -344,6 +362,8 @@ of inventing work from scratch. All three are set up as **Cursor Automations**
 against the project repo. All three obey the same guardrails:
 
 - Create issues only as `Backlog` + `spec-needed` — **never `agent-ready`**
+- Assignee is always Sharad Rohra, never an agent (see New Issue Conventions above)
+- Title starts with one relevant emoji (see New Issue Conventions above)
 - Search Linear first — skip anything already tracked (open or recently closed)
 - Max 5 issues per run (4c: max 3 — see below); if nothing real is found, create nothing
 - No implementation detail — that belongs to the later spec conversation
@@ -359,7 +379,9 @@ Exact prompt to paste into the Cursor Automation:
 ```
 You are the Spec-Drift Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule.
+follow its guardrails exactly, including the Visual Specs rule and the New
+Issue Conventions rule (assignee always Sharad Rohra, title starts with one
+relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 1. Read openspec/project.md and every file under openspec/specs/ to see what
@@ -369,8 +391,9 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
    cosmetic nitpicks.
 4. Search the Linear "Resume Website" project first; skip anything already tracked.
 5. Create up to 5 issues for real gaps: status Backlog, label spec-needed,
-   title "[Feature] <name>", 2-3 sentence description of the gap and why it
-   matters, suggested priority.
+   assignee Sharad Rohra (never an agent), title "🔧 [Feature] <name>" — pick
+   one relevant emoji, not literally 🔧 every time — 2-3 sentence description
+   of the gap and why it matters, suggested priority.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
    preview (see Visual Specs section) and link it in the issue description.
 7. If nothing meaningful is found, create nothing.
@@ -382,17 +405,20 @@ Exact prompt to paste into the Cursor Automation:
 ```
 You are the Bug/Error Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule.
+follow its guardrails exactly, including the Visual Specs rule and the New
+Issue Conventions rule (assignee always Sharad Rohra, title starts with one
+relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
 1. Read the Vercel production runtime logs/errors from the last 24 hours.
 2. Keep only real, actionable errors — drop one-off network blips, bot noise,
    and anything that self-resolved.
 3. Search the Linear "Resume Website" project first; skip anything already tracked.
-4. Create up to 5 issues: status Backlog, label spec-needed, title
-   "[Bug] <what's broken>", 2-3 sentence description with the error and when it
-   fires. Priority High if it hits a core flow (voice agent, hero, contact),
-   Medium otherwise.
+4. Create up to 5 issues: status Backlog, label spec-needed, assignee Sharad
+   Rohra (never an agent), title "🐛 [Bug] <what's broken>" — pick one relevant
+   emoji, 🐛 is just the default for a generic bug — 2-3 sentence description
+   with the error and when it fires. Priority High if it hits a core flow
+   (voice agent, hero, contact), Medium otherwise.
 5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem.
 6. If the site is clean, create nothing.
@@ -413,7 +439,9 @@ Exact prompt to paste into the Cursor Automation:
 ```
 You are the Market/Feature Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule.
+follow its guardrails exactly, including the Visual Specs rule and the New
+Issue Conventions rule (assignee always Sharad Rohra, title starts with one
+relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 1. Read openspec/project.md in full — the vision, non-negotiables, and
@@ -427,7 +455,10 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
    the stated vision and design philosophy alone.
 4. Search the Linear "Resume Website" project first; skip anything already
    proposed or tracked, including things filed by the spec-drift agent.
-5. Create up to 3 issues: status Backlog, label spec-needed, title
+5. Create up to 3 issues: status Backlog, label spec-needed, assignee Sharad
+   Rohra (never an agent), title starting with one relevant emoji for the
+   specific idea (e.g. 🎯 for a targeting/segmentation feature, 🎚️ for a
+   slider tool — pick what actually fits, not a generic default) followed by
    "[Feature] <name>", 2-3 sentence description of the idea and why it fits
    the portfolio's differentiation goals, suggested priority (default Medium
    or Low — these are speculative, not confirmed gaps).
@@ -475,6 +506,7 @@ further — not to paste more rules in.
 7. **Spec update before code change** — always, even for a one-line fix.
 8. **Checks (Vercel build + any CI) must be green before any merge.**
 9. **Never push to main directly. Never delete anything but a `preview/*` branch you created.**
+10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
 
 ---
 
