@@ -6,8 +6,9 @@ Initialize a new project into the AI-first PM loop. Run this once per new repo.
 ## What this does
 1. Asks you for the project details
 2. Creates AGENTS.md and .github/pull_request_template.md in the target GitHub repo
-3. Creates a Linear project for it
-4. Adds the project to the Project Index in AI-Workspace/AGENTS.md
+3. Initializes OpenSpec properly with per-capability spec files — NOT a flat spec doc
+4. Creates a Linear project for it
+5. Adds the project to the Project Index in AI-Workspace/AGENTS.md
 
 ## Steps
 
@@ -16,6 +17,11 @@ Ask the user for the following (one message, numbered list):
 2. Project display name (e.g. "My App")
 3. Tech stack (framework, styling, backend/DB if any) — one line
 4. Slack channel name for this project (e.g. #my-app)
+5. The product's natural capability breakdown — e.g. "hero, journey, about,
+   contact, voice-agent" for a portfolio site, or the equivalent sections for
+   whatever this product is. If the user isn't sure yet, 3-5 rough guesses are
+   fine — this can be refined later, but it must exist from day one so no
+   agent ever has to read one giant flat spec file.
 
 Once you have the answers, do all of the following:
 
@@ -57,19 +63,36 @@ Create `.github/pull_request_template.md`:
 <!-- Link to the Linear issue that drove this -->
 ```
 
-### Step C — Create Linear project
+### Step C — Initialize OpenSpec with per-capability structure (not a flat file)
+In the target repo, create:
+```
+openspec/project.md
+openspec/specs/<capability-1>/spec.md
+openspec/specs/<capability-2>/spec.md
+... one per capability from the user's answer above
+```
+`openspec/project.md` uses the template from AI-Workspace/AGENTS.md's "The Spec
+Layer: OpenSpec" section, including the `## Capabilities` index listing each
+capability name and its file path. Each `openspec/specs/<capability>/spec.md`
+can start as a short stub (a few sentences of what that capability is/does) —
+it gets filled in properly as real spec conversations happen on real issues.
+The point at this stage is the STRUCTURE existing from day one, not complete
+content — a project that starts with the right shape never needs the
+retrofit resume-website needed.
+
+### Step D — Create Linear project
 Use the Linear MCP tool to create a new project with:
 - Name: $PROJECT_NAME
 - Team: Sharad Rohra
 - Description: $ONE_SENTENCE_DESCRIPTION. Slack: $SLACK_CHANNEL. Repo: $REPO.
 - Priority: Medium
 
-### Step D — Update AI-Workspace/AGENTS.md Project Index
+### Step E — Update AI-Workspace/AGENTS.md Project Index
 Read the current AGENTS.md from the AI-Workspace repo and add a new row to the Project Index table:
 | $PROJECT_NAME | $REPO | $PROJECT_NAME | $SLACK_CHANNEL | $VERCEL_URL |
 
-### Step E — Confirm to the user
+### Step F — Confirm to the user
 Reply with:
-- Links to the two files created in GitHub
+- Links to the files created in GitHub (AGENTS.md, PR template, openspec/ structure)
 - Link to the new Linear project
 - "Next: add your first 3–5 issues to the Linear project in Backlog, then assign the first one to Cursor."
