@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SHA-19 — Live Site Telemetry Widget (preview)</title>
+<style>
+  body { margin:0; font-family: 'DM Sans', Arial, sans-serif; background:#F5EDE0; color:#1A1A1A; height: 100vh; }
+  .page-outline { position: relative; height: 100vh; }
+  .note { position: absolute; top: 24px; left: 24px; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A8A8A; }
+  .fake-content { position: absolute; top: 80px; left: 24px; right: 24px; bottom: 120px; border: 1px dashed rgba(26,26,26,0.15); border-radius: 12px; display:flex; align-items:center; justify-content:center; color:#8A8A8A; font-size:14px; }
+  .widget { position: absolute; bottom: 24px; left: 24px; background: rgba(17,17,17,0.94); color:#F5EDE0; border-radius: 14px; padding: 14px 18px; font-family: 'DM Mono', monospace; font-size: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); min-width: 220px; }
+  .widget .row { display:flex; justify-content: space-between; margin-bottom: 6px; }
+  .widget .row:last-child { margin-bottom: 0; }
+  .widget .val { color:#E8351A; font-weight: 700; }
+  .callout { position:absolute; bottom: 24px; right: 24px; max-width: 340px; border-left: 3px solid #E8351A; padding: 12px 20px; background: rgba(232,53,26,0.05); font-size: 14px; }
+</style>
+</head>
+<body>
+  <div class="page-outline">
+    <div class="note">Static mockup — fixed corner widget, page-outline only. Not interactive.</div>
+    <div class="fake-content">(rest of the long-scroll page)</div>
+    <div class="widget">
+      <div class="row"><span>Visitors today</span><span class="val">37</span></div>
+      <div class="row"><span>Scroll depth</span><span class="val">64%</span></div>
+      <div class="row"><span>Time on page</span><span class="val">2m 14s</span></div>
+    </div>
+    <div class="callout">
+      Small, transparent, always-visible. The portfolio reports its own live
+      analytics back to the visitor instead of hiding them in a dashboard only
+      Sharad sees.
+    </div>
+  </div>
+</body>
+</html>
