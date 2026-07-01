@@ -211,6 +211,61 @@ they created themselves.
 
 ---
 
+## Visual Self-QA: Look at It, Don't Just Read the Code
+
+This is different from Visual Specs above. Visual Specs is a **mockup of a
+proposed idea** before anything is built. Visual Self-QA is **looking at the
+real, live-deployed result** — either something just built (Role 1) or the
+actual current state of the site (Role 4) — the way a human QA tester would:
+open the browser, look at it, judge whether it's actually right.
+
+**Why this exists:** DOM-level test assertions (`element exists`,
+`toBeVisible()`, `href contains X`) do not catch actual visual defects.
+Something can be technically "visible" per Playwright's definition while
+overlapping another element, cut off, squished on mobile, or just ugly. An
+agent must not rely on code-level checks alone to claim something looks
+right — it has to actually look.
+
+**Mandatory, not optional, for all of the following:**
+
+| Role | What to screenshot | Viewport(s) |
+|---|---|---|
+| **Role 1 (Builder)**, after build/tests pass, before opening PR | The specific area you changed on the real deployed preview | Desktop and mobile — both, always |
+| **Role 4a (Spec-Drift)** | The live area related to the gap you're filing — shows the actual current (missing/incomplete) state as evidence | Whichever shows the gap clearly, usually desktop |
+| **Role 4b (Bug/Error)** | The live area showing the actual bug | Whichever reproduces it; both if the bug is viewport-specific |
+| **Role 4c (Market/Feature)** | The homepage or one to two relevant existing areas, for context on where the proposed idea would fit | Desktop |
+
+**Mechanism:**
+1. Use Playwright (already available in resume-website) to navigate to the
+   real URL — the PR's Vercel preview for Role 1, production for Role 4 — and
+   capture a screenshot to a local file.
+2. **Actually view the screenshot** using your own vision, the same way you'd
+   look at any image. Reason about it like a QA tester: does anything overlap,
+   get cut off, look misaligned, break on this viewport? If something looks
+   wrong, fix it (Role 1) or note it precisely in the issue (Role 4) — don't
+   just note that a screenshot was taken.
+3. **Attach the screenshot to the Linear issue** so Sharad sees the same
+   visual evidence you used, not just your verbal claim:
+   - Call `prepare_attachment_upload` with the issue ID, filename, content
+     type, and file size — this returns a signed `uploadRequest` and an `assetUrl`
+   - PUT the raw file bytes to `uploadRequest.url` with the exact headers
+     given, unmodified — this happens outside your context window, the image
+     bytes never pass through your token stream
+   - Call `create_attachment_from_upload` with the issue ID and `assetUrl` to
+     link it to the issue
+   - Reference the same `assetUrl` inline in your comment (e.g.
+     `![screenshot](assetUrl)`) so it's visible directly in the conversation,
+     not just buried in the issue's attachment list
+4. **Never use a base64/inline-content upload path for this.** That routes
+   the image through your own context and is genuinely expensive in tokens —
+   the signed-upload flow above is not. If your tooling only offers a
+   base64 fallback, flag it to Sharad rather than defaulting to it silently.
+
+This is worth the token cost — Sharad has explicitly said so. Don't skip it
+to save tokens; that defeats the purpose.
+
+---
+
 ## Roles
 
 ### Role 1: Builder Agent
@@ -263,9 +318,13 @@ I'll start the moment I see the agent-ready label.
      flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
 7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
 8. Wait up to 90 seconds for Vercel to post the preview URL to the PR
-9. Move issue to `In Review`
-10. Post the Slack message below
-11. **Stop.** This session ends here for every PR, regardless of size — a
+9. **Visual Self-QA — mandatory (see the section above for the exact
+   mechanism):** screenshot the changed area on the real preview URL, desktop
+   and mobile, actually look at both, fix anything that looks wrong, then
+   attach both screenshots to the Linear issue.
+10. Move issue to `In Review`
+11. Post the Slack message below
+12. **Stop.** This session ends here for every PR, regardless of size — a
     typo fix and a new page both wait the same way. Sharad's `@<agent>
     approved` comment re-wakes an agent to finish the merge (see Role 2).
     Nothing merges or auto-completes without that explicit comment.
@@ -389,15 +448,22 @@ against the project repo. All three obey the same guardrails:
   it in the issue description alongside the text.** This applies to all three
   variants below, not just 4c — a spec-drift gap like "add a rocket sticker
   near the hero CTA" needs a visual just as much as a market/feature idea does.
+- **Mandatory for all three variants — take a real screenshot per "Visual
+  Self-QA" above and attach it to the issue.** This is different from the
+  Visual Specs mockup above: it's a screenshot of the actual live site, not a
+  prototype of a proposed idea. 4a and 4b screenshot the current
+  gap/bug directly; 4c screenshots the homepage or relevant existing area for
+  context on where the idea fits. Not optional — do this every time, for every
+  issue these three agents create.
 
 **4a — Spec-Drift Agent** (weekly, Monday 9am)
 Exact prompt to paste into the Cursor Automation:
 ```
 You are the Spec-Drift Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule and the New
-Issue Conventions rule (assignee always Sharad Rohra, title starts with one
-relevant emoji).
+follow its guardrails exactly, including the Visual Specs rule, the Visual
+Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
+Rohra, title starts with one relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 1. Read openspec/project.md and every file under openspec/specs/ to see what
@@ -412,18 +478,23 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
    of the gap and why it matters, suggested priority.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
    preview (see Visual Specs section) and link it in the issue description.
-7. If nothing meaningful is found, create nothing.
+7. Mandatory, every issue you create: take a real Playwright screenshot of
+   the live site area related to this gap (per Visual Self-QA section) and
+   attach it to the issue via prepare_attachment_upload → PUT → 
+   create_attachment_from_upload. Never use a base64/inline upload path.
+8. If nothing meaningful is found, create nothing.
 ```
-Tools to enable: repo (automatic), Linear (create + search issues).
+Tools to enable: repo (automatic), Linear (create + search issues, attach
+files), browser/Playwright (already a devDependency in this repo).
 
 **4b — Bug/Error Agent** (daily, 9am)
 Exact prompt to paste into the Cursor Automation:
 ```
 You are the Bug/Error Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule and the New
-Issue Conventions rule (assignee always Sharad Rohra, title starts with one
-relevant emoji).
+follow its guardrails exactly, including the Visual Specs rule, the Visual
+Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
+Rohra, title starts with one relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
 1. Read the Vercel production runtime logs/errors from the last 24 hours.
@@ -437,11 +508,16 @@ Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
    (voice agent, hero, contact), Medium otherwise.
 5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem.
-6. If the site is clean, create nothing.
+6. Mandatory, every issue you create: take a real Playwright screenshot of
+   the live production site showing the actual problem (per Visual Self-QA
+   section) and attach it to the issue via prepare_attachment_upload → PUT
+   → create_attachment_from_upload. Never use a base64/inline upload path.
+7. If the site is clean, create nothing.
 ```
-Tools to enable: repo (automatic), Linear (create + search issues), Vercel
-(read deployment logs — add a Vercel API token as an automation secret if
-Cursor has no native Vercel integration in your setup).
+Tools to enable: repo (automatic), Linear (create + search issues, attach
+files), Vercel (read deployment logs — add a Vercel API token as an
+automation secret if Cursor has no native Vercel integration in your setup),
+browser/Playwright (already a devDependency in this repo).
 
 **4c — Market/Feature Agent** (weekly, Monday 9am — the "suggest brand-new specs" cron)
 Unlike 4a/4b, this agent isn't looking for gaps against an existing plan — it's
@@ -455,9 +531,9 @@ Exact prompt to paste into the Cursor Automation:
 ```
 You are the Market/Feature Idea-Generation Agent from
 rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule and the New
-Issue Conventions rule (assignee always Sharad Rohra, title starts with one
-relevant emoji).
+follow its guardrails exactly, including the Visual Specs rule, the Visual
+Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
+Rohra, title starts with one relevant emoji).
 
 Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 1. Read openspec/project.md in full — the vision, non-negotiables, and
@@ -481,11 +557,18 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
 6. Every issue from this agent has a visual/UI component almost by definition
    — attach a minimal-effort visual preview (see Visual Specs section) and
    link it in the issue description. Do not skip this step for this agent.
-7. If nothing genuinely differentiated comes to mind, create nothing —
+7. Mandatory, every issue you create: take a real Playwright screenshot of
+   the current homepage (or one to two relevant existing areas) for context
+   on where this idea fits (per Visual Self-QA section) and attach it to the
+   issue via prepare_attachment_upload → PUT → create_attachment_from_upload.
+   Never use a base64/inline upload path. This is separate from the mockup in
+   step 6 — this one shows the current site, not the proposed idea.
+8. If nothing genuinely differentiated comes to mind, create nothing —
    do not invent filler ideas to hit the cap.
 ```
-Tools to enable: repo (automatic), Linear (create + search issues), web search
-(optional — if unavailable, the agent reasons from project.md alone).
+Tools to enable: repo (automatic), Linear (create + search issues, attach
+files), web search (optional — if unavailable, the agent reasons from
+project.md alone), browser/Playwright (already a devDependency in this repo).
 
 ---
 
@@ -524,6 +607,7 @@ further — not to paste more rules in.
 9. **Never push to main directly. Never delete anything but a `preview/*` branch you created.**
 10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
 11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
+12. **Visual Self-QA is mandatory for Role 1 and all of Role 4** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
 
 ---
 
