@@ -241,6 +241,9 @@ right — it has to actually look.
 1. Use Playwright (already available in resume-website) to navigate to the
    real URL — the PR's Vercel preview for Role 1, production for Role 4 — and
    capture a screenshot to a local file.
+   - **If the page you land on is a Vercel/SSO login screen, not the actual
+     site, stop and flag it** (see the preflight check in Role 1) rather than
+     screenshotting and attaching a login page as if it were real evidence.
 2. **Actually view the screenshot** using your own vision, the same way you'd
    look at any image. Reason about it like a QA tester: does anything overlap,
    get cut off, look misaligned, break on this viewport? If something looks
@@ -340,6 +343,17 @@ I'll start the moment I see the agent-ready label.
      issue anyway: "PR opened, preview link pending — check directly: [PR URL]."
      Silence is the failure mode to avoid; a slightly late or missing preview
      link is recoverable, no notification at all is not.
+   - **Preflight check before claiming "preview ready" — do a quick HEAD
+     request on the URL and check where it lands.** If it redirects to
+     `vercel.com/sso-api` or any Vercel login page, the deployment is real but
+     access-gated (Vercel's "Deployment Protection" setting) — this already
+     happened once (see SHA-25) and silently produced a link Sharad couldn't
+     actually open. Do not claim the preview is ready in that case; instead
+     say so plainly: "Preview exists but appears access-gated — check Vercel
+     Deployment Protection settings on this project." Protection should be
+     off on both current projects as of July 2026, but this check costs
+     nothing and catches it immediately if it's ever re-enabled (e.g. by a
+     new project defaulting to it again).
 10. Once the build actually finishes (not just the URL existing), do **Visual
     Self-QA — mandatory** (see the section above for the exact mechanism):
     screenshot the changed area on the real preview URL, desktop and mobile,
