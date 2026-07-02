@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>SHA-30 — Colleague Signal Wall (mockup)</title>
+<style>
+  :root {
+    --bg-primary: #F5EDE0;
+    --text-primary: #1A1A1A;
+    --accent: #E8351A;
+    --muted: #8A8A8A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 48px 24px;
+  }
+  .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .card {
+    background: rgba(232,53,26,0.06);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .card p.quote {
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0 0 16px;
+  }
+  .card p.quote::before { content: "\201C"; color: var(--accent); font-size: 20px; }
+  .who { display: flex; align-items: center; gap: 10px; }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #1A1A1A; color: var(--bg-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace; font-size: 12px;
+  }
+  .who .name { font-size: 13px; font-weight: 600; }
+  .who .role { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+  <div class="label">Minimal mockup — SHA-30 · Colleague Signal Wall · sits at close of About</div>
+  <div class="wrap">
+    <div class="eyebrow">What people say</div>
+    <div class="cards">
+      <div class="card">
+        <p class="quote">Sharad turns ambiguous asks into shipped features faster than anyone I've worked with.</p>
+        <div class="who">
+          <div class="avatar">RM</div>
+          <div><div class="name">R. Mehta</div><div class="role">EM, Impact Analytics</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="quote">He asks the uncomfortable question in the room everyone else avoided.</p>
+        <div class="who">
+          <div class="avatar">AK</div>
+          <div><div class="name">A. Kapoor</div><div class="role">VP Product, Amadeus</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="quote">One of the few PMs I'd trust to actually write the code, not just spec it.</p>
+        <div class="who">
+          <div class="avatar">SL</div>
+          <div><div class="name">S. Lin</div><div class="role">Eng Lead, ISB cohort</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
