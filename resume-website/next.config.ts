@@ -1,13 +1,18 @@
 import type { NextConfig } from "next";
 
 const previewBasePath = process.env.PREVIEW_BASE_PATH;
+const staticExport = process.env.STATIC_EXPORT === "1" || Boolean(previewBasePath);
 
 const nextConfig: NextConfig = {
-  ...(previewBasePath
+  ...(staticExport
     ? {
         output: "export",
-        basePath: previewBasePath,
-        assetPrefix: `${previewBasePath}/`,
+        ...(previewBasePath
+          ? {
+              basePath: previewBasePath,
+              assetPrefix: `${previewBasePath}/`,
+            }
+          : {}),
       }
     : {}),
 };
