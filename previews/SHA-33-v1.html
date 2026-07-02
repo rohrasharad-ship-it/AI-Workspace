@@ -1,0 +1,46 @@
+<title>SHA-33 — Consolidate nav links</title>
+<style>
+  body { margin:0; font-family: -apple-system, "DM Sans", sans-serif; background:#F5EDE0; color:#1A1A1A; padding:40px 24px; }
+  h1 { font-size: 20px; margin-bottom:4px; }
+  p.sub { color:#8A8A8A; font-family: monospace; font-size: 12px; text-transform:uppercase; letter-spacing:0.08em; margin-top:0; margin-bottom:48px;}
+  .block { margin-bottom: 44px; }
+  .label { font-family: monospace; font-size: 11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px; display:flex; align-items:center; gap:8px;}
+  .label.current { color:#8A8A8A; }
+  .label.proposed { color:#E8351A; }
+  .dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .dot.current { background:#8A8A8A; }
+  .dot.proposed { background:#E8351A; }
+  .pill-nav { display:inline-flex; align-items:center; gap:4px; padding:8px 12px; border-radius:999px; border:1px solid rgba(26,26,26,0.12); background:rgba(245,237,224,0.9); box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+  .pill-nav a { padding: 6px 16px; font-size:14px; font-family: monospace; color:#1A1A1A; border-radius:999px; text-decoration:none; }
+  .pill-nav a.dupe { background: rgba(232,53,26,0.1); color:#E8351A; font-weight:600; }
+  .note { max-width:640px; margin-top:12px; font-size:14px; line-height:1.6; color:#3a3a3a; background:rgba(232,53,26,0.06); border-left:3px solid #E8351A; padding:16px 20px; border-radius:4px; }
+  code { background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:3px; font-size:13px; }
+</style>
+
+<h1>SHA-33 — Nav still shows duplicate "Work" / "Timeline" links</h1>
+<p class="sub">Minimal-effort spec preview · static frame, not interactive</p>
+
+<div class="block">
+  <div class="label current"><span class="dot current"></span>Current — 4 links, 2 of them go to the same place</div>
+  <div class="pill-nav">
+    <a class="dupe" href="#">Work</a>
+    <a class="dupe" href="#">Timeline</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </div>
+</div>
+
+<div class="block">
+  <div class="label proposed"><span class="dot proposed"></span>Proposed — one label per destination</div>
+  <div class="pill-nav">
+    <a href="#">Journey</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </div>
+</div>
+
+<div class="note">
+  Both "Work" and "Timeline" (highlighted red above) point to <code>href="#journey"</code> — the same
+  anchor. <code>journey/spec.md</code> confirms Work + Timeline were merged into one Journey section, so
+  the nav should say so too. Proposal: collapse both into a single "Journey" pill.
+</div>
