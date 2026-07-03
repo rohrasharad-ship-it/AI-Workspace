@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SHA-38 — Cmd+K Command Palette (mockup)</title>
+<style>
+  :root {
+    --bg-primary: #F5EDE0;
+    --bg-dark: #111111;
+    --accent: #E8351A;
+    --muted: #8A8A8A;
+    --text-primary: #1A1A1A;
+    --text-inverse: #F5EDE0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: -apple-system, "DM Sans", Helvetica, Arial, sans-serif;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 56px 24px;
+  }
+  .label {
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 600; margin: 0 0 8px; }
+  p.sub { color: var(--muted); max-width: 560px; line-height: 1.5; margin: 0 0 32px; }
+  .hint {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "DM Mono", monospace; font-size: 13px;
+    padding: 8px 14px; border-radius: 999px;
+    background: rgba(26,26,26,0.06);
+    border: 1px solid rgba(26,26,26,0.1);
+  }
+  kbd {
+    background: #1A1A1A; color: var(--text-inverse);
+    border-radius: 5px; padding: 2px 7px; font-size: 12px;
+  }
+
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(17,17,17,0.55);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 14vh;
+  }
+  .palette {
+    width: min(560px, 90vw);
+    background: rgba(18,15,14,0.97);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .search {
+    display: flex; align-items: center; gap: 10px;
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .search .icon { color: var(--muted); font-size: 16px; }
+  .search input {
+    flex: 1; font-size: 16px; color: var(--text-inverse);
+    font-family: -apple-system, sans-serif;
+  }
+  .search .fake-input { color: var(--text-inverse); font-size: 16px; }
+  .search .cursor { display:inline-block; width:1px; height:16px; background: var(--accent); margin-left:2px; vertical-align:-3px; }
+
+  .results { padding: 8px; }
+  .row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 12px; border-radius: 10px; color: var(--text-inverse);
+    font-size: 14px;
+  }
+  .row.active { background: rgba(232,53,26,0.18); }
+  .row .left { display: flex; align-items: center; gap: 10px; }
+  .row .tag {
+    font-family: "DM Mono", monospace; font-size: 10px; color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="label">SHA-38 — minimal-effort mockup, not final</div>
+    <h1>Cmd+K Command Palette</h1>
+    <p class="sub">A typed alternative to the voice agent — same Groq-powered backend, reachable without a microphone. Rough page outline behind; palette overlay is the proposed UI.</p>
+    <div class="hint"><kbd>⌘</kbd><kbd>K</kbd> opens this from anywhere on the page</div>
+  </div>
+
+  <div class="overlay">
+    <div class="palette">
+      <div class="search">
+        <span class="icon">🔍</span>
+        <span class="fake-input">Ask Sharad anything, or jump to…<span class="cursor"></span></span>
+      </div>
+      <div class="results">
+        <div class="row active">
+          <div class="left">🚀 Go to Journey — Amadeus era</div>
+          <span class="tag">jump</span>
+        </div>
+        <div class="row">
+          <div class="left">💬 "What did you build at Impact Analytics?"</div>
+          <span class="tag">ask</span>
+        </div>
+        <div class="row">
+          <div class="left">📄 Download résumé</div>
+          <span class="tag">action</span>
+        </div>
+        <div class="row">
+          <div class="left">✉️ Go to Contact</div>
+          <span class="tag">jump</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
