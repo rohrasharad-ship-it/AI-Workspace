@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SHA-37 — Before/After Case Study Strip (mockup)</title>
+<style>
+  :root {
+    --bg-primary: #F5EDE0;
+    --bg-dark: #111111;
+    --accent: #E8351A;
+    --accent-warm: #FF8C52;
+    --muted: #8A8A8A;
+    --text-primary: #1A1A1A;
+    --text-inverse: #F5EDE0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: -apple-system, "DM Sans", Helvetica, Arial, sans-serif;
+    padding: 48px 24px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .label {
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  p.sub { color: var(--muted); margin: 0 0 40px; max-width: 560px; line-height: 1.5; }
+  .strip {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .card {
+    flex: 0 0 320px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; }
+  .frame {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .before { background: var(--bg-dark); color: rgba(245,237,224,0.4); }
+  .after { background: var(--bg-dark); color: var(--text-inverse); }
+  .before .tag, .after .tag {
+    position: absolute; top: 10px; left: 10px;
+    font-size: 10px; padding: 3px 8px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+  }
+  .after .tag { background: var(--accent); color: #fff; }
+  .logo-demo { display: flex; align-items: center; justify-content: center; }
+  .logo-box {
+    background: #fff; border-radius: 12px; display:flex; align-items:center; justify-content:center;
+    color: #1A1A1A; font-weight: 700; font-family: "DM Mono", monospace;
+  }
+  .before .logo-box { width: 56px; height: 56px; font-size: 10px; }
+  .after .logo-box { width: 92px; height: 92px; font-size: 14px; }
+  .meta { padding: 16px 18px 20px; }
+  .meta .title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .meta .note { color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .arrow { display:flex; align-items:center; justify-content:center; color: var(--muted); font-size: 20px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="label">SHA-37 — minimal-effort mockup, not final</div>
+    <h1>Before/After Case Study Strip</h1>
+    <p class="sub">A horizontal strip of real shipped diffs from this exact site — proof of iteration speed and product judgment shown, not claimed. Static placeholder frames below stand in for real before/after screenshots.</p>
+
+    <div class="strip">
+      <div class="card">
+        <div class="pair">
+          <div class="frame before"><span class="tag">before</span><div class="logo-demo"><div class="logo-box">LOGO</div></div></div>
+          <div class="frame after"><span class="tag">after</span><div class="logo-demo"><div class="logo-box">LOGO</div></div></div>
+        </div>
+        <div class="meta">
+          <div class="title">Journey logo sizing</div>
+          <div class="note">Logos were swimming in white space inside the card — resized to fill the frame properly. Shipped in one pass.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pair">
+          <div class="frame before"><span class="tag">before</span>😐</div>
+          <div class="frame after"><span class="tag">after</span>🙂</div>
+        </div>
+        <div class="meta">
+          <div class="title">Warmer voice-agent avatar</div>
+          <div class="note">Stern expression, intense glow → softer smile, gentler presence. Same mechanics, better read.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pair">
+          <div class="frame before"><span class="tag">before</span>✉️ · in</div>
+          <div class="frame after"><span class="tag">after</span>✉️ · 📇 · in</div>
+        </div>
+        <div class="meta">
+          <div class="title">Save Contact vCard</div>
+          <div class="note">Contact went from two links to a one-tap "add to phone contacts" flow.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
