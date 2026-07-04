@@ -271,6 +271,36 @@ to save tokens; that defeats the purpose.
 
 ---
 
+## The Issue Description: Spec Text vs. Status Snapshot
+
+Every issue description has two parts, updated under different rules — this
+is what lets Sharad get a full picture from the description alone, without
+digging through comment history, while still keeping the spec itself from
+being rewritten mid-conversation on a whim:
+
+1. **Spec text** — the finalized feature description. Only changes when
+   Sharad gives explicit approval (see Role 3, step 7). This is what a Role 1
+   builder reads as "the spec."
+2. **Status Snapshot** — a short block pinned at the very top of the
+   description, refreshed by whichever agent/role last touched the issue, on
+   *every* meaningful turn (spec reply, PR opened, self-QA fix found,
+   approval, merge) — not gated on the spec being locked.
+
+```
+--- STATUS ---
+Phase: <Spec discussion | Building | In Review | Done>
+Last update: <date> — <one sentence of what just happened>
+PR: <link, or "none yet">
+Preview: <link, or "none yet">
+--- END STATUS ---
+```
+
+Keep it to those four lines — this is a dashboard, not a log. Comments remain
+the full history; this block is only ever overwritten with the current
+snapshot, never appended to.
+
+---
+
 ## Roles
 
 ### Role 1: Builder Agent
@@ -323,10 +353,17 @@ I'll start the moment I see the agent-ready label.
      flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
 7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
 8. **Move issue to `In Review` immediately — do this now, not after anything
-   below.** This must never depend on Vercel, screenshots, or anything else
-   succeeding. A PR existing is enough to justify this status. If everything
-   after this step fails or the session ends unexpectedly, the status change
-   has already happened.
+   below, and as literally the next tool call after the PR is created (before
+   drafting the Slack message, before polling Vercel, before anything else).**
+   This must never depend on Vercel, screenshots, or anything else succeeding.
+   A PR existing is enough to justify this status. If everything after this
+   step fails or the session ends unexpectedly, the status change has already
+   happened. Also refresh the Status Snapshot block (Phase: In Review, PR
+   link) in the same action — see "The Issue Description" section above.
+   **This step has been observed being skipped in practice** — do not treat it
+   as optional or something to get to eventually; treat it as blocking every
+   later step in this list. (See also the native-automation backup in "Cursor
+   Rules" below, which does not depend on the agent remembering this at all.)
 9. **Get the preview URL as soon as it's knowable — do not wait for the
    build to finish:**
    - Vercel assigns the preview URL the moment the deployment is *created*,
@@ -443,11 +480,32 @@ When @mentioned on an issue labeled `spec-needed`:
    - Alternative approaches if relevant
    - **A spec-preview link, if the feature is visual or motion-based** — see
      "Visual Specs" below, **full-effort tier** (Sharad is actively engaged already)
-4. **Only update the issue description when Sharad explicitly says so** — e.g. "update the issue with this", "finalize the spec", "go ahead and lock this in". Until he says that, keep discussing in comments only.
-5. The updated description is what the builder agent will read when assigned
+4. **Always refresh the Status Snapshot block** in the description (see "The
+   Issue Description" section below) on every reply, regardless of whether the
+   spec itself is locked yet — Sharad should never have to read comment
+   history to know where a conversation stands.
+5. **When the conversation looks converged on a buildable spec, ask directly
+   — don't wait silently for magic words:** "This looks ready to build — want
+   me to lock in the spec, flip the label, and kick off the build?" (or
+   similar). Surfacing the checkpoint is the agent's job, not Sharad's.
+6. **Treat any of the following as approval** — exact phrasing is not
+   required: "yes", "go ahead", "sounds good", "ship it", "approved", "lgtm",
+   a direct affirmative reply to your own check-in from (5), or the original
+   explicit phrases ("update the issue", "finalize the spec", "lock this in").
+   Sharad should never need to learn special vocabulary to unblock a build.
+7. **On approval, do all of the following yourself, in the same turn — no
+   separate manual steps for Sharad:**
+   - Finalize the issue description's spec text from the conversation
+   - Swap the label from `spec-needed` to `agent-ready`
+   - Assign the issue to the builder agent (this assignment is what wakes
+     Role 1 — see "Trigger vs Gate" above)
+   Sharad's only action is the approval reply itself. He should never need to
+   touch the label dropdown or assignee field by hand.
 
 Do not write code in the real project repo. Do not run openspec commands during spec phase.
-Do not update the issue description on your own judgment that "agreement was reached" — wait for Sharad's explicit word.
+Do not perform step 7 on your own inferred judgment that "agreement was
+reached" without a real signal per (6) — a false-positive here starts an
+unasked build, which is worse than checking in one extra time.
 
 ---
 
@@ -521,9 +579,17 @@ Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
    attach it to the issue via prepare_attachment_upload → PUT → 
    create_attachment_from_upload. Never use a base64/inline upload path.
 8. If nothing meaningful is found, create nothing.
+9. Housekeeping (runs every time, independent of 1-8): list all remote
+   `preview/*` branches in this repo. For each, parse the issue ID from the
+   branch name (`preview/<issue-id>-v<n>`) and look up that issue in Linear.
+   Delete the branch if the issue is no longer labeled `spec-needed` (i.e. it
+   moved to `agent-ready`, `In Review`, `Done`, or was canceled/duplicated),
+   or if it's an older version number than the latest branch for that issue.
+   Report the count deleted at the end of the run.
 ```
-Tools to enable: repo (automatic), Linear (create + search issues, attach
-files), browser/Playwright (already a devDependency in this repo).
+Tools to enable: repo (automatic, including branch delete), Linear (create +
+search issues, attach files, read issue status/labels), browser/Playwright
+(already a devDependency in this repo).
 
 **4b — Bug/Error Agent** (daily, 9am)
 Exact prompt to paste into the Cursor Automation:
@@ -610,7 +676,7 @@ project.md alone), browser/Playwright (already a devDependency in this repo).
 
 ---
 
-## Cursor Rules (Optional Safety Net — Not Required Right Now)
+## Cursor Rules (Fallback — Now Confirmed Needed, Not Just Hypothetical)
 
 AGENTS.md is the single source of truth and is a convention Cursor, Claude, and
 Codex all read automatically at the start of a session — including cloud/background
@@ -618,17 +684,41 @@ sessions triggered by Linear assignment. Duplicating the full ruleset into Curso
 Settings → Rules creates a second copy that will drift the moment this file changes.
 Don't do that.
 
-If — and only if — Cursor's automation-triggered agent is ever observed skipping
-AGENTS.md (this has not been confirmed; the one time it happened, AGENTS.md didn't
-exist in the repo yet), add exactly this one line as a fallback in Cursor Settings → Rules:
+**This has now been directly observed** (Cursor's builder agent skipping the
+move-to-`In Review` step, Role 1 step 8), not just a hypothetical. Add exactly
+this one line as a fallback in Cursor Settings → Rules now:
 
 ```
 Before starting any task, read and follow AGENTS.md in the repo root. Treat it as
 mandatory instructions, not optional context.
 ```
 
-Nothing more. If it still gets skipped after that, that's a signal to investigate
-further — not to paste more rules in.
+Nothing more. If it still gets skipped after that, that's a signal to
+investigate further — not to paste more rules in.
+
+### Structural backup for the `In Review` transition specifically
+
+Don't rely solely on an agent remembering one API call at the right moment —
+add a second, non-agent-dependent path: in Linear, go to **Settings →
+Integrations → GitHub** and enable the built-in workflow automation that moves
+an issue's status based on its linked PR's state (open PR → `In Review`,
+PR merged → `Done`). This is a native Linear feature, not something any agent
+has to execute — once configured, the status updates correctly even if the
+agent's own step 8 is skipped. Keep the agent instruction above as well; the
+two paths don't conflict, whichever fires first wins and both land on the
+same correct status.
+
+### Structural backup for preview-branch pileup
+
+The per-issue cleanup rules above (delete the previous iteration's branch,
+delete on spec-lock) rely on an agent remembering what it created. Add a
+periodic sweep to the weekly spec-drift cron (Role 4a): list all remote
+`preview/*` branches, check each one's issue via the branch name
+(`preview/<issue-id>-v<n>`), and delete any branch whose issue is no longer
+`spec-needed` (i.e. it's `agent-ready`, `In Review`, `Done`, or canceled) or
+that isn't the highest version number for that issue. Report how many were
+deleted in the cron's normal output. This catches orphans regardless of which
+session created them.
 
 ---
 
@@ -636,18 +726,27 @@ further — not to paste more rules in.
 
 1. **Assignment wakes an agent; the `agent-ready` label decides whether it builds.** Status is never the gate — Linear auto-flips it to In Progress on assignment.
 2. **`spec-needed` = discuss only, no code.** `agent-ready` = build.
-3. **Only Sharad adds or removes the `agent-ready` label.**
+3. **The `agent-ready` label only changes as a direct, same-turn consequence
+   of Sharad's explicit approval** (see Role 3, steps 6-7) — never on an
+   agent's own inferred judgment that agreement was reached, and never at any
+   other time. Sharad's job is to type the approval; the agent's job is to
+   execute the mechanical label/assignee change — not to decide independently
+   that approval happened.
 4. **Every PR waits for Sharad's explicit "@<agent> approved" before merging.** No auto-merge, no size-based exception — a typo fix and a new feature both wait the same way.
 5. **Vercel preview URL is the only review surface.** Sharad never sees code.
 6. **All Sharad feedback goes on the Linear issue** — not the PR, even if he sends it via Slack.
 7. **Spec update before code change** — always, even for a one-line fix.
 8. **Checks (Vercel build + any CI) must be green before any merge.**
-9. **Never push to main directly. Never delete anything but a `preview/*` branch you created.**
+9. **Never push to main directly. Never delete anything but a `preview/*`
+   branch** — either one you created this session, or, for the weekly
+   spec-drift cron's housekeeping sweep, an orphaned `preview/*` branch whose
+   issue is no longer `spec-needed` (see "Cursor Rules" backup section above).
 10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
 11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
 12. **Visual Self-QA is mandatory for Role 1 and all of Role 4** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
 13. **Moving an issue to `In Review` happens immediately when a PR opens — never gated on Vercel, screenshots, or anything downstream.** A step failing later must not silently undo or block what already succeeded earlier.
 14. **Never go silent.** If the preview URL can't be obtained after reasonable polling, post what you have (the PR link) rather than posting nothing at all.
+15. **Keep the Status Snapshot block at the top of every issue description current on every touch** (see "The Issue Description" section) — Sharad should be able to read the description alone and know the current phase, without opening comments.
 
 ---
 
