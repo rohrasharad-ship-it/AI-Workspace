@@ -4,7 +4,8 @@
 **Triggered by:** Assigned to a Linear issue
 
 **Read first:** `agents/shared/loop.md`, `agents/shared/openspec.md`,
-`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`
+`agents/shared/visual-self-qa.md`, `agents/shared/status-snapshot.md`,
+`agents/shared/conventions.md`
 
 ---
 
@@ -54,10 +55,18 @@ I'll start the moment I see the agent-ready label.
      flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
 7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
 8. **Move issue to `In Review` immediately — do this now, not after anything
-   below.** This must never depend on Vercel, screenshots, or anything else
-   succeeding. A PR existing is enough to justify this status. If everything
-   after this step fails or the session ends unexpectedly, the status change
-   has already happened.
+   below, and as literally the next tool call after the PR is created (before
+   drafting the Slack message, before polling Vercel, before anything else).**
+   This must never depend on Vercel, screenshots, or anything else succeeding.
+   A PR existing is enough to justify this status. If everything after this
+   step fails or the session ends unexpectedly, the status change has already
+   happened. Also refresh the Status Snapshot block (Phase: In Review, PR
+   link) in the same action — see `agents/shared/status-snapshot.md`.
+   **This step has been observed being skipped in practice** — do not treat it
+   as optional or something to get to eventually; treat it as blocking every
+   later step in this list. (See also the native-automation backup in
+   `agents/shared/conventions.md`'s Cursor Rules section, which does not
+   depend on the agent remembering this at all.)
 9. **Get the preview URL as soon as it's knowable — do not wait for the
    build to finish:**
    - Vercel assigns the preview URL the moment the deployment is *created*,

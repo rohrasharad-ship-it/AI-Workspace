@@ -35,8 +35,18 @@ full-breadth reading by design — see the "who reads how much" table in
    and attach it to the issue via prepare_attachment_upload → PUT →
    create_attachment_from_upload. Never use a base64/inline upload path.
 8. If nothing meaningful is found, create nothing.
+9. **Housekeeping (runs every time, independent of 1-8):** list all remote
+   `preview/*` branches in the target repo. For each, parse the issue ID from
+   the branch name (`preview/<issue-id>-v<n>`) and look up that issue in
+   Linear. Delete the branch if the issue is no longer labeled `spec-needed`
+   (i.e. it moved to `agent-ready`, `In Review`, `Done`, or was
+   canceled/duplicated), or if it's an older version number than the latest
+   branch for that issue. Report the count deleted at the end of the run.
+   This is the structural backup for preview-branch pileup — see
+   `agents/shared/conventions.md`'s Cursor Rules section for why it exists.
 
-**Tools needed:** repo read access (GitHub MCP), Linear (create + search
-issues, attach files), browser/Playwright against the live site.
+**Tools needed:** repo read access (GitHub MCP, including branch delete),
+Linear (create + search issues, attach files, read issue status/labels),
+browser/Playwright against the live site.
 
 **Cadence:** weekly, Monday 9am (default — see `routines/idea-sweep.md`).
