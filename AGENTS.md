@@ -1,762 +1,48 @@
-# PM OS — Agent Operating Instructions
+# PM OS — Agent Operating Instructions (Router)
 
-This file is the single source of truth for how AI agents operate across all of Sharad's projects.
-Every agent (Cursor, Claude, Codex, or otherwise) reads this before starting work.
+This file is the entry point for how AI agents operate across all of Sharad's
+projects. Every agent (Cursor, Claude, Codex, or otherwise) reads this before
+starting work — but this file itself is deliberately thin. It tells you which
+role you're in and which file to read next; the actual process lives in
+`agents/` and `routines/`.
 
----
+## Why it's split this way
 
-## Core Concept: Trigger vs Gate
-
-Two different things, often confused:
-
-- **Trigger** = what *wakes* an agent. Assigning an issue to an agent, or
-  @mentioning it in a comment, starts a fresh agent session. This is the only
-  way an agent starts working — nothing else wakes it (a plain comment with no
-  @mention wakes no one; a status change wakes no one).
-- **Gate** = what the woken agent *checks before proceeding*. This is the
-  `agent-ready` label. The agent wakes on assignment, then reads the label to
-  decide whether to build or refuse.
-
-So the build flow is always: **assignment wakes the agent → the agent checks the
-label → builds if `agent-ready`, refuses if `spec-needed`.**
-
-### Why the label, not the status
-
-Linear automatically flips an issue's status to "In Progress" the instant you
-assign it to an agent — core to Linear's native agent-assignment feature, not
-configurable. By the time an agent's session starts, status has already left
-Backlog whether or not the spec is ready. So **status can never be the gate.**
-
-- `spec-needed` — spec not yet approved. Agent refuses to build.
-- `agent-ready` — spec approved by Sharad. Agent may build.
-
-Status is cosmetic — it reflects Linear's automation, not a signal agents act on.
-
-## The Loop
+A single flat instructions file means every agent — whether it's building a
+feature, discussing a spec, or scanning for bugs — reads the entire ruleset,
+including sections it will never act on. That wastes tokens and increases the
+chance of drift/confusion from irrelevant context. So this repo is structured
+like OpenSpec is structured for product specs (see `agents/shared/openspec.md`):
+one small file everyone reads, then per-role files that only the relevant
+agent reads.
 
 ```
-SPEC PHASE (issue labeled spec-needed — no agent assignment yet)
-  Sharad @mentions an agent in a Linear comment: "@cursor what do you think about..."
-  Agent replies in comments, refines the spec
-  Back-and-forth until Sharad is satisfied
-  Agent updates the issue DESCRIPTION only when Sharad explicitly says so
-  No code. No branches. No assignment.
-
-BUILD TRIGGER
-  Sharad swaps the label from spec-needed to agent-ready, then assigns to an agent
-  (assignment wakes the agent; the agent-ready label is what tells it to proceed)
-
-BUILD PHASE
-  Agent's first action: check the label, not the status
-  If spec-needed → refuse (see Role 1) and stop
-  If agent-ready → proceed:
-    Clean up any leftover preview/<issue-id>-* branch from the spec phase
-    Read full issue: finalized description = spec, comments = context
-    Run OpenSpec, implement
-    Run the build and the existing test suite — do not open a PR if either fails
-    Open PR
-    Move issue to In Review IMMEDIATELY — never gated on Vercel or anything else
-    Poll for the real Vercel preview URL (not just build success) — up to ~2 min
-    Slack as soon as the URL is known: "🔍 [feature] ready. Preview: [URL]. Approve with '@<agent> approved' on [Linear link]"
-    (If no URL after ~2 min, post anyway with the PR link — never go silent)
-    Once the build finishes, do Visual Self-QA against the real preview; fix and note any issue found
-    STOP. The session ends here — nothing watches for approval automatically.
-    (No auto-merge, no size-based exception. Every PR waits, always.)
-
-APPROVAL (every PR — no exceptions for size or type)
-  Sharad taps the preview URL on his phone, reviews visually
-  Either:
-    Feedback → comments on the Linear issue (spec change first, then code — see Role 2)
-    Approved → comments "@<agent> approved" (the @mention re-wakes the agent)
-  On approval, the re-woken agent: merges → openspec archive → moves to Done → Slack "🚀 live"
+AGENTS.md              — this file: router only
+agents/
+  builder.md            — Role 1: assigned a Linear issue, builds it
+  reviewer.md            — Role 2: re-woken by Sharad's feedback/approval comment
+  spec-conversation.md   — Role 3: @mentioned on a spec-needed issue
+  spec-drift.md          — Role 4a: idea-generation, routine-triggered
+  bug-error.md           — Role 4b: idea-generation, routine-triggered
+  market-feature.md      — Role 4c: idea-generation, routine-triggered
+  shared/                — modules referenced by name from role files above
+routines/               — named, git-stored jobs an external trigger invokes
+                           by name; see routines/README.md
+projects.md             — repo / Linear / Slack / prod URL per project
 ```
 
----
-
-## The Spec Layer: OpenSpec
-
-Every repo uses OpenSpec to keep a living spec in sync with what's actually built.
-**The whole point of OpenSpec — not optional, not a nice-to-have — is that the
-spec is split by capability so agents only read what's relevant to the task in
-front of them.** A single flat spec file (however well organized with headers)
-defeats this: every agent ends up reading the entire thing for every task,
-which wastes tokens and increases the chance of drift/confusion on unrelated
-sections.
-
-**Setup (agent does this once per repo, on first task — verify it actually ran,
-don't just assume from a prior AGENTS.md instruction):**
-```bash
-npm install --save-dev @fission-ai/openspec@latest
-npx openspec init   # select cursor as assistant
-```
-
-**Required structure after init:**
-```
-openspec/
-├── project.md              — small constitution, ~1 page, always read
-├── specs/
-│   ├── <capability-a>/spec.md    — e.g. hero, journey, voice-agent, contact
-│   ├── <capability-b>/spec.md
-│   └── ...
-└── changes/
-    └── <change-id>/proposal.md, tasks.md   — one small delta per active change
-```
-
-If a repo currently has a single flat spec file (e.g. a pre-existing `SPEC.md`
-from before OpenSpec was adopted), **that must be split into per-capability
-files under `openspec/specs/`** as part of running `openspec init` properly —
-not left as-is with OpenSpec layered awkwardly on top. Natural capability
-boundaries are usually the site's own sections (hero, journey/timeline, about,
-contact, voice-agent, etc.) — split along those lines, don't invent new ones.
-
-When bootstrapping a new project, do **not** start from empty placeholder
-stubs if the app already has shipped features. First inspect the codebase,
-identify what is already built, and write those existing capabilities into the
-baseline OpenSpec files. New issues are for gaps beyond that baseline, not for
-re-describing working behavior.
-
-**`openspec/project.md` template (agent fills this on init):**
-```markdown
-# Project: <Name>
-
-## What This Is
-<One sentence: what the product does and who it's for>
-
-## Tech Stack
-- Framework: 
-- Styling: 
-- Backend/DB: 
-- Hosting: Vercel
-- Language: TypeScript
-
-## Non-Negotiables
-- <Rules the agent must never break>
-- Every PR must include the Vercel preview URL
-- No new dependencies without a spec proposal first
-
-## Out of Scope
-<What this product will never do>
-
-## Capabilities
-<List of capability names and which openspec/specs/<name>/spec.md file covers
-each one — this is the index an agent uses to find the ONE file it needs>
-```
-
-**Three commands — all run by the agent, never Sharad:**
-- `npx openspec propose "<title>"` — generates proposal artifacts before coding
-- `npx openspec apply` — implements the approved spec
-- `npx openspec archive` — folds delta back into the relevant capability's
-  `spec.md` after merge — **not** into one giant file
-
-### Who reads how much (this is the rule that actually prevents waste)
-
-| Agent | What it reads | Why |
-|---|---|---|
-| **Idea-Generation (spec-drift, Role 4)** | `project.md` + **all** capability spec files | Its job is finding gaps across the whole product — full breadth is correct here, not a mistake |
-| **Builder / Spec Conversation (Roles 1 & 3) on a single issue** | `project.md` + **only the one relevant capability's** `spec.md` | It's working one feature — reading unrelated capabilities wastes tokens and adds irrelevant context that can cause drift |
-
-If a builder or spec-conversation agent finds itself reading the entire
-`openspec/specs/` tree for a single-capability task, something is wrong —
-either the capability split doesn't exist yet (fix it, see above) or the task
-genuinely spans multiple capabilities (rare — flag it to Sharad rather than
-silently reading everything).
-
----
-
-## Visual Specs: When Text Isn't Enough
-
-PMs today pitch features with a prototype, not a document. This project follows
-the same rule: **any time an agent proposes something with a meaningful visual
-or motion component — whether during an active spec conversation (Role 3) or
-while auto-generating a brand-new idea (Role 4, spec-drift or market/feature) —
-it attaches a visual, not just text.** Sharad should never have to imagine what
-"the emoji tilts 20 degrees on scroll" or "add a rocket sticker near the hero
-CTA" looks like from a sentence.
-
-**Skip this entirely** for changes with no visual/UI component — logic, config,
-copy-only changes, backend behavior. Text is genuinely enough there; don't
-manufacture a visual to check a box.
-
-**Mechanism (same for every use, only the effort tier changes):**
-1. Build a **single standalone HTML/CSS/JS file** — no framework, no build step,
-   just the element/interaction in question, or a rough page-outline showing
-   roughly where it would sit. Do not touch the real project repo.
-2. Save it to `rohrasharad-ship-it/AI-Workspace`, path `previews/<issue-id>-v<n>.html`
-   (e.g. `previews/SHA-13-v1.html`)
-3. Push to a branch named `preview/<issue-id>-v<n>` (e.g. `preview/SHA-13-v1`).
-   **Do not open a PR** — Vercel deploys a preview for any pushed branch, PR or not.
-4. Before pushing, **delete the previous iteration's branch** for this issue
-   (`git push origin --delete preview/<issue-id>-v<n-1>`). Only one preview
-   branch should ever exist per issue at a time.
-5. Look up the deployment URL for the new branch. **The Vercel project's output
-   directory is the repo root**, so the bare deployment URL just shows the
-   placeholder homepage — link the actual file path:
-   `<deployment-url>/previews/<issue-id>-v<n>.html`. Paste that full path
-   alongside the spec text, not the bare deployment URL.
-6. **When the idea is dropped or the spec is finalized** (`agent-ready` label,
-   or Sharad rejects it in triage), delete the remaining preview branch. No
-   preview branch should survive past that point.
-
-**Two effort tiers — same mechanism, different investment:**
-
-| Tier | When | Effort |
-|---|---|---|
-| **Full** | Role 3 — Sharad is already actively discussing this issue with you | Build the real interaction if motion matters (e.g. an actual scroll-linked emoji tilt) — this is a live candidate for building |
-| **Minimal** | Role 4 — you're auto-generating a brand-new idea Sharad hasn't seen yet | A single static frame is enough: show the emoji itself, roughly where it would sit on the page, or a plain annotated mockup. No interactivity, no polish. Most auto-generated ideas get triaged out — don't over-invest before Sharad has even looked at it. |
-
-**Branch safety — never touch `main`:** only ever run
-`git push origin --delete preview/<issue-id>-v<n>` — a fully qualified branch
-name with the `preview/` prefix. Never run a bare or wildcard delete command.
-`main` is additionally protected at the GitHub level against deletion, but
-agents must never attempt to delete anything other than a `preview/*` branch
-they created themselves.
-
----
-
-## Visual Self-QA: Look at It, Don't Just Read the Code
-
-This is different from Visual Specs above. Visual Specs is a **mockup of a
-proposed idea** before anything is built. Visual Self-QA is **looking at the
-real, live-deployed result** — either something just built (Role 1) or the
-actual current state of the site (Role 4) — the way a human QA tester would:
-open the browser, look at it, judge whether it's actually right.
-
-**Why this exists:** DOM-level test assertions (`element exists`,
-`toBeVisible()`, `href contains X`) do not catch actual visual defects.
-Something can be technically "visible" per Playwright's definition while
-overlapping another element, cut off, squished on mobile, or just ugly. An
-agent must not rely on code-level checks alone to claim something looks
-right — it has to actually look.
-
-**Mandatory, not optional, for all of the following:**
-
-| Role | What to screenshot | Viewport(s) |
-|---|---|---|
-| **Role 1 (Builder)**, after build/tests pass, before opening PR | The specific area you changed on the real deployed preview | Desktop and mobile — both, always |
-| **Role 4a (Spec-Drift)** | The live area related to the gap you're filing — shows the actual current (missing/incomplete) state as evidence | Whichever shows the gap clearly, usually desktop |
-| **Role 4b (Bug/Error)** | The live area showing the actual bug | Whichever reproduces it; both if the bug is viewport-specific |
-| **Role 4c (Market/Feature)** | The homepage or one to two relevant existing areas, for context on where the proposed idea would fit | Desktop |
-
-**Mechanism:**
-1. Use Playwright (already available in resume-website) to navigate to the
-   real URL — the PR's Vercel preview for Role 1, production for Role 4 — and
-   capture a screenshot to a local file.
-   - **If the page you land on is a Vercel/SSO login screen, not the actual
-     site, stop and flag it** (see the preflight check in Role 1) rather than
-     screenshotting and attaching a login page as if it were real evidence.
-2. **Actually view the screenshot** using your own vision, the same way you'd
-   look at any image. Reason about it like a QA tester: does anything overlap,
-   get cut off, look misaligned, break on this viewport? If something looks
-   wrong, fix it (Role 1) or note it precisely in the issue (Role 4) — don't
-   just note that a screenshot was taken.
-3. **Attach the screenshot to the Linear issue** so Sharad sees the same
-   visual evidence you used, not just your verbal claim:
-   - Call `prepare_attachment_upload` with the issue ID, filename, content
-     type, and file size — this returns a signed `uploadRequest` and an `assetUrl`
-   - PUT the raw file bytes to `uploadRequest.url` with the exact headers
-     given, unmodified — this happens outside your context window, the image
-     bytes never pass through your token stream
-   - Call `create_attachment_from_upload` with the issue ID and `assetUrl` to
-     link it to the issue
-   - Reference the same `assetUrl` inline in your comment (e.g.
-     `![screenshot](assetUrl)`) so it's visible directly in the conversation,
-     not just buried in the issue's attachment list
-4. **Never use a base64/inline-content upload path for this.** That routes
-   the image through your own context and is genuinely expensive in tokens —
-   the signed-upload flow above is not. If your tooling only offers a
-   base64 fallback, flag it to Sharad rather than defaulting to it silently.
-
-This is worth the token cost — Sharad has explicitly said so. Don't skip it
-to save tokens; that defeats the purpose.
-
----
-
-## The Issue Description: Spec Text vs. Status Snapshot
-
-Every issue description has two parts, updated under different rules — this
-is what lets Sharad get a full picture from the description alone, without
-digging through comment history, while still keeping the spec itself from
-being rewritten mid-conversation on a whim:
-
-1. **Spec text** — the finalized feature description. Only changes when
-   Sharad gives explicit approval (see Role 3, step 7). This is what a Role 1
-   builder reads as "the spec."
-2. **Status Snapshot** — a short block pinned at the very top of the
-   description, refreshed by whichever agent/role last touched the issue, on
-   *every* meaningful turn (spec reply, PR opened, self-QA fix found,
-   approval, merge) — not gated on the spec being locked.
-
-```
---- STATUS ---
-Phase: <Spec discussion | Building | In Review | Done>
-Last update: <date> — <one sentence of what just happened>
-PR: <link, or "none yet">
-Preview: <link, or "none yet">
---- END STATUS ---
-```
-
-Keep it to those four lines — this is a dashboard, not a log. Comments remain
-the full history; this block is only ever overwritten with the current
-snapshot, never appended to.
-
----
-
-## Roles
-
-### Role 1: Builder Agent
-**Who:** Cursor (primary), Claude, Codex
-**Triggered by:** Assigned to an issue
-
-**FIRST ACTION ON ANY ASSIGNMENT — check the label, never the status:**
-Status will already say "In Progress" by the time you read this — that is
-Linear's automatic behavior on assignment, not a signal that the spec is ready.
-Ignore it. Check labels instead.
-
-**If the issue is labeled `spec-needed` (not `agent-ready`):**
-Do not build. Post this comment on the Linear issue and stop:
-
-```
-⚠️ Spec not confirmed.
-
-This issue is still labeled spec-needed — the spec hasn't been approved yet.
-I can't start building.
-
-Please review and refine the spec with me in the comments below, then:
-1. Swap the label from spec-needed to agent-ready
-2. Re-assign me (or just comment to ping me again)
-
-I'll start the moment I see the agent-ready label.
-```
-
-**If the issue is labeled `agent-ready`:**
-1. **Cleanup:** delete any leftover `preview/<issue-id>-*` branch from the spec
-   phase (`git push origin --delete preview/<issue-id>-vN`). These are scratch
-   demos from Role 3 and must not survive into the build.
-2. Read the full Linear issue: the finalized description is the spec, comments are context
-3. Ensure OpenSpec is installed: `npm install --save-dev @fission-ai/openspec@latest`
-4. Run `npx openspec propose "<issue title>"` (base it on the finalized description)
-5. Run `npx openspec apply` — implement
-6. **Test proportionally — not a full suite for every change, but never skip
-   the build check:**
-   - **Always** run the project's build command (e.g. `npm run build`). If it
-     fails, fix it before proceeding. This alone catches the worst failure
-     mode (site doesn't compile) and costs seconds, not tokens — never skip it.
-   - **If** an existing test suite is present in the repo (e.g. `test:qa`) —
-     run it **only when the change plausibly touches shared or critical
-     surface**: navigation, layout, design-system-level styling, or anything
-     used across multiple capabilities. A copy tweak or a single isolated
-     component doesn't need the full suite run against it.
-   - **Never require a project to have a test suite.** If none exists, the
-     build check alone is the gate — do not create a test suite as a
-     side-effect of a task, and do not block on its absence.
-   - If tests are run and fail, fix them or, if you genuinely cannot, stop and
-     flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
-7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
-8. **Move issue to `In Review` immediately — do this now, not after anything
-   below, and as literally the next tool call after the PR is created (before
-   drafting the Slack message, before polling Vercel, before anything else).**
-   This must never depend on Vercel, screenshots, or anything else succeeding.
-   A PR existing is enough to justify this status. If everything after this
-   step fails or the session ends unexpectedly, the status change has already
-   happened. Also refresh the Status Snapshot block (Phase: In Review, PR
-   link) in the same action — see "The Issue Description" section above.
-   **This step has been observed being skipped in practice** — do not treat it
-   as optional or something to get to eventually; treat it as blocking every
-   later step in this list. (See also the native-automation backup in "Cursor
-   Rules" below, which does not depend on the agent remembering this at all.)
-9. **Get the preview URL as soon as it's knowable — do not wait for the
-   build to finish:**
-   - Vercel assigns the preview URL the moment the deployment is *created*,
-     not when the build succeeds. Poll the PR's checks / the Vercel bot's PR
-     comment every ~10-15 seconds, up to about 2 minutes total, and grab the
-     real public `*.vercel.app` URL (not a Vercel dashboard/inspector link
-     that requires login) as soon as it appears — even while the check still
-     shows pending/building.
-   - **Post the Slack message below as soon as you have that URL.** Note "still
-     building, give it a minute" in the message if the check hasn't reached
-     success yet. Do not hold the message back waiting for full completion.
-   - **If you truly cannot get a real preview URL after ~2 minutes of
-     polling, do not go silent.** Post to Slack and comment on the Linear
-     issue anyway: "PR opened, preview link pending — check directly: [PR URL]."
-     Silence is the failure mode to avoid; a slightly late or missing preview
-     link is recoverable, no notification at all is not.
-   - **Preflight check before claiming "preview ready" — do a quick HEAD
-     request on the URL and check where it lands.** If it redirects to
-     `vercel.com/sso-api` or any Vercel login page, the deployment is real but
-     access-gated (Vercel's "Deployment Protection" setting) — this already
-     happened once (see SHA-25) and silently produced a link Sharad couldn't
-     actually open. Do not claim the preview is ready in that case; instead
-     say so plainly: "Preview exists but appears access-gated — check Vercel
-     Deployment Protection settings on this project." Protection should be
-     off on both current projects as of July 2026, but this check costs
-     nothing and catches it immediately if it's ever re-enabled (e.g. by a
-     new project defaulting to it again).
-10. Once the build actually finishes (not just the URL existing), do **Visual
-    Self-QA — mandatory** (see the section above for the exact mechanism):
-    screenshot the changed area on the real preview URL, desktop and mobile,
-    actually look at both, attach both screenshots to the Linear issue.
-    - If something looks wrong, fix it, push to the same branch, and post a
-      follow-up comment on the Linear issue: "Found and fixed [X] during
-      self-QA — preview refreshed at the same URL." Do not re-post to Slack
-      for this; the issue comment is enough.
-11. **Stop.** This session ends here for every PR, regardless of size — a
-    typo fix and a new page both wait the same way. Sharad's `@<agent>
-    approved` comment re-wakes an agent to finish the merge (see Role 2).
-    Nothing merges or auto-completes without that explicit comment.
-
-**Slack post (every PR, no exceptions — send as soon as the preview URL is known):**
-```
-🔍 Ready for your review
-Feature: [issue title]
-Preview: [Vercel preview URL] ← tap this (note if still building)
-What changed: [2 sentences]
-Checks: ✅ build passing, tests passing
-Approve: comment "@<agent> approved" on [Linear issue URL]
-```
-
-**Never:**
-- Write any code on an issue labeled `spec-needed` — check the label every time, regardless of status
-- Add or remove the `agent-ready` label yourself — only Sharad does that
-- Open a PR without first confirming the build succeeds and existing tests pass
-- Merge any PR without Sharad's explicit "approved" comment — there is no
-  size-based exception, no auto-merge, ever
-- Move any issue to `Done` yourself — that only happens as a direct result of
-  Sharad's approval (see Role 2)
-- Push directly to main
-- Change code without updating the spec first
-- Leave a `preview/*` branch alive once you start building
-
----
-
-### Role 2: Review & Merge (on approval)
-**Who:** Cursor, Claude — whichever agent Sharad @mentions
-**Triggered by:** Sharad commenting on the Linear issue while any PR is open
-
-There is no always-on autonomous reviewer, and no auto-merge path — every PR,
-regardless of size, waits for Sharad. The open PR simply sits until he
-comments. His comment is one of two kinds:
-
-**A. Feedback ("make the button red", "the animation is too fast"):**
-1. Every piece of feedback = spec amendment first
-2. Run `npx openspec propose "adjustment: [what Sharad said]"`, update `openspec/project.md`
-3. Then update the code
-4. Push to the **same branch** — PR and Vercel preview auto-refresh
-5. Comment on the Linear issue: "Updated — preview refreshed at the same URL"
-6. Stop. Wait for the next comment (more feedback, or approval).
-
-**B. Approval ("@<agent> approved", "@<agent> lgtm"):**
-1. Confirm checks are green (Vercel build + any CI). If red, say so and stop.
-2. Merge the PR
-3. Run `npx openspec archive`
-4. Move the Linear issue to `Done`
-5. Slack: "🚀 [feature] is live. [prod URL]"
-
-**Spillover — gaps noticed while building or reviewing:**
-If you notice a gap out of scope for the current issue (missing error state, no
-empty state, accessibility, mobile handling), don't block. File a new Linear
-issue (`Backlog`, `spec-needed`, title + 2-sentence description — see the
-**New Issue Conventions** rule below for assignee and title format) and note it
-in a comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
-
-**Never:**
-- Merge with failing checks
-- Merge any PR without an explicit "approved" comment from Sharad — no exceptions for size or type
-- Show Sharad code — only preview URLs
-- Change code without updating the spec first
-
----
-
-### Role 3: Spec Conversation Agent
-**Who:** Cursor, Claude — @mentioned in Linear comments while issue is labeled `spec-needed`
-
-**This role has no assignment. It is triggered by @mentions in Linear comments.**
-
-When @mentioned on an issue labeled `spec-needed`:
-1. Read the issue title, description, and all prior comments
-2. Read `openspec/project.md` from the repo for project context
-3. Reply in the Linear comment thread:
-   - What you understand the feature to be
-   - Questions or concerns about the approach
-   - Alternative approaches if relevant
-   - **A spec-preview link, if the feature is visual or motion-based** — see
-     "Visual Specs" below, **full-effort tier** (Sharad is actively engaged already)
-4. **Always refresh the Status Snapshot block** in the description (see "The
-   Issue Description" section below) on every reply, regardless of whether the
-   spec itself is locked yet — Sharad should never have to read comment
-   history to know where a conversation stands.
-5. **When the conversation looks converged on a buildable spec, ask directly
-   — don't wait silently for magic words:** "This looks ready to build — want
-   me to lock in the spec, flip the label, and kick off the build?" (or
-   similar). Surfacing the checkpoint is the agent's job, not Sharad's.
-6. **Treat any of the following as approval** — exact phrasing is not
-   required: "yes", "go ahead", "sounds good", "ship it", "approved", "lgtm",
-   a direct affirmative reply to your own check-in from (5), or the original
-   explicit phrases ("update the issue", "finalize the spec", "lock this in").
-   Sharad should never need to learn special vocabulary to unblock a build.
-7. **On approval, do all of the following yourself, in the same turn — no
-   separate manual steps for Sharad:**
-   - Finalize the issue description's spec text from the conversation
-   - Swap the label from `spec-needed` to `agent-ready`
-   - Assign the issue to the builder agent (this assignment is what wakes
-     Role 1 — see "Trigger vs Gate" above)
-   Sharad's only action is the approval reply itself. He should never need to
-   touch the label dropdown or assignee field by hand.
-
-Do not write code in the real project repo. Do not run openspec commands during spec phase.
-Do not perform step 7 on your own inferred judgment that "agreement was
-reached" without a real signal per (6) — a false-positive here starts an
-unasked build, which is worse than checking in one extra time.
-
----
-
-## New Issue Conventions (applies to every issue any agent creates, anywhere)
-
-Whether it's Role 2's spillover, Role 4's crons, or any future issue-creating
-path — every new Linear issue follows both of these, no exceptions:
-
-1. **Assignee is always Sharad Rohra.** Never assign an agent directly at
-   creation time, and never set a `delegate`. Sharad decides who (if anyone)
-   works the issue, and when — that decision happens later, not at creation.
-2. **Title starts with one relevant emoji, then the rest of the title as
-   usual.** e.g. `🎬 [Feature] Project video card shell`, `📱 [Feature] Mobile
-   QA pass`, `🔗 [Feature] LinkedIn Open Graph meta tags`. One emoji is enough
-   — pick the single most relevant one, don't decorate the whole title with
-   several. Sharad is visual; he wants to recognize an issue type at a glance
-   in a list, not read a sentence to know what it's about.
-
----
-
-### Role 4: Idea-Generation Agents (cron-triggered)
-
-Three scheduled agents keep the Backlog self-filling so Sharad triages instead
-of inventing work from scratch. All three are set up as **Cursor Automations**
-against the project repo. All three obey the same guardrails:
-
-- Create issues only as `Backlog` + `spec-needed` — **never `agent-ready`**
-- Assignee is always Sharad Rohra, never an agent (see New Issue Conventions above)
-- Title starts with one relevant emoji (see New Issue Conventions above)
-- Search Linear first — skip anything already tracked (open or recently closed)
-- Max 5 issues per run (4c: max 3 — see below); if nothing real is found, create nothing
-- No implementation detail — that belongs to the later spec conversation
-- Suggest a priority; Sharad overrides
-- **If the proposed issue has a meaningful visual/UI component, attach a visual
-  preview per the "Visual Specs" section above, minimal-effort tier, and link
-  it in the issue description alongside the text.** This applies to all three
-  variants below, not just 4c — a spec-drift gap like "add a rocket sticker
-  near the hero CTA" needs a visual just as much as a market/feature idea does.
-- **Mandatory for all three variants — take a real screenshot per "Visual
-  Self-QA" above and attach it to the issue.** This is different from the
-  Visual Specs mockup above: it's a screenshot of the actual live site, not a
-  prototype of a proposed idea. 4a and 4b screenshot the current
-  gap/bug directly; 4c screenshots the homepage or relevant existing area for
-  context on where the idea fits. Not optional — do this every time, for every
-  issue these three agents create.
-
-**4a — Spec-Drift Agent** (weekly, Monday 9am)
-Exact prompt to paste into the Cursor Automation:
-```
-You are the Spec-Drift Idea-Generation Agent from
-rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule, the Visual
-Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
-Rohra, title starts with one relevant emoji).
-
-Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
-1. Read openspec/project.md and every file under openspec/specs/ to see what
-   is planned/specced.
-2. Read the current codebase to see what is actually built.
-3. Find meaningful gaps — planned things missing or only half-built. Ignore
-   cosmetic nitpicks.
-4. Search the Linear "Resume Website" project first; skip anything already tracked.
-5. Create up to 5 issues for real gaps: status Backlog, label spec-needed,
-   assignee Sharad Rohra (never an agent), title "🔧 [Feature] <name>" — pick
-   one relevant emoji, not literally 🔧 every time — 2-3 sentence description
-   of the gap and why it matters, suggested priority.
-6. If the gap has a visual/UI component, attach a minimal-effort visual
-   preview (see Visual Specs section) and link it in the issue description.
-7. Mandatory, every issue you create: take a real Playwright screenshot of
-   the live site area related to this gap (per Visual Self-QA section) and
-   attach it to the issue via prepare_attachment_upload → PUT → 
-   create_attachment_from_upload. Never use a base64/inline upload path.
-8. If nothing meaningful is found, create nothing.
-9. Housekeeping (runs every time, independent of 1-8): list all remote
-   `preview/*` branches in this repo. For each, parse the issue ID from the
-   branch name (`preview/<issue-id>-v<n>`) and look up that issue in Linear.
-   Delete the branch if the issue is no longer labeled `spec-needed` (i.e. it
-   moved to `agent-ready`, `In Review`, `Done`, or was canceled/duplicated),
-   or if it's an older version number than the latest branch for that issue.
-   Report the count deleted at the end of the run.
-```
-Tools to enable: repo (automatic, including branch delete), Linear (create +
-search issues, attach files, read issue status/labels), browser/Playwright
-(already a devDependency in this repo).
-
-**4b — Bug/Error Agent** (daily, 9am)
-Exact prompt to paste into the Cursor Automation:
-```
-You are the Bug/Error Idea-Generation Agent from
-rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule, the Visual
-Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
-Rohra, title starts with one relevant emoji).
-
-Repo: rohrasharad-ship-it/resume-website, deployed at meet-sharad.vercel.app.
-1. Read the Vercel production runtime logs/errors from the last 24 hours.
-2. Keep only real, actionable errors — drop one-off network blips, bot noise,
-   and anything that self-resolved.
-3. Search the Linear "Resume Website" project first; skip anything already tracked.
-4. Create up to 5 issues: status Backlog, label spec-needed, assignee Sharad
-   Rohra (never an agent), title "🐛 [Bug] <what's broken>" — pick one relevant
-   emoji, 🐛 is just the default for a generic bug — 2-3 sentence description
-   with the error and when it fires. Priority High if it hits a core flow
-   (voice agent, hero, contact), Medium otherwise.
-5. If the bug is visual (layout, overlap, broken animation), attach a
-   minimal-effort visual preview showing the problem.
-6. Mandatory, every issue you create: take a real Playwright screenshot of
-   the live production site showing the actual problem (per Visual Self-QA
-   section) and attach it to the issue via prepare_attachment_upload → PUT
-   → create_attachment_from_upload. Never use a base64/inline upload path.
-7. If the site is clean, create nothing.
-```
-Tools to enable: repo (automatic), Linear (create + search issues, attach
-files), Vercel (read deployment logs — add a Vercel API token as an
-automation secret if Cursor has no native Vercel integration in your setup),
-browser/Playwright (already a devDependency in this repo).
-
-**4c — Market/Feature Agent** (weekly, Monday 9am — the "suggest brand-new specs" cron)
-Unlike 4a/4b, this agent isn't looking for gaps against an existing plan — it's
-proposing features nobody has written down yet, based on the product's vision
-and what similar products do well. Because these are more speculative, cap at
-3 issues per run, not 5, and always attach a visual — a brand-new idea pitched
-as a paragraph of text is exactly the "document instead of prototype" problem
-this whole section exists to avoid.
-
-Exact prompt to paste into the Cursor Automation:
-```
-You are the Market/Feature Idea-Generation Agent from
-rohrasharad-ship-it/AI-Workspace/AGENTS.md (Role 4). Read that file first and
-follow its guardrails exactly, including the Visual Specs rule, the Visual
-Self-QA rule, and the New Issue Conventions rule (assignee always Sharad
-Rohra, title starts with one relevant emoji).
-
-Repo: rohrasharad-ship-it/resume-website. Linear project: Resume Website.
-1. Read openspec/project.md in full — the vision, non-negotiables, and
-   Out of Scope section. Never propose anything listed as Out of Scope.
-2. Read every file under openspec/specs/ to understand what already exists,
-   so you don't re-propose something already built or already tracked.
-3. Based on the stated vision (a PM's portfolio that itself demonstrates
-   product thinking) and how strong portfolio/personal sites differentiate
-   themselves, propose up to 3 features not yet in the spec or Linear. If web
-   search is available, use it lightly for inspiration; otherwise reason from
-   the stated vision and design philosophy alone.
-4. Search the Linear "Resume Website" project first; skip anything already
-   proposed or tracked, including things filed by the spec-drift agent.
-5. Create up to 3 issues: status Backlog, label spec-needed, assignee Sharad
-   Rohra (never an agent), title starting with one relevant emoji for the
-   specific idea (e.g. 🎯 for a targeting/segmentation feature, 🎚️ for a
-   slider tool — pick what actually fits, not a generic default) followed by
-   "[Feature] <name>", 2-3 sentence description of the idea and why it fits
-   the portfolio's differentiation goals, suggested priority (default Medium
-   or Low — these are speculative, not confirmed gaps).
-6. Every issue from this agent has a visual/UI component almost by definition
-   — attach a minimal-effort visual preview (see Visual Specs section) and
-   link it in the issue description. Do not skip this step for this agent.
-7. Mandatory, every issue you create: take a real Playwright screenshot of
-   the current homepage (or one to two relevant existing areas) for context
-   on where this idea fits (per Visual Self-QA section) and attach it to the
-   issue via prepare_attachment_upload → PUT → create_attachment_from_upload.
-   Never use a base64/inline upload path. This is separate from the mockup in
-   step 6 — this one shows the current site, not the proposed idea.
-8. If nothing genuinely differentiated comes to mind, create nothing —
-   do not invent filler ideas to hit the cap.
-```
-Tools to enable: repo (automatic), Linear (create + search issues, attach
-files), web search (optional — if unavailable, the agent reasons from
-project.md alone), browser/Playwright (already a devDependency in this repo).
-
----
-
-## Cursor Rules (Fallback — Now Confirmed Needed, Not Just Hypothetical)
-
-AGENTS.md is the single source of truth and is a convention Cursor, Claude, and
-Codex all read automatically at the start of a session — including cloud/background
-sessions triggered by Linear assignment. Duplicating the full ruleset into Cursor
-Settings → Rules creates a second copy that will drift the moment this file changes.
-Don't do that.
-
-**This has now been directly observed** (Cursor's builder agent skipping the
-move-to-`In Review` step, Role 1 step 8), not just a hypothetical. Add exactly
-this one line as a fallback in Cursor Settings → Rules now:
-
-```
-Before starting any task, read and follow AGENTS.md in the repo root. Treat it as
-mandatory instructions, not optional context.
-```
-
-Nothing more. If it still gets skipped after that, that's a signal to
-investigate further — not to paste more rules in.
-
-### Structural backup for the `In Review` transition specifically
-
-Don't rely solely on an agent remembering one API call at the right moment —
-add a second, non-agent-dependent path: in Linear, go to **Settings →
-Integrations → GitHub** and enable the built-in workflow automation that moves
-an issue's status based on its linked PR's state (open PR → `In Review`,
-PR merged → `Done`). This is a native Linear feature, not something any agent
-has to execute — once configured, the status updates correctly even if the
-agent's own step 8 is skipped. Keep the agent instruction above as well; the
-two paths don't conflict, whichever fires first wins and both land on the
-same correct status.
-
-### Structural backup for preview-branch pileup
-
-The per-issue cleanup rules above (delete the previous iteration's branch,
-delete on spec-lock) rely on an agent remembering what it created. Add a
-periodic sweep to the weekly spec-drift cron (Role 4a): list all remote
-`preview/*` branches, check each one's issue via the branch name
-(`preview/<issue-id>-v<n>`), and delete any branch whose issue is no longer
-`spec-needed` (i.e. it's `agent-ready`, `In Review`, `Done`, or canceled) or
-that isn't the highest version number for that issue. Report how many were
-deleted in the cron's normal output. This catches orphans regardless of which
-session created them.
-
----
-
-## Rules That Always Apply
-
-1. **Assignment wakes an agent; the `agent-ready` label decides whether it builds.** Status is never the gate — Linear auto-flips it to In Progress on assignment.
-2. **`spec-needed` = discuss only, no code.** `agent-ready` = build.
-3. **The `agent-ready` label only changes as a direct, same-turn consequence
-   of Sharad's explicit approval** (see Role 3, steps 6-7) — never on an
-   agent's own inferred judgment that agreement was reached, and never at any
-   other time. Sharad's job is to type the approval; the agent's job is to
-   execute the mechanical label/assignee change — not to decide independently
-   that approval happened.
-4. **Every PR waits for Sharad's explicit "@<agent> approved" before merging.** No auto-merge, no size-based exception — a typo fix and a new feature both wait the same way.
-5. **Vercel preview URL is the only review surface.** Sharad never sees code.
-6. **All Sharad feedback goes on the Linear issue** — not the PR, even if he sends it via Slack.
-7. **Spec update before code change** — always, even for a one-line fix.
-8. **Checks (Vercel build + any CI) must be green before any merge.**
-9. **Never push to main directly. Never delete anything but a `preview/*`
-   branch** — either one you created this session, or, for the weekly
-   spec-drift cron's housekeeping sweep, an orphaned `preview/*` branch whose
-   issue is no longer `spec-needed` (see "Cursor Rules" backup section above).
-10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions.
-11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
-12. **Visual Self-QA is mandatory for Role 1 and all of Role 4** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
-13. **Moving an issue to `In Review` happens immediately when a PR opens — never gated on Vercel, screenshots, or anything downstream.** A step failing later must not silently undo or block what already succeeded earlier.
-14. **Never go silent.** If the preview URL can't be obtained after reasonable polling, post what you have (the PR link) rather than posting nothing at all.
-15. **Keep the Status Snapshot block at the top of every issue description current on every touch** (see "The Issue Description" section) — Sharad should be able to read the description alone and know the current phase, without opening comments.
-
----
-
-## Distribution: One AGENTS.md, Not Copy-Pasted
-
-This file lives once, in `rohrasharad-ship-it/AI-Workspace`. Every project repo
-gets a **thin pointer file** instead of a full copy — while this process is still
-evolving, staying in one place beats syncing N copies by hand.
-
-**Thin `AGENTS.md` template for a new project repo:**
+## Hub model: this repo is the only place instructions live
+
+All process — for every project, every role, every routine — lives once, in
+`rohrasharad-ship-it/AI-Workspace`. A project repo (e.g. resume-website) never
+gets a full copy; it gets a **thin pointer `AGENTS.md`** that fetches and
+follows this repo's files. Nothing is stored in Cursor Settings, Claude
+project config, Codex config, or any other outside tool — an outside trigger
+(co-work, cron) only ever needs to name a routine and a project; see
+`routines/README.md` for exactly what that trigger should say.
+
+**Thin `AGENTS.md` template for a new project repo** (created automatically by
+`/init-project`):
 ```markdown
 # Agent Instructions — <Project Name>
 
@@ -771,58 +57,50 @@ not optional context. This file only adds project-specific facts.
 - Tech stack: <one line>
 ```
 
-**Why this works:** an agent's GitHub tool (or a raw-content web fetch, if the
-AI-Workspace repo is public) can pull that file in under a second for roughly
-800-1000 tokens — negligible, and it happens once per task, not per turn.
+**Requirement:** AI-Workspace must be reachable by whatever agent is doing the
+fetch. Since this file has no secrets in it, keep AI-Workspace **public** so
+any agent (Cursor cloud agent, Claude, Codex via GitHub Action) can fetch it
+with zero special repo grants. If AI-Workspace must stay private, use a git
+submodule in each project repo instead — more setup, but works without a
+public repo.
 
-**One requirement:** AI-Workspace must be reachable by whatever agent is doing
-the fetch. Since this file has no secrets in it, keep AI-Workspace **public** so
-any agent (Cursor cloud agent, Claude, Codex via GitHub Action) can fetch it with
-zero special repo grants. If AI-Workspace must stay private, use a git submodule
-in each project repo instead — more setup, but works without a public repo.
+## Core Concept: Trigger vs Gate
 
-**When to stop pointing and start copying:** once this process is stable and
-you're no longer editing it weekly, bake a static copy into each repo. Fetching
-a stable file forever is unnecessary overhead — the pointer is a convenience
-during active iteration, not a permanent architecture.
+- **Trigger** = what *wakes* an agent (Linear assignment, an @mention, or a
+  routine firing). Nothing else wakes an agent.
+- **Gate** = what the woken agent checks before proceeding (e.g. the
+  `agent-ready` label for the builder role).
 
----
+Full detail: `agents/shared/loop.md`.
 
-## Project Index
+## Dispatch table — find your role, read its file, nothing else
 
-| Project | Repo | Linear Project | Slack Channel | Vercel Prod |
-|---|---|---|---|---|
-| Resume Website | rohrasharad-ship-it/resume-website | Resume Website | #resume-website | meet-sharad.vercel.app |
-| AI Workspace (PM OS) | rohrasharad-ship-it/AI-Workspace | PM OS | #pm-ops | ai-workspace.vercel.app (spec-preview sandbox — set up once via Vercel dashboard "Add New Project", see Spec Previews section) |
-| AI Landscape 2026 | rohrasharad-ship-it/ai-landscape | AI Landscape | #ai-landscape | https://rohrasharad-ship-it.github.io/ai-landscape/ |
-| Application Agent | rohrasharad-ship-it/Application-Agent | Application Agent | #application-agent | TBD |
+| You were triggered by... | You are... | Read |
+|---|---|---|
+| Assigned to a Linear issue | **Builder** | `agents/builder.md` |
+| Sharad commented on an issue with an open PR (feedback or "approved") | **Reviewer** | `agents/reviewer.md` |
+| @mentioned in a comment on a `spec-needed` issue | **Spec Conversation** | `agents/spec-conversation.md` |
+| The `idea-sweep` routine (or a spec-drift-only trigger) | **Spec-Drift** | `agents/spec-drift.md` |
+| The `idea-sweep` routine (or a bug-error-only trigger) | **Bug/Error** | `agents/bug-error.md` |
+| The `idea-sweep` routine (or a market-feature-only trigger) | **Market/Feature** | `agents/market-feature.md` |
 
-*Add new projects via `/init-project` skill.*
+Every role above also reads `agents/shared/conventions.md` — that file holds
+the rules that apply regardless of role (new-issue conventions, the "always
+apply" rule list, what Sharad does vs what agents do). It is the one file
+every agent reads no matter what.
 
----
+## Routines: how idea-generation actually gets triggered
 
-## Idea Feeder Sources (setup order)
+Roles 1–3 above are woken directly by Linear. The three idea-generation roles
+are not — something external has to trigger them, on a schedule or on demand.
+That's what `routines/` is for: a routine is a named bundle (which roles, which
+projects, what output) that an external trigger invokes by name, with the real
+instructions living here in git, not pasted into any outside tool. Start at
+`routines/README.md`.
 
-| Feeder | What it does | Trigger | Status |
-|---|---|---|---|
-| Spec-drift agent (4a) | Reads openspec/specs/ vs actual code, files issues for what's specced but unbuilt | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | Active |
-| Bug/error agent (4b) | Reads Vercel runtime errors + logs, files issues for what's breaking in prod | Daily cron — **Sharad sets up in Cursor Automations** | Active |
-| Market/feature agent (4c) | Reads project vision, proposes brand-new features not yet in the spec or Linear, always with a visual | Weekly cron (Mon 9am) — **Sharad sets up in Cursor Automations** | Active |
-| Spillover | Agent notices a gap while building or reviewing, files a new Backlog issue, doesn't block current work | Per-issue (built into Roles 1 & 2) | Already in loop |
-| Capture agent | Sharad drops a Slack message or voice note → becomes a clean Backlog issue | On-demand — **Sharad sets up Slack workflow** | Not yet built |
+## Projects
 
-**Done:** Manual issues, spec-drift, bug/error, market/feature — all three crons have exact prompts in Role 4.
-**Remaining:** Capture agent — the only feeder left. Low priority, build when the others feel routine.
-
----
-
-## What Sharad Does vs What Agents Do
-
-| Sharad | Agents |
-|---|---|
-| @mentions agents on `spec-needed` issues to refine spec | Draft spec, ask questions, update issue description (only when asked) |
-| Swaps label to `agent-ready`, then assigns (assignment wakes the agent) | Check label first, refuse if `spec-needed`, build if `agent-ready` |
-| Views Vercel preview URL on phone | Verify build + tests pass before opening any PR |
-| Comments feedback on Linear issue | Update spec then code, refresh preview |
-| Comments "@<agent> approved" | Merge, archive spec, move to Done, notify Slack |
-| Overrides issue priority | Everything else |
+Every project this file's roles and routines can operate on — repo, Linear
+project, Slack channel, prod URL — is in `projects.md`. Add new projects via
+the `/init-project` skill, which also creates a project's thin pointer
+`AGENTS.md` automatically.
