@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mockup — Case Study Deep-Dive Modal (SHA-64)</title>
+<style>
+  :root{
+    --bg-primary:#F5EDE0; --bg-dark:#111111; --accent:#E8351A;
+    --accent-warm:#FF8C52; --muted:#8A8A8A; --text-primary:#1A1A1A; --text-inverse:#F5EDE0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--bg-primary);
+    font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    color:var(--text-primary); padding:48px 24px; display:flex; flex-direction:column; align-items:center; gap:28px;
+  }
+  .label{font-family:"Courier New",monospace; letter-spacing:.14em; text-transform:uppercase; font-size:12px; color:var(--muted);}
+  .stage{position:relative; width:100%; max-width:960px;}
+  .era-card{
+    background:var(--bg-dark); color:var(--text-inverse); border-radius:20px; padding:40px;
+    display:flex; gap:32px; align-items:flex-start; filter:blur(0.3px); opacity:.55;
+  }
+  .logo{width:96px;height:96px;background:#fff;border-radius:14px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;color:#111;font-size:13px;}
+  .era-meta{font-family:"Courier New",monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-warm);}
+  .era-metric{font-size:44px; font-weight:700; margin:6px 0 18px;}
+  .proj-card{
+    display:inline-flex; flex-direction:column; gap:4px; background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:14px 18px; margin-top:8px; cursor:pointer;
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .proj-title{font-weight:600;}
+  .proj-metric{color:var(--accent); font-weight:700;}
+  .tap-hint{position:absolute; top:-14px; right:calc(50% - 210px); background:var(--accent); color:#fff; font-family:"Courier New",monospace;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border-radius:20px; box-shadow:0 6px 16px rgba(232,53,26,.35);}
+
+  .modal-overlay{
+    position:absolute; inset:-24px -24px auto -24px; top:20px; display:flex; justify-content:center;
+  }
+  .modal{
+    width:min(720px,92%); background:var(--bg-primary); border-radius:20px; padding:36px 40px;
+    box-shadow:0 30px 80px rgba(0,0,0,.45); border:1px solid rgba(0,0,0,.08); position:relative;
+  }
+  .modal-close{position:absolute; top:18px; right:20px; width:30px;height:30px;border-radius:50%;
+    background:rgba(0,0,0,.06); display:flex;align-items:center;justify-content:center; font-size:16px; color:var(--muted);}
+  .modal-head{display:flex; gap:18px; align-items:center; margin-bottom:22px;}
+  .modal-logo{width:56px;height:56px;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;}
+  .modal-title{font-size:24px; font-weight:700;}
+  .modal-sub{font-family:"Courier New",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:2px;}
+  .frame-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .frame{background:#fff; border:1px solid rgba(0,0,0,.08); border-radius:14px; padding:16px 18px;}
+  .frame h4{margin:0 0 8px; font-family:"Courier New",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent);}
+  .frame p{margin:0; font-size:14.5px; line-height:1.5; color:var(--text-primary);}
+  .frame.outcome{grid-column:1 / -1; background:rgba(232,53,26,0.06); border-color:rgba(232,53,26,.18);}
+  .frame.outcome h4{color:var(--accent-warm);}
+  .frame.outcome .big{font-size:26px; font-weight:700; color:var(--accent); margin-top:4px;}
+  .caption{margin-top:22px; font-size:13px; color:var(--muted); text-align:center; max-width:640px;}
+</style>
+</head>
+<body>
+  <div class="label">SHA-64 — mockup v1 — not final visual design</div>
+  <div class="stage">
+    <div class="tap-hint">tap → opens case study</div>
+    <div class="era-card">
+      <div class="logo">AMADEUS</div>
+      <div>
+        <div class="era-meta">Amadeus · Current</div>
+        <div class="era-metric">$2B+</div>
+        <div class="proj-card">
+          <div class="proj-title">Platform transition program</div>
+          <div class="proj-metric">Migrated core booking flow · zero downtime</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay">
+      <div class="modal">
+        <div class="modal-close">×</div>
+        <div class="modal-head">
+          <div class="modal-logo">AMADEUS</div>
+          <div>
+            <div class="modal-title">Platform transition program</div>
+            <div class="modal-sub">Amadeus · Case study</div>
+          </div>
+        </div>
+        <div class="frame-grid">
+          <div class="frame">
+            <h4>Problem</h4>
+            <p>Legacy booking core was blocking every new platform feature and couldn't scale with travel demand recovery.</p>
+          </div>
+          <div class="frame">
+            <h4>Approach</h4>
+            <p>Sequenced a zero-downtime migration in reversible slices instead of a single cutover, with a live rollback path at each stage.</p>
+          </div>
+          <div class="frame">
+            <h4>Trade-off</h4>
+            <p>Chose a slower phased rollout over a faster big-bang launch, trading speed for the ability to walk back any single stage.</p>
+          </div>
+          <div class="frame outcome">
+            <h4>Outcome</h4>
+            <p>Business line now on modern platform, unblocking roadmap velocity.</p>
+            <div class="big">$2B+ line migrated · zero downtime</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">Illustrative frame only — clicking a Journey project mini-card opens this modal in place, over the dimmed era panel. Colors/type from the live design system (cream / #111 dark zone / #E8351A accent).</p>
+</body>
+</html>
