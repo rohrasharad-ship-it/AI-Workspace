@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Usercon — Context Check-Ins (mockup)</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --panel: #ffffff;
+    --ink: #201d1a;
+    --muted: #6b6560;
+    --line: #e7e1d8;
+    --terracotta: #c7522a;
+    --green: #2f4937;
+    --gold: #91651f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .mono { font-family: "SF Mono", Consolas, Menlo, monospace; letter-spacing: .02em; }
+  .shell { max-width: 880px; margin: 0 auto; padding: 40px 24px 80px; }
+  .eyebrow {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: var(--terracotta);
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    margin: 0 0 6px;
+  }
+  h1 { font-size: 34px; margin: 0 0 10px; }
+  p.lead { color: var(--muted); font-family: -apple-system, sans-serif; font-size: 15px; max-width: 620px; line-height: 1.5; margin: 0 0 32px; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .checkin {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .checkin:last-child { border-bottom: none; }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--terracotta);
+    margin-top: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px rgba(199,82,42,0.12);
+  }
+  .checkin-body { flex: 1; font-family: -apple-system, sans-serif; }
+  .checkin-title { font-family: Georgia, serif; font-size: 17px; font-weight: 700; margin: 0 0 4px; }
+  .checkin-meta {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .checkin-body p { margin: 0 0 12px; color: #3a3630; font-size: 14px; line-height: 1.5; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  button {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button.primary { background: var(--terracotta); border-color: var(--terracotta); color: #fff; }
+  button.ghost { background: transparent; }
+  .stale-pill {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 11px;
+    background: #f6e9df;
+    color: var(--gold);
+    border-radius: 999px;
+    padding: 3px 9px;
+    margin-left: 8px;
+  }
+  .section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .section-head h2 { font-size: 19px; margin: 0; }
+  .count { font-family: "SF Mono", Consolas, monospace; font-size: 12px; color: var(--muted); }
+  .note {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 28px;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <p class="eyebrow">Mockup — Context Check-Ins</p>
+    <h1>Still true?</h1>
+    <p class="lead">
+      Context items that haven't been touched in a while surface here as gentle check-ins.
+      Confirm what's still accurate, update what's changed, or archive what's done —
+      using the same approve / edit / correct / archive actions that already exist on every context item.
+    </p>
+
+    <div class="panel">
+      <div class="section-head">
+        <h2>Fitness</h2>
+        <span class="count">2 items untouched 90+ days</span>
+      </div>
+
+      <div class="checkin">
+        <div class="dot"></div>
+        <div class="checkin-body">
+          <p class="checkin-title">Run a half marathon by October <span class="stale-pill">118 days untouched</span></p>
+          <p class="checkin-meta">GOAL · SOURCE: MANUAL · LAST UPDATED JUN 3</p>
+          <p>Build endurance to complete 13.1 miles by October while keeping strength work and recovery visible to fitness and food agents.</p>
+          <div class="actions">
+            <button class="primary">Still true</button>
+            <button class="ghost">Update</button>
+            <button class="ghost">Archive</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkin">
+        <div class="dot"></div>
+        <div class="checkin-body">
+          <p class="checkin-title">Warm, high-protein dinners after heavy workdays <span class="stale-pill">96 days untouched</span></p>
+          <p class="checkin-meta">PREFERENCE · SOURCE: MANUAL · LAST UPDATED JUN 3</p>
+          <p>After long workdays, prefer warm, filling dinners with high protein. Avoid cold salads as the main dinner on these days.</p>
+          <div class="actions">
+            <button class="primary">Still true</button>
+            <button class="ghost">Update</button>
+            <button class="ghost">Archive</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-head">
+        <h2>Travel</h2>
+        <span class="count">1 item untouched 90+ days</span>
+      </div>
+      <div class="checkin">
+        <div class="dot"></div>
+        <div class="checkin-body">
+          <p class="checkin-title">Europe Summer Trip Planning <span class="stale-pill">101 days untouched</span></p>
+          <p class="checkin-meta">PROJECT · SOURCE: MANUAL · LAST UPDATED JUN 3</p>
+          <p>Coordinate flights, accommodation, visa preparation, city sequence, and flexible work blocks for a summer Europe trip.</p>
+          <div class="actions">
+            <button class="primary">Still true</button>
+            <button class="ghost">Update</button>
+            <button class="ghost">Archive</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      Non-functional mockup for SHA-71. Illustrates the interaction shape only — thresholds, copy, and placement
+      are open questions for the spec proposal.
+    </p>
+  </div>
+</body>
+</html>
