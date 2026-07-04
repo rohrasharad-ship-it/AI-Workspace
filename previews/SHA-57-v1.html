@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-57 mockup — Deep links</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0A0F1E; color:#E2E8F0; margin:0; padding:40px 20px; }
+  .browser { max-width:640px; margin:0 auto; background:#1E293B; border-radius:12px; overflow:hidden; border:1px solid #334155; }
+  .chrome { background:#334155; padding:10px 14px; display:flex; gap:8px; align-items:center; }
+  .dots { display:flex; gap:6px; }
+  .dot { width:10px; height:10px; border-radius:50%; background:#64748B; }
+  .url { flex:1; background:#0F172A; border-radius:6px; padding:8px 12px; font-size:12px; font-family:monospace; color:#38BDF8; border:1px solid #38BDF8; }
+  .content { padding:24px; text-align:center; }
+  .map { height:180px; background:radial-gradient(circle at center,#1E3A5F 0%,#0A0F1E 70%); border-radius:8px; margin-bottom:16px; display:flex; align-items:center; justify-content:center; color:#64748B; font-size:13px; }
+  .panel { text-align:left; background:#0E1629; border-radius:8px; padding:14px; border-left:3px solid #38BDF8; }
+  .note { max-width:640px; margin:16px auto 0; font-size:13px; color:#94A3B8; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="browser">
+    <div class="chrome">
+      <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="url">…/ai-landscape/#node=Claude-4.x</div>
+    </div>
+    <div class="content">
+      <div class="map">Radial map with Claude node auto-selected & highlighted</div>
+      <div class="panel">
+        <strong>Claude 4.x</strong><br/>
+        <span style="font-size:12px;color:#94A3B8">Models · Frontier LLMs — detail panel open on load</span>
+      </div>
+    </div>
+  </div>
+  <p class="note">Paste link → recipient lands directly on that tool's detail view</p>
+</body>
+</html>

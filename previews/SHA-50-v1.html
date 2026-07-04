@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHA-50 mockup — Mobile filters</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: system-ui, sans-serif; background:#0A0F1E; color:#E2E8F0; padding:20px; max-width:390px; margin:0 auto; }
+  .header { margin-bottom:12px; }
+  .title { font-size:20px; font-weight:800; }
+  .search { width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:#E2E8F0; margin:10px 0; }
+  .chips { display:flex; gap:6px; overflow-x:auto; margin-bottom:12px; }
+  .chip { padding:7px 13px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); font-size:12px; white-space:nowrap; }
+  .chip.active { border-color:#38BDF8; background:rgba(56,189,248,0.15); }
+  .new-filters { border:2px dashed #38BDF8; border-radius:12px; padding:12px; margin-bottom:16px; background:rgba(56,189,248,0.05); }
+  .new-tag { font-size:10px; font-weight:700; color:#38BDF8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; }
+  .slider-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; font-size:12px; color:#94A3B8; }
+  input[type=range] { flex:1; accent-color:#38BDF8; }
+  .val { color:#38BDF8; font-weight:700; min-width:24px; }
+  .stat { font-size:12px; color:#64748B; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">AI Landscape <span style="color:#38BDF8">2026</span></div>
+    <div class="stat">87 tools · 6 layers</div>
+  </div>
+  <input class="search" placeholder="Search tools, categories…" readonly/>
+  <div class="chips">
+    <span class="chip active">All</span><span class="chip">Hardware</span><span class="chip">Models</span><span class="chip">Tools</span>
+  </div>
+  <div class="new-filters">
+    <div class="new-tag">Proposed mobile filters</div>
+    <div class="slider-row"><span>Popularity ≥</span><input type="range" min="0" max="100" value="60"/><span class="val">60</span></div>
+    <div class="slider-row"><span>Link strength ≥</span><input type="range" min="1" max="5" value="2"/><span class="val">2</span></div>
+  </div>
+  <p style="font-size:12px;color:#64748B;">Card list would filter live as sliders move — matching desktop toolbar behavior.</p>
+</body>
+</html>

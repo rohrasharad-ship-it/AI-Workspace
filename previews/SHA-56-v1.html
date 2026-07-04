@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-56 mockup — Compare mode</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0A0F1E; color:#E2E8F0; margin:0; padding:20px; }
+  .bar { max-width:700px; margin:0 auto 16px; display:flex; gap:12px; align-items:center; }
+  .tool { flex:1; padding:12px; background:#1E293B; border-radius:10px; text-align:center; font-weight:700; border:2px solid #38BDF8; }
+  .vs { color:#64748B; font-weight:800; }
+  .grid { max-width:700px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .col { background:#0E1629; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px; }
+  .lbl { font-size:10px; color:#64748B; text-transform:uppercase; margin-bottom:8px; }
+  .val { font-size:13px; line-height:1.5; }
+  .shared { max-width:700px; margin:16px auto 0; padding:14px; background:rgba(34,197,94,0.1); border:1px solid #22C55E; border-radius:10px; font-size:13px; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="tool">LangChain</div>
+    <div class="vs">vs</div>
+    <div class="tool">LlamaIndex</div>
+  </div>
+  <div class="grid">
+    <div class="col"><div class="lbl">Layer</div><div class="val">L4 Frameworks & Infra</div></div>
+    <div class="col"><div class="lbl">Layer</div><div class="val">L4 Frameworks & Infra</div></div>
+    <div class="col"><div class="lbl">Focus</div><div class="val">General LLM app orchestration, agents</div></div>
+    <div class="col"><div class="lbl">Focus</div><div class="val">RAG, data connectors, retrieval</div></div>
+    <div class="col"><div class="lbl">Shared connections</div><div class="val">OpenAI GPT-5, Claude, Pinecone, Hugging Face</div></div>
+    <div class="col"><div class="lbl">Unique to this tool</div><div class="val">LangGraph, LangSmith</div></div>
+  </div>
+  <div class="shared">3 shared dependencies · same layer · 2-hop path between them via MCP</div>
+</body>
+</html>

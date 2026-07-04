@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-55 mockup — Stack pathfinder</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#0A0F1E; color:#E2E8F0; margin:0; padding:24px; }
+  .panel { max-width:420px; margin:0 auto; background:#0E1629; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:20px; }
+  h2 { font-size:16px; margin-bottom:16px; }
+  .pick { display:flex; gap:8px; margin-bottom:16px; }
+  .pick input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid #334155; background:#1E293B; color:#fff; font-size:13px; }
+  .path { border-left:3px solid #38BDF8; padding-left:14px; }
+  .step { margin-bottom:14px; position:relative; }
+  .step::before { content:''; position:absolute; left:-20px; top:6px; width:10px; height:10px; border-radius:50%; background:#38BDF8; }
+  .layer { font-size:10px; color:#64748B; text-transform:uppercase; }
+  .name { font-size:15px; font-weight:700; }
+  .rel { font-size:11px; color:#94A3B8; }
+  .cta { margin-top:16px; padding:10px; background:rgba(56,189,248,0.15); border:1px solid #38BDF8; border-radius:8px; text-align:center; font-size:13px; color:#38BDF8; }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <h2>🛤️ Stack pathfinder</h2>
+    <div class="pick">
+      <input value="TSMC" readonly/><span style="align-self:center;color:#64748B">→</span><input value="Cursor" readonly/>
+    </div>
+    <div class="path">
+      <div class="step"><div class="layer">L0 Foundry</div><div class="name">TSMC</div><div class="rel">manufactures →</div></div>
+      <div class="step"><div class="layer">L1 Chips</div><div class="name">NVIDIA</div><div class="rel">powers →</div></div>
+      <div class="step"><div class="layer">L2 Cloud</div><div class="name">Azure AI</div><div class="rel">hosts →</div></div>
+      <div class="step"><div class="layer">L3 Models</div><div class="name">GPT-5</div><div class="rel">integrates →</div></div>
+      <div class="step"><div class="layer">L5 Apps</div><div class="name">Cursor</div></div>
+    </div>
+    <div class="cta">Highlight path on map + Copy as LinkedIn thread</div>
+  </div>
+</body>
+</html>

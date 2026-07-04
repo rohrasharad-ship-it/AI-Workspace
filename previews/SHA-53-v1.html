@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-53 mockup — Social share preview</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#f3f4f6; padding:40px; }
+  h1 { font-size:16px; color:#374151; margin-bottom:24px; }
+  .cards { display:flex; gap:24px; flex-wrap:wrap; }
+  .card { width:320px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  .card.bad .img { background:#e5e7eb; display:flex; align-items:center; justify-content:center; color:#9ca3af; font-size:13px; height:168px; }
+  .card.good .img { height:168px; background:linear-gradient(135deg,#0A0F1E 40%,#38BDF8); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:18px; }
+  .body { padding:12px 14px; }
+  .domain { font-size:11px; color:#6b7280; text-transform:uppercase; }
+  .title { font-size:14px; font-weight:600; color:#111; margin:4px 0; }
+  .desc { font-size:12px; color:#6b7280; line-height:1.4; }
+  .tag { display:inline-block; margin-top:16px; padding:4px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+  .tag.bad { background:#FEE2E2; color:#B91C1C; }
+  .tag.good { background:#D1FAE5; color:#047857; }
+</style>
+</head>
+<body>
+  <h1>LinkedIn / Slack link preview when sharing the map URL</h1>
+  <div class="cards">
+    <div class="card bad">
+      <div class="img">No image — generic</div>
+      <div class="body">
+        <div class="domain">github.io</div>
+        <div class="title">Site not found</div>
+        <div class="desc">(Today: no og:description, no og:image)</div>
+        <span class="tag bad">Current</span>
+      </div>
+    </div>
+    <div class="card good">
+      <div class="img">AI Landscape 2026</div>
+      <div class="body">
+        <div class="domain">rohrasharad-ship-it.github.io</div>
+        <div class="title">AI Landscape 2026 — Interactive AI Ecosystem Map</div>
+        <div class="desc">156 tools, 310 connections, 6 layers from chip foundries to end-user apps. Explore how the AI stack connects.</div>
+        <span class="tag good">With OG tags + preview.png</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
