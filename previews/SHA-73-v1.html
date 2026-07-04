@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Usercon — Life Area Timeline (mockup)</title>
+<style>
+  :root {
+    --bg: #faf8f4;
+    --panel: #ffffff;
+    --ink: #201d1a;
+    --muted: #6b6560;
+    --line: #e7e1d8;
+    --terracotta: #c7522a;
+    --green: #2f4937;
+    --navy: #365f87;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .shell { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+  .eyebrow {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: var(--terracotta);
+    font-family: "SF Mono", Consolas, Menlo, monospace;
+    margin: 0 0 6px;
+  }
+  h1 { font-size: 34px; margin: 0 0 10px; }
+  p.lead { color: var(--muted); font-family: -apple-system, sans-serif; font-size: 15px; max-width: 600px; line-height: 1.5; margin: 0 0 28px; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px 28px 8px;
+  }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 22px; }
+  .panel-head h2 { font-size: 19px; margin: 0; }
+  .panel-head span { font-family: "SF Mono", Consolas, monospace; font-size: 12px; color: var(--muted); }
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--line);
+  }
+  .entry { position: relative; padding-bottom: 26px; }
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: -26px; top: 3px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--line);
+  }
+  .entry.added::before { background: var(--green); box-shadow: 0 0 0 1px var(--green); }
+  .entry.edited::before { background: var(--navy); box-shadow: 0 0 0 1px var(--navy); }
+  .entry.archived::before { background: var(--muted); box-shadow: 0 0 0 1px var(--muted); }
+  .entry-date { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--muted); margin: 0 0 4px; }
+  .entry-kind {
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 2px 7px;
+    border-radius: 999px;
+    margin-right: 8px;
+  }
+  .entry.added .entry-kind { background: #e7f0ea; color: var(--green); }
+  .entry.edited .entry-kind { background: #e8eef4; color: var(--navy); }
+  .entry.archived .entry-kind { background: #ece9e5; color: var(--muted); }
+  .entry-title { font-family: -apple-system, sans-serif; font-size: 14.5px; font-weight: 600; margin: 0 0 3px; }
+  .entry-detail { font-family: -apple-system, sans-serif; font-size: 13px; color: #4a453f; margin: 0; line-height: 1.45; }
+  .entry-source { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .note {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 28px;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <p class="eyebrow">Mockup — Life Area Timeline</p>
+    <h1>How Fitness got here</h1>
+    <p class="lead">
+      A chronological record of every add, edit, and archive for a life area — built on the
+      activity log Usercon already plans to store. Makes context legible and auditable
+      instead of an opaque growing blob.
+    </p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Fitness</h2>
+        <span>3 active items · 5 events</span>
+      </div>
+      <div class="timeline">
+        <div class="entry edited">
+          <p class="entry-date">Jun 24, 2026</p>
+          <p class="entry-title"><span class="entry-kind">Edited</span>Run a half marathon by October</p>
+          <p class="entry-detail">Training pace target updated after last week's long run.</p>
+          <p class="entry-source">via Claude · self-correction</p>
+        </div>
+        <div class="entry added">
+          <p class="entry-date">Jun 10, 2026</p>
+          <p class="entry-title"><span class="entry-kind">Added</span>Note from last week's meeting about fitness</p>
+          <p class="entry-detail">Discussed cardio endurance, strength training, half marathon timing, gym membership updates.</p>
+          <p class="entry-source">via Manual · pending review</p>
+        </div>
+        <div class="entry edited">
+          <p class="entry-date">Jun 6, 2026</p>
+          <p class="entry-title"><span class="entry-kind">Edited</span>Warm, high-protein dinners after heavy workdays</p>
+          <p class="entry-detail">Linked to half marathon goal after Codex flagged a recovery connection.</p>
+          <p class="entry-source">via Codex · linked-context suggestion</p>
+        </div>
+        <div class="entry archived">
+          <p class="entry-date">Jun 4, 2026</p>
+          <p class="entry-title"><span class="entry-kind">Archived</span>Sign up for spin class trial</p>
+          <p class="entry-detail">Superseded by the half marathon training plan.</p>
+          <p class="entry-source">via Manual</p>
+        </div>
+        <div class="entry added">
+          <p class="entry-date">Jun 3, 2026</p>
+          <p class="entry-title"><span class="entry-kind">Added</span>Run a half marathon by October</p>
+          <p class="entry-detail">Build endurance to complete 13.1 miles by October.</p>
+          <p class="entry-source">via Manual · seed context card</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      Non-functional mockup for SHA-73. Illustrates the interaction shape only — event grouping,
+      filtering, and retention are open questions for the spec proposal.
+    </p>
+  </div>
+</body>
+</html>
