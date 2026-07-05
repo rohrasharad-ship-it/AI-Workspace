@@ -16,6 +16,14 @@ full-breadth reading by design — see the "who reads how much" table in
 `agents/shared/openspec.md`.
 
 **For the target repo and Linear project given at trigger time:**
+
+**Step 0 — Issue Cap pre-flight.** If `idea-sweep` triggered you, this was
+already checked once for this project before you started — skip straight to
+step 1. If you were triggered standalone (not via `idea-sweep`), do the check
+yourself first: see "Pre-flight: Issue Cap" in `routines/README.md`. If the
+project is at or over the cap, stop here — post the skip message to Slack and
+do not proceed to step 1.
+
 1. Read `openspec/project.md` and every file under `openspec/specs/` to see what
    is planned/specced.
 2. Read the current codebase to see what is actually built.

@@ -22,6 +22,15 @@ The trigger names one or more projects by their `projects.md` name (e.g.
 `projects.md`. Resolve each name to its repo, Linear project, Slack channel,
 and prod URL before running the roles.
 
+## Pre-flight, per project
+
+Before running any of the three roles for a given project, do the Issue Cap
+check from `routines/README.md` **once** for that project. If it's at or over
+the cap (5 open issues), post the skip message to that project's Slack
+channel and move on to the next named project — do not run spec-drift,
+bug-error, or market-feature for this one this cycle. Projects under the cap
+proceed normally below.
+
 ## Cadence (default, when set up as a recurring trigger)
 
 - spec-drift: weekly, Monday 9am
@@ -49,6 +58,10 @@ cron), not something this file needs to enforce.
   ```
 - If a role found nothing, say so ("Bug/error: clean, nothing filed") rather
   than omitting it — Sharad should be able to tell the sweep actually ran.
+- **A project skipped at the pre-flight step (see above) gets only the skip
+  message, never the consolidated summary too** — no roles ran, so there's
+  nothing to summarize. One Slack message per project, either the skip
+  message or the summary, never both.
 
 ## Example trigger
 
