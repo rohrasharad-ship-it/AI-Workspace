@@ -14,6 +14,14 @@ see `routines/README.md`
 Backlog issues for real, actionable bugs.
 
 **For the target repo, its production URL, and Linear project given at trigger time:**
+
+**Step 0 — Issue Cap pre-flight.** If `idea-sweep` triggered you, this was
+already checked once for this project before you started — skip straight to
+step 1. If you were triggered standalone (not via `idea-sweep`), do the check
+yourself first: see "Pre-flight: Issue Cap" in `routines/README.md`. If the
+project is at or over the cap, stop here — post the skip message to Slack and
+do not proceed to step 1.
+
 1. Read the Vercel production runtime logs/errors from the last 24 hours.
 2. Keep only real, actionable errors — drop one-off network blips, bot noise,
    and anything that self-resolved.

@@ -19,6 +19,14 @@ brand-new idea pitched as a paragraph of text is exactly the
 to avoid.
 
 **For the target repo and Linear project given at trigger time:**
+
+**Step 0 — Issue Cap pre-flight.** If `idea-sweep` triggered you, this was
+already checked once for this project before you started — skip straight to
+step 1. If you were triggered standalone (not via `idea-sweep`), do the check
+yourself first: see "Pre-flight: Issue Cap" in `routines/README.md`. If the
+project is at or over the cap, stop here — post the skip message to Slack and
+do not proceed to step 1.
+
 1. Read `openspec/project.md` in full — the vision, non-negotiables, and
    Out of Scope section. Never propose anything listed as Out of Scope.
 2. Read every file under `openspec/specs/` to understand what already exists,
