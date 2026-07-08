@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-83 preview — resize past breakpoint doesn't switch UI</title>
+<style>
+  body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:#0A0F1E; color:#E2E8F0; padding:28px; }
+  h1 { font-size:16px; margin:0 0 4px; }
+  p.sub { font-size:12px; color:#94A3B8; margin:0 0 24px; max-width:760px; line-height:1.5; }
+  .cols { display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start; }
+  .col h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:#64748B; margin:0 0 10px; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:8px; }
+  .badge.bad { background:rgba(239,68,68,.18); color:#FCA5A5; }
+  .badge.good { background:rgba(16,185,129,.18); color:#6EE7B7; }
+  .frame { width:340px; height:560px; border:1px solid rgba(255,255,255,.15); border-radius:14px; overflow:hidden;
+           position:relative; background:#0A0F1E; }
+
+  /* --- reproduction of the DESKTOP #controls bar, squeezed to 340px (bug state) --- */
+  .d-controls { display:flex; align-items:center; gap:8px; padding:8px 10px; background:rgba(10,15,30,.96);
+                border-bottom:1px solid rgba(255,255,255,.08); flex-wrap:wrap; }
+  .d-title { font-size:12px; font-weight:700; white-space:nowrap; }
+  .d-search { flex:0 1 90px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+              border-radius:6px; padding:5px 8px; font-size:11px; color:#94A3B8; }
+  .d-slider { display:flex; align-items:center; gap:5px; background:rgba(255,255,255,.05); padding:4px 7px;
+              border-radius:6px; border:1px solid rgba(255,255,255,.1); font-size:10px; color:#94A3B8; white-space:nowrap; }
+  .d-btn { padding:4px 7px; border-radius:6px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.06);
+           color:#CBD5E1; font-size:10px; white-space:nowrap; }
+  .d-btn.active { background:rgba(56,189,248,.2); border-color:#38BDF8; color:#F8FAFC; }
+  .d-map { position:absolute; inset:0; top:132px; display:flex; align-items:center; justify-content:center;
+           color:#334155; font-size:11px; text-align:center; padding:10px; }
+  .warn { position:absolute; top:6px; right:8px; background:rgba(239,68,68,.85); color:#fff; font-size:9px;
+          font-weight:700; padding:2px 6px; border-radius:4px; }
+
+  /* --- correct mobile UI (what SHOULD render at this width) --- */
+  .m-header { padding:12px 12px 8px; background:linear-gradient(180deg,#0E1629 0%,#0A0F1E 100%);
+              border-bottom:1px solid rgba(255,255,255,.08); }
+  .m-title { font-size:17px; font-weight:800; }
+  .m-search { width:100%; margin-top:8px; padding:8px 10px; background:rgba(255,255,255,.06);
+              border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#64748B; font-size:12px; box-sizing:border-box; }
+  .m-chips { display:flex; gap:5px; margin-top:8px; overflow:hidden; }
+  .m-chip { flex-shrink:0; padding:5px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+            background:rgba(255,255,255,.04); font-size:10px; color:#CBD5E1; }
+  .m-chip.active { background:rgba(56,189,248,.18); border-color:#38BDF8; color:#F8FAFC; }
+  .m-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; padding:12px; }
+  .m-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:10px;
+            height:60px; display:flex; align-items:center; justify-content:center; font-size:9px; color:#64748B; }
+</style>
+</head>
+<body>
+  <h1>SHA-83 — Resizing past the mobile breakpoint doesn't switch UI</h1>
+  <p class="sub">
+    Static reproduction of the actual DOM/CSS from <code>index.html</code>'s <code>#controls</code> bar and mobile
+    <code>#m-app</code> markup, both laid out at a 340px frame width. Left: what the page actually shows if you
+    resize an already-loaded desktop session down past 768px (<code>IS_MOBILE</code> is only computed once at
+    load, so the resize listener never swaps to the mobile renderer). Right: the mobile UI that should render at
+    this width, and does — but only on a fresh page load below the breakpoint.
+  </p>
+  <div class="cols">
+    <div class="col">
+      <h2>After resize, no reload <span class="badge bad">broken</span></h2>
+      <div class="frame">
+        <span class="warn">overlapping / cut off</span>
+        <div class="d-controls">
+          <div class="d-title">AI Landscape <span style="color:#38BDF8">2026</span></div>
+          <div class="d-search">Search...</div>
+          <div class="d-slider">Pop &ge; <span>60</span></div>
+          <div class="d-slider" style="color:#A78BFA">Link &ge; <span>1</span></div>
+          <div class="d-btn active">All</div>
+          <div class="d-btn">Hardware</div>
+          <div class="d-btn">Models</div>
+          <div class="d-btn">Creative</div>
+          <div class="d-btn">Tools</div>
+          <div class="d-btn">Infra</div>
+          <div class="d-btn">Emerging</div>
+          <div class="d-btn" style="background:rgba(168,85,247,.15)">View: Radial</div>
+          <div class="d-btn" style="background:rgba(168,85,247,.15)">Clear Selection</div>
+        </div>
+        <div class="d-map">Radial map squeezed into a thin strip below the wrapped, overlapping controls bar</div>
+      </div>
+    </div>
+    <div class="col">
+      <h2>Fresh load at this width <span class="badge good">works</span></h2>
+      <div class="frame">
+        <div class="m-header">
+          <div class="m-title">AI Landscape <span style="color:#38BDF8">2026</span></div>
+          <div class="m-search">Search tools, categories…</div>
+          <div class="m-chips">
+            <div class="m-chip active">All</div>
+            <div class="m-chip">Hardware</div>
+            <div class="m-chip">Infra</div>
+            <div class="m-chip">Models</div>
+          </div>
+        </div>
+        <div class="m-grid">
+          <div class="m-card">TSMC</div>
+          <div class="m-card">NVIDIA</div>
+          <div class="m-card">GPT-5</div>
+          <div class="m-card">Claude</div>
+          <div class="m-card">Gemini</div>
+          <div class="m-card">Groq</div>
+          <div class="m-card">AMD</div>
+          <div class="m-card">Cursor</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
