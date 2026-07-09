@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview — Downloadable Landscape Poster / Snapshot Export</title>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:#0A0F1E; color:#E2E8F0; padding:28px; }
+  h1 { font-size:16px; margin:0 0 4px; }
+  p.sub { font-size:12px; color:#94A3B8; margin:0 0 22px; max-width:760px; line-height:1.5; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:8px;
+           background:rgba(56,189,248,.15); color:#7DD3FC; }
+  .row { display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap; }
+  .toolbar-mock { display:flex; align-items:center; gap:10px; background:#111827; border:1px solid rgba(255,255,255,.08);
+                  border-radius:10px; padding:8px 12px; }
+  .toolbar-mock .fake { height:24px; border-radius:6px; background:rgba(255,255,255,.06); }
+  .fake.search { width:110px; }
+  .fake.slider { width:80px; }
+  .export-btn { display:flex; align-items:center; gap:6px; background:#38BDF8; color:#0A0F1E; font-weight:700;
+                font-size:12px; padding:7px 12px; border-radius:8px; cursor:pointer; border:none; }
+  .poster { width:360px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,.12);
+            box-shadow:0 12px 40px rgba(0,0,0,.5); background:#0A0F1E; }
+  .poster-head { padding:14px 16px 8px; }
+  .poster-head h2 { font-size:14px; margin:0 0 2px; }
+  .poster-head .meta { font-size:9px; color:#64748B; }
+  .poster-canvas { height:220px; margin:0 16px; border-radius:8px; background:
+      radial-gradient(circle at 30% 30%, rgba(139,92,246,.18), transparent 55%),
+      radial-gradient(circle at 70% 60%, rgba(56,189,248,.16), transparent 55%),
+      #0E1629; position:relative; }
+  .p-node { position:absolute; width:12px; height:12px; border-radius:50%; background:#fff; }
+  .poster-legend { display:flex; gap:10px; padding:10px 16px 6px; flex-wrap:wrap; }
+  .poster-legend span { font-size:8.5px; color:#94A3B8; display:flex; align-items:center; gap:4px; }
+  .dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+  .poster-foot { display:flex; justify-content:space-between; align-items:center; padding:10px 16px 14px;
+                 border-top:1px solid rgba(255,255,255,.06); margin-top:6px; }
+  .poster-foot .url { font-size:9px; color:#38BDF8; }
+  .poster-foot .filters { font-size:9px; color:#64748B; }
+  .dl-row { display:flex; gap:8px; margin-top:14px; }
+  .dl-row button { font-size:11px; background:rgba(255,255,255,.06); color:#E2E8F0; border:1px solid rgba(255,255,255,.1);
+                   border-radius:6px; padding:6px 10px; cursor:pointer; }
+</style>
+</head>
+<body>
+  <h1>Feature preview — Downloadable Landscape Poster <span class="badge">proposed</span></h1>
+  <p class="sub">
+    A new "Export" button in the toolbar renders the <em>current filtered view</em> (whatever search/category/
+    popularity state the reader has set) as a shareable static poster — title, legend, and a "as of" timestamp
+    included — downloadable as PNG or SVG. No backend involved: pure client-side SVG serialization of the existing
+    D3 canvas, similar to how landscape sites like CNCF's Cloud Native Landscape offer a static poster download.
+  </p>
+
+  <div class="row">
+    <div>
+      <div class="toolbar-mock">
+        <div class="fake search"></div>
+        <div class="fake slider"></div>
+        <div class="fake slider"></div>
+        <button class="export-btn">&#8681; Export poster</button>
+      </div>
+      <div class="dl-row">
+        <button>Download PNG</button>
+        <button>Download SVG</button>
+      </div>
+    </div>
+
+    <div class="poster">
+      <div class="poster-head">
+        <h2>AI Landscape 2026 — Coding &amp; Agents view</h2>
+        <div class="meta">Filtered: popularity ≥ 60 · category: Tools · exported 2026-07-09</div>
+      </div>
+      <div class="poster-canvas" id="pcanvas"></div>
+      <div class="poster-legend">
+        <span><i class="dot" style="background:#F59E0B"></i>manufactures/powers</span>
+        <span><i class="dot" style="background:#A78BFA"></i>hosts/runs</span>
+        <span><i class="dot" style="background:#22D3EE"></i>built-on</span>
+      </div>
+      <div class="poster-foot">
+        <span class="url">ai-landscape.example/?q=Coding&pop=60</span>
+        <span class="filters">42 nodes shown</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('pcanvas');
+    const pts = [[20,30],[35,55],[50,25],[62,60],[75,35],[85,50],[45,75],[28,15],[65,18],[90,70]];
+    pts.forEach(([x,y]) => {
+      const n = document.createElement('div');
+      n.className = 'p-node';
+      n.style.left = x + '%';
+      n.style.top = y + '%';
+      canvas.appendChild(n);
+    });
+  </script>
+</body>
+</html>
