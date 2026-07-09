@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Usercon — Context Timeline (mockup)</title>
+<style>
+  :root{--paper:#faf8f4;--paper-strong:#fffdf8;--surface-soft:#f7f4ef;--ink:#191816;--muted:#6d675f;--line:rgba(25,24,22,0.13);
+        --terracotta:#c7522a;--terracotta-soft:rgba(199,82,42,0.12);--moss:#2f4937;--moss-soft:rgba(47,73,55,0.13);
+        --gold:#91651f;--gold-soft:rgba(145,101,31,0.13);--blue:#365f87;--blue-soft:rgba(54,95,135,0.12);
+        --serif:Georgia,"Times New Roman",serif;--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:"SFMono-Regular",Consolas,monospace}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+  .banner{background:var(--terracotta);color:#fff;text-align:center;padding:8px;font-family:var(--mono);font-size:12px;letter-spacing:.04em}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+  .eyebrow{color:#9f3717;font-family:var(--mono);font-size:12px;font-weight:800;text-transform:uppercase}
+  h1{font-family:var(--serif);font-size:34px;margin:6px 0 6px}
+  .sub{color:var(--muted);font-size:15px;max-width:640px;line-height:1.5;margin-bottom:26px}
+  .panel{border:1px solid var(--line);border-radius:8px;background:rgba(255,253,248,.85);box-shadow:0 22px 70px rgba(55,39,28,0.08);padding:22px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-family:var(--mono);font-size:12px;color:var(--muted);background:var(--surface-soft)}
+  .chip.active{border-color:var(--terracotta);background:var(--terracotta-soft);color:#9f3717;font-weight:700}
+  .timeline{position:relative;padding-left:26px}
+  .timeline:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .day{margin-bottom:26px}
+  .day-label{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;font-weight:800}
+  .entry{position:relative;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;margin-bottom:14px}
+  .entry:before{content:"";position:absolute;left:-23px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--moss);border:2px solid var(--paper-strong)}
+  .entry.pending:before{background:var(--gold)}
+  .entry.rejected:before{background:var(--terracotta)}
+  .card{border:1px solid var(--line);border-radius:8px;background:var(--surface-soft);padding:12px 14px;width:100%}
+  .card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .agent-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:800;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--line)}
+  .agent-claude{background:var(--terracotta-soft);color:#9f3717}
+  .agent-codex{background:var(--blue-soft);color:var(--blue)}
+  .agent-manual{background:var(--gold-soft);color:var(--gold)}
+  .time{font-family:var(--mono);font-size:11px;color:#918a80}
+  .title-line{font-family:var(--serif);font-size:17px;margin-bottom:4px}
+  .body-line{font-size:13.5px;color:var(--muted);line-height:1.45;margin-bottom:8px}
+  .tag-row{display:flex;gap:6px;flex-wrap:wrap}
+  .tag{border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--paper-strong)}
+  .life-area{border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-family:var(--mono);font-size:11px;font-weight:700}
+  .la-food{color:#9f3717;background:var(--terracotta-soft)}
+  .la-fitness{color:var(--blue);background:var(--blue-soft)}
+  .la-finance{color:var(--moss);background:var(--moss-soft)}
+  .action{font-family:var(--mono);font-size:11px;color:var(--quiet,#918a80);text-transform:uppercase;letter-spacing:.03em}
+</style>
+</head>
+<body>
+<div class="banner">MOCKUP — proposed feature, not built. Static preview for SHA-87.</div>
+<div class="wrap">
+  <p class="eyebrow">Map · New</p>
+  <h1>Context Timeline</h1>
+  <p class="sub">A chronological feed of everything Claude, Codex, and Sharad have added or changed — so trust in the context graph comes from seeing exactly who wrote what, and when.</p>
+
+  <div class="panel">
+    <div class="filters">
+      <span class="chip active">All agents</span>
+      <span class="chip">Claude</span>
+      <span class="chip">Codex</span>
+      <span class="chip">Manual</span>
+      <span class="chip">Approved</span>
+      <span class="chip">Pending</span>
+    </div>
+
+    <div class="timeline">
+      <div class="day">
+        <div class="day-label">Today · Jul 9</div>
+        <div class="entry pending">
+          <div></div>
+          <div class="card">
+            <div class="card-top">
+              <span class="agent-badge agent-claude">● Claude</span>
+              <span class="time">10:42 AM · added</span>
+            </div>
+            <div class="title-line">Prefers window seats on flights over 4 hours</div>
+            <div class="body-line">Added while planning the Europe trip — awaiting review.</div>
+            <div class="tag-row">
+              <span class="life-area la-food">Travel</span>
+              <span class="tag">pending</span>
+            </div>
+          </div>
+        </div>
+        <div class="entry">
+          <div></div>
+          <div class="card">
+            <div class="card-top">
+              <span class="agent-badge agent-codex">● Codex</span>
+              <span class="time">9:15 AM · edited</span>
+            </div>
+            <div class="title-line">Repeat purchases should preserve decision context</div>
+            <div class="body-line">Updated budget constraint after a shopping conversation.</div>
+            <div class="tag-row">
+              <span class="life-area la-finance">Shopping</span>
+              <span class="action">field: body</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-label">Yesterday · Jul 8</div>
+        <div class="entry">
+          <div></div>
+          <div class="card">
+            <div class="card-top">
+              <span class="agent-badge agent-manual">● Manual</span>
+              <span class="time">7:02 PM · approved</span>
+            </div>
+            <div class="title-line">Note from last week's meeting about fitness</div>
+            <div class="body-line">Sharad reviewed and approved this Codex-sourced note.</div>
+            <div class="tag-row">
+              <span class="life-area la-fitness">Fitness</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-label">Jul 3</div>
+        <div class="entry">
+          <div></div>
+          <div class="card">
+            <div class="card-top">
+              <span class="agent-badge agent-codex">● Codex</span>
+              <span class="time">9:00 AM · added</span>
+            </div>
+            <div class="title-line">Usercon should store user context, not agent context</div>
+            <div class="body-line">Product thesis captured during PRD synthesis.</div>
+            <div class="tag-row">
+              <span class="life-area la-fitness">Learning</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
