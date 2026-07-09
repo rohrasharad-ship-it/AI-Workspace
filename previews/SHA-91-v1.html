@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SHA-91 preview — Shareable deep-links</title>
+<style>
+  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif; background:#0b0d12; color:#e8e8ec; }
+  .bar { display:flex; align-items:center; gap:10px; padding:14px 18px; background:#14161d; border-bottom:1px solid #262a35; }
+  .bar input { flex:1; background:#0b0d12; border:1px solid #2c313d; border-radius:6px; color:#9aa0ac; padding:8px 12px; font-size:13px; font-family:ui-monospace,monospace; }
+  .bar button { background:#4f7cff; color:#fff; border:none; border-radius:6px; padding:8px 14px; font-size:13px; cursor:pointer; }
+  .stage { position:relative; height:520px; display:flex; align-items:center; justify-content:center; }
+  .node { position:absolute; width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; text-align:center; }
+  .n1 { background:#22314f; border:2px solid #4f7cff; top:60px; left:120px; }
+  .n2 { background:#4f7cff; border:2px solid #8fb0ff; top:220px; left:340px; width:80px; height:80px; box-shadow:0 0 0 6px rgba(79,124,255,.18); }
+  .n3 { background:#22314f; border:2px solid #4f7cff; top:380px; left:560px; }
+  .callout { position:absolute; top:230px; left:440px; background:#1c2130; border:1px dashed #4f7cff; border-radius:8px; padding:10px 14px; font-size:12px; max-width:220px; color:#c9d3ff; }
+  .label { position:absolute; font-size:11px; color:#6c7484; }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <span style="font-size:12px;color:#6c7484;">ai-landscape.example</span>
+    <input readonly value="https://.../ai-landscape/#node=Claude-4x&cat=Models&layer=3&q=agent">
+    <button>Copy Link ▲</button>
+  </div>
+  <div class="stage">
+    <div class="node n1">TSMC</div>
+    <div class="node n2">Claude 4.x<br>(selected)</div>
+    <div class="node n3">Consumer App</div>
+    <div class="callout">Idea: the current selection + filters + search term are encoded in the URL hash, so this exact view is shareable and restorable on load.</div>
+  </div>
+</body>
+</html>
