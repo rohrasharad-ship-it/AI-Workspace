@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview — Timeline Scrubber ("Evolution of the AI Stack")</title>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:#0A0F1E; color:#E2E8F0; }
+  header { padding:20px 28px 8px; }
+  h1 { font-size:16px; margin:0 0 4px; }
+  p.sub { font-size:12px; color:#94A3B8; margin:0 0 18px; max-width:760px; line-height:1.5; }
+  .stage { position:relative; margin:0 28px 28px; border:1px solid rgba(255,255,255,.08); border-radius:12px;
+           background:radial-gradient(ellipse at 50% 40%, rgba(56,189,248,.06), transparent 60%); height:420px; overflow:hidden; }
+  .node { position:absolute; width:34px; height:34px; border-radius:50%; background:#fff; border:2px solid #38BDF8;
+          transition:opacity .5s ease, filter .5s ease, transform .5s ease; }
+  .node.dim { opacity:.12; filter:grayscale(1); transform:scale(.82); }
+  .node .lbl { position:absolute; top:38px; left:50%; transform:translateX(-50%); font-size:9px; color:#94A3B8;
+               white-space:nowrap; transition:opacity .5s ease; }
+  .node.dim .lbl { opacity:.15; }
+  .controls { position:absolute; left:0; right:0; bottom:0; padding:14px 22px 18px; background:linear-gradient(0deg, rgba(10,15,30,.92), transparent);
+              display:flex; align-items:center; gap:14px; }
+  .playbtn { width:34px; height:34px; border-radius:50%; background:#38BDF8; border:none; color:#0A0F1E; font-size:14px;
+             cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none; }
+  .track-wrap { flex:1; position:relative; }
+  input[type=range] { width:100%; accent-color:#38BDF8; }
+  .years { display:flex; justify-content:space-between; font-size:10px; color:#64748B; margin-top:2px; }
+  .yearnow { position:absolute; top:-22px; font-size:12px; font-weight:700; color:#E2E8F0; transform:translateX(-50%); }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:8px;
+           background:rgba(56,189,248,.15); color:#7DD3FC; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Feature preview — Timeline Scrubber <span class="badge">proposed</span></h1>
+  <p class="sub">
+    A bottom-of-screen scrubber lets readers replay how the AI ecosystem grew, year by year, by dimming nodes
+    not yet "notable" as of the selected year. Drag the slider below (static demo, non-functional) to see the concept:
+    older infrastructure nodes stay lit while newer app-layer nodes fade in as the year advances.
+  </p>
+</header>
+
+<div class="stage" id="stage">
+  <div class="yearnow" id="yearNow" style="left:38%">2020</div>
+</div>
+
+<script>
+  const DEMO = [
+    { name: "TSMC",        x: 10, y: 30, year: 1987 },
+    { name: "NVIDIA",      x: 20, y: 55, year: 1993 },
+    { name: "AWS",         x: 30, y: 20, year: 2006 },
+    { name: "TensorFlow",  x: 40, y: 65, year: 2015 },
+    { name: "GPT-3",       x: 50, y: 35, year: 2020 },
+    { name: "Stable Diff.",x: 58, y: 70, year: 2022 },
+    { name: "GPT-4",       x: 68, y: 45, year: 2023 },
+    { name: "Claude 4",    x: 78, y: 25, year: 2025 },
+    { name: "Sora 2",      x: 85, y: 60, year: 2025 },
+    { name: "GPT-5",       x: 92, y: 38, year: 2026 },
+  ];
+  const stage = document.getElementById('stage');
+  const els = DEMO.map(d => {
+    const n = document.createElement('div');
+    n.className = 'node';
+    n.style.left = d.x + '%';
+    n.style.top = d.y + '%';
+    n.innerHTML = '<div class="lbl">' + d.name + ' ’' + String(d.year).slice(2) + '</div>';
+    stage.appendChild(n);
+    return { el: n, year: d.year };
+  });
+
+  function render(year) {
+    els.forEach(o => o.el.classList.toggle('dim', o.year > year));
+    document.getElementById('yearNow').textContent = year;
+  }
+
+  const controls = document.createElement('div');
+  controls.className = 'controls';
+  controls.innerHTML = `
+    <button class="playbtn" id="playBtn">&#9654;</button>
+    <div class="track-wrap">
+      <input type="range" id="slider" min="1987" max="2026" value="2020" step="1"/>
+      <div class="years"><span>1987</span><span>Foundries → Chips → Cloud → Models → Infra → Apps</span><span>2026</span></div>
+    </div>
+  `;
+  stage.appendChild(controls);
+
+  const slider = document.getElementById('slider');
+  slider.addEventListener('input', e => {
+    const year = +e.target.value;
+    render(year);
+    document.getElementById('yearNow').style.left = ((year - 1987) / (2026 - 1987) * 100) + '%';
+  });
+  render(2020);
+
+  let playing = false, timer = null;
+  document.getElementById('playBtn').addEventListener('click', () => {
+    playing = !playing;
+    document.getElementById('playBtn').innerHTML = playing ? '&#10074;&#10074;' : '&#9654;';
+    if (playing) {
+      timer = setInterval(() => {
+        let y = +slider.value + 1;
+        if (y > 2026) y = 1987;
+        slider.value = y;
+        slider.dispatchEvent(new Event('input'));
+      }, 500);
+    } else {
+      clearInterval(timer);
+    }
+  });
+</script>
+</body>
+</html>
