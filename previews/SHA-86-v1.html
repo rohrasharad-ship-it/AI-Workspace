@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview — Guided Tour Mode</title>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,sans-serif; background:#0A0F1E; color:#E2E8F0; padding:28px; }
+  h1 { font-size:16px; margin:0 0 4px; }
+  p.sub { font-size:12px; color:#94A3B8; margin:0 0 22px; max-width:760px; line-height:1.5; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-left:8px;
+           background:rgba(56,189,248,.15); color:#7DD3FC; }
+  .row { display:flex; gap:24px; flex-wrap:wrap; }
+  .panel { width:240px; background:#111827; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; }
+  .panel h3 { font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:#64748B; margin:0 0 10px; }
+  .tour { display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:8px; cursor:pointer; margin-bottom:4px; }
+  .tour:hover, .tour.active { background:rgba(56,189,248,.1); }
+  .tour .ic { width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:13px; flex:none; }
+  .tour .txt .t { font-size:12px; font-weight:600; }
+  .tour .txt .d { font-size:10px; color:#64748B; }
+
+  .stage { position:relative; flex:1; min-width:420px; height:380px; border:1px solid rgba(255,255,255,.08);
+           border-radius:12px; background:radial-gradient(ellipse at 50% 40%, rgba(56,189,248,.06), transparent 60%); overflow:hidden; }
+  .node { position:absolute; width:30px; height:30px; border-radius:50%; background:#fff; border:2px solid #38BDF8; opacity:.25; transition:all .4s; }
+  .node .lbl { position:absolute; top:34px; left:50%; transform:translateX(-50%); font-size:9px; color:#64748B; white-space:nowrap; }
+  .node.hi { opacity:1; box-shadow:0 0 0 6px rgba(56,189,248,.18); transform:scale(1.15); }
+  .link { position:absolute; height:2px; background:rgba(56,189,248,.25); transform-origin:0 0; }
+  .link.hi { background:#38BDF8; height:2.5px; }
+
+  .narration { position:absolute; left:16px; right:16px; bottom:16px; background:rgba(10,15,30,.92);
+               border:1px solid rgba(56,189,248,.3); border-radius:10px; padding:12px 14px; }
+  .narration .step { font-size:9px; color:#38BDF8; font-weight:700; letter-spacing:.04em; margin-bottom:4px; }
+  .narration .text { font-size:12px; line-height:1.5; }
+  .navbtns { display:flex; justify-content:flex-end; gap:8px; margin-top:8px; }
+  .navbtns button { font-size:11px; background:rgba(255,255,255,.06); color:#E2E8F0; border:1px solid rgba(255,255,255,.1);
+                    border-radius:6px; padding:5px 10px; cursor:pointer; }
+</style>
+</head>
+<body>
+  <h1>Feature preview — Guided Tour Mode <span class="badge">proposed</span></h1>
+  <p class="sub">
+    Curated, narrated walkthroughs (e.g. "The LLM Stack", "Chip → Cloud → Model pipeline") auto-pan the radial
+    map and sequentially highlight the nodes/links involved, with a short caption explaining each hop. This gives
+    newcomers an editorial on-ramp into the graph instead of dropping them into 154 nodes and hoping search/filter
+    is enough — a common differentiator for explainer-style landscape products versus pure data browsers.
+  </p>
+
+  <div class="row">
+    <div class="panel">
+      <h3>Guided tours</h3>
+      <div class="tour active">
+        <div class="ic" style="background:rgba(56,189,248,.15);color:#7DD3FC;">&#129504;</div>
+        <div class="txt"><div class="t">The LLM Stack</div><div class="d">Chip → Cloud → Model → App</div></div>
+      </div>
+      <div class="tour">
+        <div class="ic" style="background:rgba(167,139,250,.15);color:#C4B5FD;">&#127912;</div>
+        <div class="txt"><div class="t">Creative AI Pipeline</div><div class="d">Image, video &amp; voice gen</div></div>
+      </div>
+      <div class="tour">
+        <div class="ic" style="background:rgba(52,211,153,.15);color:#6EE7B7;">&#128272;</div>
+        <div class="txt"><div class="t">AI Safety &amp; Guardrails</div><div class="d">Who guards the models?</div></div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="narration">
+        <div class="step">STEP 2 OF 4 &middot; THE LLM STACK</div>
+        <div class="text">NVIDIA's GPUs are rented through cloud hubs like AWS and Azure — this is where
+          foundation models actually get trained.</div>
+        <div class="navbtns"><button>&larr; Back</button><button>Next &rarr;</button></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEMO = [
+      { name: "TSMC",   x: 12, y: 20 },
+      { name: "NVIDIA", x: 30, y: 15, hi:true },
+      { name: "AWS",    x: 50, y: 22, hi:true },
+      { name: "GPT-5",  x: 68, y: 18 },
+      { name: "Cursor", x: 85, y: 25 },
+      { name: "vLLM",   x: 40, y: 45 },
+      { name: "LangChain", x: 60, y: 50 },
+    ];
+    const stage = document.getElementById('stage');
+    const linkPairs = [[1,2]];
+    const positions = {};
+    DEMO.forEach((d,i) => {
+      const n = document.createElement('div');
+      n.className = 'node' + (d.hi ? ' hi' : '');
+      n.style.left = d.x + '%';
+      n.style.top = d.y + '%';
+      n.innerHTML = '<div class="lbl">' + d.name + '</div>';
+      stage.appendChild(n);
+      positions[i] = d;
+    });
+    linkPairs.forEach(([a,b]) => {
+      const pa = positions[a], pb = positions[b];
+      const l = document.createElement('div');
+      l.className = 'link hi';
+      const dx = (pb.x - pa.x), dy = (pb.y - pa.y);
+      const len = Math.sqrt(dx*dx+dy*dy);
+      l.style.width = len + '%';
+      l.style.left = pa.x + '%';
+      l.style.top = (pa.y + 2) + '%';
+      l.style.transform = 'rotate(' + (Math.atan2(dy, dx) * 180/Math.PI) + 'deg)';
+      stage.insertBefore(l, stage.firstChild);
+    });
+  </script>
+</body>
+</html>
