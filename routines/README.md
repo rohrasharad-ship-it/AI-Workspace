@@ -74,6 +74,16 @@ project, count that project's **open Linear issues** — every issue whose
 status is not `Done` or `Cancelled` (Backlog, spec-needed, agent-ready,
 In Progress, In Review all count toward the total).
 
+**Resolve the project to its Linear project ID first (e.g. via `get_project`),
+then count issues by that ID — do not filter `list_issues` by the project's
+display name.** Name-based filtering has been observed to silently return 0
+issues for a project that actually had 13 open, under-counting instead of
+erroring; that false "0" let a sweep run for a project that should have been
+skipped, filing 4 issues that then had to be canceled. Filtering by ID does
+not have this failure mode. If the count still comes back suspiciously low
+(e.g. 0) for a project known to be active, treat that as a signal to double
+check by ID before trusting it.
+
 **If that count is 5 or more, do not run any of the three idea-generation
 roles for this project this cycle.** Create no issues, do not read the
 codebase or logs — skip straight to notifying Slack:
