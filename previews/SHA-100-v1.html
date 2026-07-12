@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Relationship Path Finder — mockup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  :root{
+    --bg:#0a0c14; --panel:#12151f; --border:#242938; --text:#e8eaf1; --dim:#7a8194;
+    --accent:#8b6cf2; --orange:#e8823a; --cyan:#3fc4e0; --green:#3ecf8e;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
+  header{display:flex;align-items:center;gap:16px;padding:10px 16px;border-bottom:1px solid var(--border);background:#0d0f1a;}
+  .brand{font-weight:700;font-size:16px;}
+  .brand small{color:var(--dim);font-weight:400;font-size:12px;margin-left:4px;}
+  .pathbar{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:6px 10px;flex:1;max-width:640px;}
+  .pathbar input{background:transparent;border:none;color:var(--text);outline:none;font-size:13px;width:150px;}
+  .pathbar .arrow{color:var(--dim);}
+  .findbtn{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;}
+  .badge{margin-left:auto;font-size:12px;color:var(--dim);border:1px solid var(--border);border-radius:6px;padding:5px 10px;}
+  .stage{position:relative;height:560px;overflow:hidden;background:radial-gradient(ellipse at center,#12141f 0%,#0a0c14 70%);}
+  svg{width:100%;height:100%;}
+  .node{fill:#1a1e2c;stroke:var(--border);stroke-width:1.5;}
+  .node.path{fill:#241a3d;stroke:var(--accent);stroke-width:2.5;filter:drop-shadow(0 0 6px rgba(139,108,242,.7));}
+  .node.dim{opacity:.18;}
+  .label{fill:var(--text);font-size:11px;font-family:inherit;text-anchor:middle;}
+  .label.dim{opacity:.18;}
+  .link{stroke:var(--border);stroke-width:1.2;opacity:.35;}
+  .link.path{stroke:var(--accent);stroke-width:3;opacity:1;filter:drop-shadow(0 0 4px rgba(139,108,242,.8));}
+  .ring{fill:none;stroke:var(--border);stroke-width:1;opacity:.4;}
+  .callout{position:absolute;left:24px;bottom:24px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;max-width:360px;}
+  .callout h3{margin:0 0 6px;font-size:13px;color:var(--accent);}
+  .callout p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.5;}
+  .chip{display:inline-block;background:#1a1e2c;border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:11px;margin-top:8px;color:var(--text);}
+  .newtag{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">AI Landscape <small>path finder — proposed</small></div>
+  <div class="pathbar">
+    <input value="Nvidia" readonly/>
+    <span class="arrow">&#8594;</span>
+    <input value="OpenAI" readonly/>
+    <button class="findbtn">Find Path</button>
+  </div>
+  <div class="badge">3 hops found</div>
+</header>
+<div class="stage">
+  <svg viewBox="0 0 1440 560">
+    <circle class="ring" cx="720" cy="500" r="90"/>
+    <circle class="ring" cx="720" cy="500" r="180"/>
+    <circle class="ring" cx="720" cy="500" r="270"/>
+    <circle class="ring" cx="720" cy="500" r="360"/>
+    <circle class="ring" cx="720" cy="500" r="450"/>
+
+    <!-- dimmed background nodes -->
+    <g>
+      <circle class="node dim" cx="420" cy="380" r="14"/>
+      <circle class="node dim" cx="1020" cy="380" r="14"/>
+      <circle class="node dim" cx="520" cy="160" r="12"/>
+      <circle class="node dim" cx="900" cy="150" r="12"/>
+      <circle class="node dim" cx="300" cy="250" r="10"/>
+      <circle class="node dim" cx="1160" cy="260" r="10"/>
+      <circle class="node dim" cx="640" cy="90" r="10"/>
+      <circle class="node dim" cx="820" cy="80" r="10"/>
+    </g>
+
+    <!-- path links -->
+    <line class="link path" x1="720" y1="470" x2="640" y2="330"/>
+    <line class="link path" x1="640" y1="330" x2="560" y2="190"/>
+    <line class="link path" x1="560" y1="190" x2="470" y2="70"/>
+
+    <!-- path nodes -->
+    <circle class="node path" cx="720" cy="470" r="20"/>
+    <text class="label" x="720" y="500">Nvidia</text>
+
+    <circle class="node path" cx="640" cy="330" r="16"/>
+    <text class="label" x="640" y="358">Azure AI</text>
+
+    <circle class="node path" cx="560" cy="190" r="16"/>
+    <text class="label" x="560" y="218">GPT-5.x</text>
+
+    <circle class="node path" cx="470" cy="70" r="18"/>
+    <text class="label" x="470" y="46">OpenAI</text>
+  </svg>
+  <div class="callout">
+    <h3><span class="newtag">NEW</span>&nbsp; Relationship Path Finder</h3>
+    <p>Pick any two nodes and the map traces the shortest chain of real connections between them — powers, hosts, and integrates edges — dimming everything not on the path.</p>
+    <div class="chip">Nvidia → manufactures → Azure AI → hosts → GPT‑5.x → built‑on → OpenAI</div>
+  </div>
+</div>
+</body>
+</html>
