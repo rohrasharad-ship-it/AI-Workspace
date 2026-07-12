@@ -1,0 +1,44 @@
+<title>SHA-104 preview — side panel should respect active filters</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:system-ui,-apple-system,sans-serif; background:#0A0F1E; color:#E2E8F0; padding:32px; }
+  h1 { font-size:18px; margin-bottom:6px; }
+  p.sub { color:#94A3B8; font-size:13px; margin-bottom:24px; max-width:760px; }
+  .row { display:flex; gap:24px; flex-wrap:wrap; }
+  .panel { flex:1; min-width:320px; max-width:340px; background:#0E1629; border-left:3px solid #38BDF8; border-radius:10px; padding:16px; }
+  .panel h2 { font-size:12px; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+  .panel.bad h2 { color:#F87171; }
+  .panel.good h2 { color:#34D399; }
+  .filterline { font-size:11px; color:#A78BFA; margin-bottom:14px; }
+  .name { font-size:16px; font-weight:700; margin-bottom:10px; }
+  .conn { display:flex; align-items:center; gap:7px; font-size:11px; color:#CBD5E1; padding:5px 2px; border-radius:3px; }
+  .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .w5 .dot { background:#F59E0B; }
+  .wlow .dot { background:#475569; }
+  .wlow { opacity:0.35; text-decoration:line-through; }
+  .tag { margin-left:auto; font-size:9px; color:#64748B; }
+  .note { font-size:10px; color:#64748B; margin-top:10px; }
+</style>
+<h1>SHA-104 — Side panel connection list should respect the active Link ≥ filter</h1>
+<p class="sub">Static mockup only — no interactivity. Both panels show NVIDIA selected while the "Link ≥" slider is set to 5 (max). Left = current behavior (panel lists all 15 raw connections regardless of weight). Right = target behavior (panel only lists the connections the graph is actually drawing).</p>
+<div class="row">
+  <div class="panel bad">
+    <h2>Today</h2>
+    <div class="filterline">Link ≥ 5 active — graph only draws weight-5 arrows</div>
+    <div class="name">NVIDIA</div>
+    <div class="conn w5">← TSMC <span class="tag">manufactures · w5</span></div>
+    <div class="conn w5">→ Azure AI <span class="tag">powers · w5</span></div>
+    <div class="conn wlow">→ vLLM <span class="tag">integrates · w3</span></div>
+    <div class="conn wlow">← Deepgram <span class="tag">powers · w2</span></div>
+    <div class="conn wlow">← Boston Dynamics <span class="tag">powers · w2</span></div>
+    <div class="note">…10 more low-weight connections still listed, contradicting the filtered graph.</div>
+  </div>
+  <div class="panel good">
+    <h2>Target</h2>
+    <div class="filterline">Link ≥ 5 active — panel matches the graph</div>
+    <div class="name">NVIDIA</div>
+    <div class="conn w5">← TSMC <span class="tag">manufactures · w5</span></div>
+    <div class="conn w5">→ Azure AI <span class="tag">powers · w5</span></div>
+    <div class="note">Only the 2 connections that pass the current filter are shown — consistent with the graph.</div>
+  </div>
+</div>
