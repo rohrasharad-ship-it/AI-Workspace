@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Build Your Stack — mockup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  :root{
+    --bg:#0a0c14; --panel:#12151f; --border:#242938; --text:#e8eaf1; --dim:#7a8194;
+    --accent:#8b6cf2; --orange:#e8823a; --cyan:#3fc4e0; --green:#3ecf8e; --purple:#a06cd5;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
+  header{padding:14px 20px;border-bottom:1px solid var(--border);background:#0d0f1a;}
+  .brand{font-weight:700;font-size:16px;}
+  .brand small{color:var(--dim);font-weight:400;font-size:12px;margin-left:4px;}
+  .newtag{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;margin-right:6px;}
+  main{padding:28px 32px;}
+  .cols{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  .col{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;min-height:150px;}
+  .col .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--dim);margin-bottom:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .pick{background:#1a1e2c;border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:12.5px;margin-bottom:8px;cursor:pointer;}
+  .pick.selected{border-color:var(--accent);background:#241a3d;box-shadow:0 0 0 1px var(--accent) inset;}
+  .summary{margin-top:22px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+  .summary h3{margin:0 0 10px;font-size:14px;}
+  .chain{display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+  .chip{background:#1a1e2c;border:1px solid var(--accent);color:var(--text);border-radius:20px;padding:6px 12px;font-size:12px;}
+  .chain .arrow{color:var(--dim);}
+  .actions{margin-top:14px;display:flex;gap:8px;}
+  .actions button{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:12.5px;font-weight:600;}
+  .actions button.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">AI Landscape <small><span class="newtag">NEW</span>Build Your Stack — proposed</small></div>
+</header>
+<main>
+  <div class="cols">
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:var(--orange)"></span>Foundry</div>
+      <div class="pick">TSMC</div>
+      <div class="pick selected">Samsung Foundry</div>
+    </div>
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:var(--orange)"></span>Chip Designers</div>
+      <div class="pick selected">Nvidia</div>
+      <div class="pick">AMD</div>
+    </div>
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:var(--cyan)"></span>Cloud / Hubs</div>
+      <div class="pick">AWS</div>
+      <div class="pick selected">Azure AI</div>
+    </div>
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:#5c7cff"></span>Foundation Models</div>
+      <div class="pick selected">GPT‑5.x</div>
+      <div class="pick">Claude</div>
+    </div>
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:var(--purple)"></span>Frameworks &amp; Infra</div>
+      <div class="pick">LangChain</div>
+      <div class="pick selected">LlamaIndex</div>
+    </div>
+    <div class="col">
+      <div class="lbl"><span class="dot" style="background:var(--green)"></span>Applications</div>
+      <div class="pick selected">Notion AI</div>
+      <div class="pick">Copilot</div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h3>Your Stack</h3>
+    <div class="chain">
+      <span class="chip">Samsung Foundry</span><span class="arrow">&#8594;</span>
+      <span class="chip">Nvidia</span><span class="arrow">&#8594;</span>
+      <span class="chip">Azure AI</span><span class="arrow">&#8594;</span>
+      <span class="chip">GPT‑5.x</span><span class="arrow">&#8594;</span>
+      <span class="chip">LlamaIndex</span><span class="arrow">&#8594;</span>
+      <span class="chip">Notion AI</span>
+    </div>
+    <div class="actions">
+      <button>Copy shareable summary</button>
+      <button class="ghost">Reset</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>
