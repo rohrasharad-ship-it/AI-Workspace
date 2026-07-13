@@ -5,6 +5,10 @@
 **Read first:** `agents/shared/openspec.md`, `agents/shared/visual-specs.md`,
 `agents/shared/status-snapshot.md`, `agents/shared/conventions.md`
 
+**If the feature is visual or motion-based:** also read `design/README.md` and
+`design/resources.md` — propose effects using known copy-paste sources, not
+from-scratch animation logic.
+
 ---
 
 **This role has no assignment. It is triggered by @mentions in Linear comments.**

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snippet — Blur text reveal (React Bits pattern)</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0a0a0f;
+      color: #f4f4f5;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      margin: 0;
+    }
+    .blur-text {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      text-align: center;
+    }
+    .blur-text span {
+      display: inline-block;
+      filter: blur(8px);
+      opacity: 0.3;
+      transition: filter 0.6s ease, opacity 0.6s ease;
+    }
+    .blur-text span.revealed {
+      filter: blur(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="blur-text" id="blur-demo">
+    <span>B</span><span>u</span><span>i</span><span>l</span><span>d</span>
+    <span>&nbsp;</span>
+    <span>s</span><span>o</span><span>m</span><span>e</span><span>t</span><span>h</span><span>i</span><span>n</span><span>g</span>
+    <span>&nbsp;</span>
+    <span>m</span><span>e</span><span>m</span><span>o</span><span>r</span><span>a</span><span>b</span><span>l</span><span>e</span>
+  </div>
+
+  <script>
+    const spans = document.querySelectorAll('#blur-demo span');
+    let revealed = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !revealed) {
+          revealed = true;
+          spans.forEach((span, i) => {
+            setTimeout(() => span.classList.add('revealed'), i * 40);
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+    observer.observe(document.getElementById('blur-demo'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snippet — Spotlight hover (React Bits pattern)</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0a0a0f;
+      color: #f4f4f5;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      padding: 2rem;
+    }
+    .spotlight-card {
+      position: relative;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: #12121a;
+      padding: 3rem 2rem;
+      max-width: 400px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .spotlight {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .spotlight-card:hover .spotlight { opacity: 1; }
+    h3 { position: relative; z-index: 1; margin: 0 0 0.5rem; }
+    p { position: relative; z-index: 1; color: #a1a1aa; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="spotlight-card" id="card">
+    <div class="spotlight" id="spotlight"></div>
+    <h3>Hover me</h3>
+    <p>Cursor-following spotlight — copy from React Bits Spotlight component for React projects.</p>
+  </div>
+
+  <script>
+    const card = document.getElementById('card');
+    const spotlight = document.getElementById('spotlight');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      spotlight.style.left = (e.clientX - rect.left) + 'px';
+      spotlight.style.top = (e.clientY - rect.top) + 'px';
+    });
+  </script>
+</body>
+</html>

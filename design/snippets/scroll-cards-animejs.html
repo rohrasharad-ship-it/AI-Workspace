@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snippet — Scroll cards (Anime.js)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #0a0a0f; color: #f4f4f5; margin: 0; padding: 2rem; }
+    .spacer { height: 60vh; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; max-width: 900px; margin: 0 auto; }
+    .card {
+      background: #12121a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.25rem;
+      opacity: 0;
+    }
+    .card h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+    .card p { margin: 0; color: #a1a1aa; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="spacer"></div>
+  <div class="cards" id="cards">
+    <div class="card" data-animate><h3>Card one</h3><p>Animates in on scroll.</p></div>
+    <div class="card" data-animate><h3>Card two</h3><p>Staggered delay.</p></div>
+    <div class="card" data-animate><h3>Card three</h3><p>Anime.js onScroll.</p></div>
+  </div>
+  <div class="spacer"></div>
+
+  <script type="module">
+    import { animate, stagger, onScroll } from 'https://cdn.jsdelivr.net/npm/animejs@4.0.2/+esm';
+
+    animate('[data-animate]', {
+      opacity: [0, 1],
+      translateY: [30, 0],
+      duration: 700,
+      ease: 'outExpo',
+      delay: stagger(120),
+      autoplay: onScroll({
+        target: '#cards',
+        enter: 'bottom top-=100',
+        sync: true,
+      }),
+    });
+  </script>
+</body>
+</html>

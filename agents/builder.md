@@ -7,6 +7,9 @@
 `agents/shared/visual-self-qa.md`, `agents/shared/status-snapshot.md`,
 `agents/shared/conventions.md`
 
+**If the issue touches UI, layout, or animation:** also read `design/README.md`
+(and `design/workflow.md` when implementing).
+
 ---
 
 **FIRST ACTION ON ANY ASSIGNMENT — check the label, never the status:**

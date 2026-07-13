@@ -29,6 +29,7 @@ agents/
 routines/               — named, git-stored jobs an external trigger invokes
                            by name; see routines/README.md
 projects.md             — repo / Linear / Slack / prod URL per project
+design/                 — UI animation & component copy-paste reference system
 ```
 
 ## Hub model: this repo is the only place instructions live
@@ -104,3 +105,11 @@ Every project this file's roles and routines can operate on — repo, Linear
 project, Slack channel, prod URL — is in `projects.md`. Add new projects via
 the `/init-project` skill, which also creates a project's thin pointer
 `AGENTS.md` automatically.
+
+## UI design reference
+
+When building or speccing anything with a visual or motion component, read
+`design/README.md` first. It catalogs external copy-paste sources (React Bits,
+Aceternity UI, Anime.js, etc.), local snippets, and the workflow for adapting
+them — **don't write UI animations from scratch** when a reference exists.
+Full detail lives in `design/resources.md` and `design/workflow.md`.
