@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SHA-123 preview — Shareable deep-links</title>
+<style>
+  body { margin:0; font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#0b0d12; color:#e8eaf0; }
+  .toolbar { display:flex; align-items:center; gap:10px; padding:12px 16px; background:#12151d; border-bottom:1px solid #232838; }
+  .toolbar input { flex:0 0 220px; padding:6px 10px; border-radius:6px; border:1px solid #2b3145; background:#1a1e2a; color:#e8eaf0; }
+  .chip { padding:5px 10px; border-radius:999px; background:#1a1e2a; border:1px solid #2b3145; font-size:12px; color:#a8b0c3; }
+  .share-btn { margin-left:auto; display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:6px; background:#3b5bfd; color:white; font-size:13px; font-weight:600; }
+  .canvas { height:340px; display:flex; align-items:center; justify-content:center; color:#3a3f52; font-size:13px; }
+  .callout { margin:0 16px 16px; padding:12px 14px; border:1px dashed #3b5bfd; border-radius:8px; background:#12162a; font-size:13px; color:#9fb0ff; }
+  .url-bar { margin:0 16px 16px; padding:8px 12px; border-radius:6px; background:#1a1e2a; border:1px solid #2b3145; font-family: ui-monospace, monospace; font-size:12px; color:#7fe0a8; overflow-wrap:anywhere; }
+  .label { position:absolute; }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <input placeholder="Search tools, categories…">
+    <span class="chip">Hardware</span>
+    <span class="chip">Models</span>
+    <span class="chip">Infra</span>
+    <div class="share-btn">🔗 Share this view</div>
+  </div>
+  <div class="canvas">[ existing radial map canvas — unchanged ]</div>
+  <div class="callout">New: clicking "Share this view" copies a link that reproduces the current filters + selected node exactly as seen now.</div>
+  <div class="url-bar">https://rohrasharad-ship-it.github.io/ai-landscape/#layer=4&amp;node=langchain&amp;pop=40</div>
+</body>
+</html>
