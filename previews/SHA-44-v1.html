@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHA-44 — Animation Libraries Preview</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --border: rgba(255,255,255,0.08);
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --accent: #8b5cf6;
+      --accent2: #06b6d4;
+      --glow: rgba(139, 92, 246, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 100;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, var(--glow), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(6,182,212,0.15), transparent);
+      z-index: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      max-width: 14ch;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 42ch;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.85rem;
+      opacity: 0;
+    }
+
+    .scroll-hint .arrow {
+      display: block;
+      width: 24px;
+      height: 24px;
+      margin: 0.5rem auto 0;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+    }
+
+    section {
+      padding: 5rem 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 55ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      cursor: default;
+    }
+
+    .card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      box-shadow: 0 0 40px var(--glow);
+      transform: translateY(-4px) !important;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.2));
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(139,92,246,0.15);
+      color: var(--accent);
+    }
+
+    /* React Bits style: blur text reveal */
+    .blur-text-demo {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      text-align: center;
+      padding: 3rem 1rem;
+      min-height: 120px;
+    }
+
+    .blur-text-demo span {
+      display: inline-block;
+      filter: blur(8px);
+      opacity: 0.3;
+      transition: filter 0.6s ease, opacity 0.6s ease;
+    }
+
+    .blur-text-demo span.revealed {
+      filter: blur(0);
+      opacity: 1;
+    }
+
+    /* React Bits style: spotlight background */
+    .spotlight-section {
+      position: relative;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 3rem 2rem;
+      overflow: hidden;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .spotlight {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .spotlight-section:hover .spotlight { opacity: 1; }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-table th {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .compare-table tr:last-child td { border-bottom: none; }
+
+    .footer-note {
+      text-align: center;
+      padding: 3rem 1.5rem 4rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .footer-note strong { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .compare-table { font-size: 0.8rem; }
+      .compare-table th, .compare-table td { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+
+  <!-- Section 1: Anime.js — hero entrance + scroll stagger -->
+  <div class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="badge" id="badge">Spec preview · SHA-44</div>
+    <h1 id="hero-title">
+      <span class="word">Make</span>
+      <span class="word">your</span>
+      <span class="word gradient">resume</span>
+      <span class="word">memorable</span>
+    </h1>
+    <p id="hero-sub">This preview shows what Anime.js and React Bits–style effects could look like on a Usercon-like site.</p>
+    <div class="scroll-hint" id="scroll-hint">
+      Scroll to see more
+      <span class="arrow"></span>
+    </div>
+  </div>
+
+  <!-- Section 2: Anime.js scroll-triggered cards -->
+  <section id="skills">
+    <div class="section-label">Anime.js · scroll observer</div>
+    <h2>Skills that animate in on scroll</h2>
+    <p class="section-desc">Anime.js gives you a low-level animation engine — great for custom scroll-linked reveals, staggered entrances, and timeline orchestration. You write the animation logic yourself.</p>
+    <div class="cards">
+      <div class="card" data-animate>
+        <div class="card-icon">⚡</div>
+        <h3>Product Strategy</h3>
+        <p>End-to-end ownership from discovery to launch.</p>
+        <span class="tag">anime.js stagger</span>
+      </div>
+      <div class="card" data-animate>
+        <div class="card-icon">🎨</div>
+        <h3>Design Systems</h3>
+        <p>Tokens, components, and motion guidelines.</p>
+        <span class="tag">scroll observer</span>
+      </div>
+      <div class="card" data-animate>
+        <div class="card-icon">🤖</div>
+        <h3>AI Workflows</h3>
+        <p>Agent loops, spec-driven development, PM OS.</p>
+        <span class="tag">timeline API</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: React Bits style blur text -->
+  <section id="react-bits-text">
+    <div class="section-label">React Bits · BlurText component</div>
+    <h2>Pre-built text animations</h2>
+    <p class="section-desc">React Bits ships 130+ copy-paste React components. Each one comes in 4 variants (JS/TS × CSS/Tailwind). Install via CLI or copy the source — you own the code.</p>
+    <div class="blur-text-demo" id="blur-demo">
+      <span>B</span><span>u</span><span>i</span><span>l</span><span>d</span>
+      <span>&nbsp;</span>
+      <span>s</span><span>o</span><span>m</span><span>e</span><span>t</span><span>h</span><span>i</span><span>n</span><span>g</span>
+      <span>&nbsp;</span>
+      <span>p</span><span>e</span><span>o</span><span>p</span><span>l</span><span>e</span>
+      <span>&nbsp;</span>
+      <span>r</span><span>e</span><span>m</span><span>e</span><span>m</span><span>b</span><span>e</span><span>r</span>
+    </div>
+  </section>
+
+  <!-- Section 4: React Bits style spotlight -->
+  <section id="react-bits-spotlight">
+    <div class="section-label">React Bits · Spotlight component</div>
+    <h2>Interactive backgrounds</h2>
+    <p class="section-desc">Move your cursor over the card below — this mimics React Bits' Spotlight / background effects. These are drop-in components, not animation engines.</p>
+    <div class="spotlight-section" id="spotlight-card">
+      <div class="spotlight" id="spotlight"></div>
+      <h3 style="position:relative;z-index:1;font-size:1.5rem;margin-bottom:0.5rem;">Hover me</h3>
+      <p style="position:relative;z-index:1;color:var(--muted);max-width:35ch;">Cursor-following spotlights, particle backgrounds, 3D cards — all pre-built and customizable via props.</p>
+    </div>
+  </section>
+
+  <!-- Section 5: Comparison -->
+  <section id="comparison">
+    <div class="section-label">Which to use where?</div>
+    <h2>Two different categories</h2>
+    <p class="section-desc">Anime.js and React Bits solve different problems. For a React/Next.js resume or Usercon site, you'd likely use React Bits (or similar) for most UI polish, and optionally Anime.js or Motion for bespoke animations.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Anime.js</th>
+          <th>React Bits</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>What it is</td>
+          <td>Animation engine (library)</td>
+          <td>Component collection (copy-paste)</td>
+        </tr>
+        <tr>
+          <td>Framework</td>
+          <td>Any (vanilla JS)</td>
+          <td>React / Next.js</td>
+        </tr>
+        <tr>
+          <td>Integration</td>
+          <td><code>npm i animejs</code></td>
+          <td><code>npx shadcn add @react-bits/...</code></td>
+        </tr>
+        <tr>
+          <td>Best for</td>
+          <td>Custom timelines, SVG morphs, physics</td>
+          <td>Hero text, backgrounds, UI flair fast</td>
+        </tr>
+        <tr>
+          <td>Effort</td>
+          <td>Higher — you compose animations</td>
+          <td>Lower — pick a component, tweak props</td>
+        </tr>
+        <tr>
+          <td>Similar sites</td>
+          <td>GSAP, Motion (Framer)</td>
+          <td>Aceternity UI, Magic UI, shadcn</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="footer-note">
+    <strong>SHA-44 spec preview</strong> — not production code.<br>
+    Sections 1–2 use <strong>Anime.js v4</strong> (CDN). Sections 3–4 mimic <strong>React Bits</strong> patterns in plain HTML/CSS/JS.<br>
+  </div>
+
+  <script type="module">
+    import { animate, stagger, onScroll, createTimeline } from 'https://cdn.jsdelivr.net/npm/animejs@4.0.2/+esm';
+
+    // Hero entrance timeline
+    createTimeline({ defaults: { ease: 'outExpo', duration: 900 } })
+      .add('#badge', { opacity: [0, 1], translateY: [-10, 0] })
+      .add('.word', { opacity: [0, 1], translateY: [40, 0] }, stagger(80))
+      .add('#hero-sub', { opacity: [0, 1], translateY: [20, 0] }, '-=400')
+      .add('#scroll-hint', { opacity: [0, 1] }, '-=200');
+
+    // Scroll hint bounce
+    animate('#scroll-hint .arrow', {
+      translateY: [0, 8, 0],
+      loop: true,
+      duration: 1500,
+      ease: 'inOutSine',
+    });
+
+    // Scroll-triggered cards
+    animate('[data-animate]', {
+      opacity: [0, 1],
+      translateY: [30, 0],
+      duration: 700,
+      ease: 'outExpo',
+      delay: stagger(120),
+      autoplay: onScroll({
+        target: '#skills',
+        enter: 'bottom top-=100',
+        leave: 'top bottom',
+        sync: true,
+      }),
+    });
+
+    // Blur text reveal on scroll (React Bits BlurText mimic)
+    const blurSpans = document.querySelectorAll('#blur-demo span');
+    let blurRevealed = false;
+    const blurObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !blurRevealed) {
+          blurRevealed = true;
+          blurSpans.forEach((span, i) => {
+            setTimeout(() => span.classList.add('revealed'), i * 40);
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+    blurObserver.observe(document.getElementById('blur-demo'));
+
+    // Spotlight follow cursor (React Bits Spotlight mimic)
+    const card = document.getElementById('spotlight-card');
+    const spotlight = document.getElementById('spotlight');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      spotlight.style.left = (e.clientX - rect.left) + 'px';
+      spotlight.style.top = (e.clientY - rect.top) + 'px';
+    });
+    card.addEventListener('mouseleave', () => {
+      spotlight.style.opacity = '0';
+    });
+    card.addEventListener('mouseenter', () => {
+      spotlight.style.opacity = '1';
+    });
+  </script>
+</body>
+</html>
