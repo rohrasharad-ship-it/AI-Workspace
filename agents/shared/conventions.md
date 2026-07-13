@@ -91,6 +91,9 @@ regardless of which session created them.
     current on every touch** (see `agents/shared/status-snapshot.md`) —
     Sharad should be able to read the description alone and know the current
     phase, without opening comments.
+16. **For visual or motion UI work, start at `design/README.md`** — copy-paste
+    from the resource catalog or local snippets (`design/snippets/`) rather
+    than inventing animations from scratch. See `design/workflow.md`.
 
 ## What Sharad Does vs What Agents Do
 
