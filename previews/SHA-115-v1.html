@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SHA-115 preview — Truthfulness diff</title>
+<style>
+  body { margin:0; padding:32px; background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
+  .slack-msg { max-width:560px; margin:0 auto; background:#fff; border:1px solid #e2e2e2; border-radius:8px; padding:20px 22px; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+  .hdr { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .avatar { width:36px; height:36px; border-radius:8px; background:#611f69; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:14px; }
+  .name { font-weight:700; color:#1d1c1d; font-size:15px; }
+  .time { color:#8a8a8e; font-size:12px; margin-left:6px; }
+  .label { display:inline-block; background:#eee; color:#616061; font-size:11px; padding:2px 6px; border-radius:4px; margin-left:6px; }
+  .body-text { font-size:14px; color:#1d1c1d; line-height:1.5; }
+  .resume-block { margin-top:12px; border:1px solid #e2e2e2; border-radius:6px; padding:14px 16px; font-size:13px; line-height:1.7; }
+  mark.verbatim { background:#d3f9d8; color:#1d1c1d; border-radius:3px; padding:0 2px; }
+  mark.paraphrase { background:#fff3bf; color:#1d1c1d; border-radius:3px; padding:0 2px; }
+  .footnote { font-size:11.5px; color:#8a8a8e; margin-top:2px; }
+  .legend { margin-top:14px; font-size:12px; color:#616061; display:flex; gap:16px; }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .swatch { width:10px; height:10px; border-radius:2px; display:inline-block; }
+</style>
+</head>
+<body>
+  <div class="slack-msg">
+    <div class="hdr">
+      <div class="avatar">AA</div>
+      <div>
+        <span class="name">Application Agent</span><span class="label">Ready</span>
+        <div class="time">#application-agent · thread</div>
+      </div>
+    </div>
+    <div class="body-text">Cover letter + tailored resume ready for <b>Northwind Systems — Staff PM</b>. Review before you fill.</div>
+    <div class="resume-block">
+      Led <mark class="verbatim">a multi-year marketplace strategy integrating 3rd-party flight aggregators</mark>, expanding bookable supply across <mark class="verbatim">26 markets</mark>.
+      <div class="footnote">↳ verbatim from projects.yaml: "amadeus-marketplace"</div>
+      <br><br>
+      <mark class="paraphrase">Partnered closely with engineering leadership to reposition legacy APIs as a self-service developer platform</mark>.
+      <div class="footnote">↳ paraphrased, supported by projects.yaml: "amadeus-devportal" (original: "repositioning fragmented legacy APIs as one self-service platform")</div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:#d3f9d8"></span>verbatim from profile</span>
+      <span><span class="swatch" style="background:#fff3bf"></span>paraphrased, still supported</span>
+    </div>
+  </div>
+</body>
+</html>
