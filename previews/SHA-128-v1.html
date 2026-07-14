@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SHA-128 preview — Shareable deep-link URLs</title>
+<style>
+body{margin:0;background:#0A0F1E;color:#E2E8F0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;padding:40px;}
+h2{font-size:14px;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:20px;}
+.urlbar{display:flex;align-items:center;gap:8px;background:#161E33;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 14px;max-width:640px;font-size:13px;color:#94A3B8;margin-bottom:28px;}
+.urlbar .lock{color:#38BDF8;}
+.urlbar .path{color:#F8FAFC;}
+.urlbar .param{color:#A78BFA;}
+#side-panel{width:280px;background:#0E1629;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px;}
+#sp-name{font-size:18px;font-weight:800;color:#F8FAFC;margin-bottom:10px;}
+.sp-label{font-size:9px;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
+#sp-actions{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+#sp-link{padding:8px 12px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);border-radius:6px;color:#38BDF8;font-size:12px;text-align:center;text-decoration:none;}
+#sp-linkedin-btn{padding:8px 12px;background:rgba(10,102,194,0.18);border:1px solid rgba(10,102,194,0.4);border-radius:6px;color:#93C5FD;font-size:12px;text-align:center;}
+#sp-copylink-btn{padding:8px 12px;background:rgba(56,189,248,0.18);border:2px dashed #38BDF8;border-radius:6px;color:#7DD3FC;font-size:12px;text-align:center;position:relative;}
+.new-tag{position:absolute;top:-9px;right:8px;background:#38BDF8;color:#0A0F1E;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;}
+.note{margin-top:24px;max-width:640px;font-size:12px;color:#64748B;line-height:1.6;}
+</style></head>
+<body>
+<h2>Concept — shareable deep link (new element dashed)</h2>
+<div class="urlbar"><span class="lock">🔒</span><span class="path">ai-landscape/</span><span class="param">?node=NVIDIA&amp;cat=Hardware</span></div>
+<div id="side-panel">
+  <div id="sp-name">NVIDIA</div>
+  <div class="sp-label">Category</div>
+  <div style="font-size:12px;color:#CBD5E1;margin-bottom:14px;">Hardware · Chip Designers · GPU Makers</div>
+  <div id="sp-actions">
+    <a id="sp-link" href="#">Visit site &rarr;</a>
+    <button id="sp-linkedin-btn">Copy LinkedIn blurb</button>
+    <button id="sp-copylink-btn">🔗 Copy link to this view<span class="new-tag">NEW</span></button>
+  </div>
+</div>
+<div class="note">Rough placement only — new button sits below the existing LinkedIn action; URL bar shows the encoded state the button would copy. Not interactive.</div>
+</body></html>
