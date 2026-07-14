@@ -1,0 +1,36 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SHA-129 preview — Path Finder</title>
+<style>
+body{margin:0;background:#0A0F1E;color:#E2E8F0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;padding:40px;}
+h2{font-size:14px;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:20px;}
+.panel{display:flex;gap:10px;align-items:center;background:#161E33;border:2px dashed #38BDF8;border-radius:10px;padding:14px 18px;max-width:640px;margin-bottom:36px;}
+.panel input{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:8px 12px;color:#E2E8F0;font-size:13px;width:180px;}
+.panel .arrow{color:#38BDF8;font-size:18px;}
+.panel .go{background:#38BDF8;color:#0A0F1E;border:none;border-radius:6px;padding:8px 16px;font-size:12px;font-weight:700;}
+.new-tag{background:#38BDF8;color:#0A0F1E;font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;margin-left:6px;}
+svg{background:#0E1629;border-radius:10px;border:1px solid rgba(255,255,255,0.08);}
+.note{margin-top:20px;max-width:640px;font-size:12px;color:#64748B;line-height:1.6;}
+</style></head>
+<body>
+<h2>Concept — Path Finder (new panel dashed)</h2>
+<div class="panel">
+  <input value="TSMC" readonly/>
+  <span class="arrow">→</span>
+  <input value="Cursor" readonly/>
+  <button class="go">Find path</button>
+  <span class="new-tag">NEW</span>
+</div>
+<svg width="640" height="180" viewBox="0 0 640 180">
+  <line x1="60" y1="90" x2="220" y2="90" stroke="#38BDF8" stroke-width="3"/>
+  <line x1="220" y1="90" x2="380" y2="90" stroke="#38BDF8" stroke-width="3"/>
+  <line x1="380" y1="90" x2="580" y2="90" stroke="#38BDF8" stroke-width="3"/>
+  <circle cx="60" cy="90" r="26" fill="#B45309"/><text x="60" y="135" text-anchor="middle" fill="#CBD5E1" font-size="12">TSMC</text>
+  <circle cx="220" cy="90" r="26" fill="#F59E0B"/><text x="220" y="135" text-anchor="middle" fill="#CBD5E1" font-size="12">NVIDIA</text>
+  <circle cx="380" cy="90" r="26" fill="#A855F7"/><text x="380" y="135" text-anchor="middle" fill="#CBD5E1" font-size="12">LangChain</text>
+  <circle cx="580" cy="90" r="26" fill="#10B981"/><text x="580" y="135" text-anchor="middle" fill="#CBD5E1" font-size="12">Cursor</text>
+  <text x="140" y="75" text-anchor="middle" fill="#7DD3FC" font-size="10">manufactures</text>
+  <text x="300" y="75" text-anchor="middle" fill="#7DD3FC" font-size="10">built-on</text>
+  <text x="480" y="75" text-anchor="middle" fill="#7DD3FC" font-size="10">integrates</text>
+</svg>
+<div class="note">Rough placement only — a two-field finder above the canvas, result is the existing arrow style but highlighted along the found path. Not interactive; static frame.</div>
+</body></html>
