@@ -1,1 +1,66 @@
-PLACEHOLDER
+<title>SHA-131 mockup — Approve/Reject actions</title>
+<style>
+  :root {
+    --paper: #faf8f4; --paper-strong: #fffdf8; --surface-soft: #f7f4ef;
+    --ink: #191816; --muted: #6d675f; --quiet: #918a80;
+    --line: rgba(25,24,22,0.13);
+    --terracotta: #c7522a; --terracotta-soft: rgba(199,82,42,0.12);
+    --moss: #2f4937; --moss-soft: rgba(47,73,55,0.13);
+    --gold: #91651f; --gold-soft: rgba(145,101,31,0.13);
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --serif: Georgia, "Times New Roman", serif;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); padding: 32px 18px; }
+  .note { max-width: 620px; margin: 0 auto 22px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .note strong { color: var(--ink); }
+  .detail-panel {
+    width: min(100%, 380px); margin: 0 auto;
+    border: 1px solid var(--line); border-radius: 8px;
+    background: rgba(255,253,248,0.9); box-shadow: 0 22px 70px rgba(55,39,28,0.09);
+    padding: 18px; display: grid; gap: 16px;
+  }
+  .detail-head { display: flex; gap: 8px; }
+  .type-pill, .review-pill { border: 1px solid var(--line); border-radius: 999px; padding: 5px 8px; font-family: var(--mono); font-size: 12px; }
+  .type-pill { background: var(--gold-soft); color: var(--gold); }
+  .review-pill.pending { background: var(--gold-soft); color: var(--gold); }
+  h2 { font-family: var(--serif); font-size: 26px; margin: 0; line-height: 1.1; }
+  p.body { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0; }
+  .action-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .action-row button {
+    min-height: 38px; border: 1px solid var(--line); border-radius: 999px;
+    padding: 0 14px; background: var(--surface-soft); color: var(--ink); font-weight: 700; cursor: pointer;
+  }
+  .action-row button.approve { border-color: rgba(47,73,55,0.35); background: var(--moss-soft); color: var(--moss); }
+  .action-row button.reject { border-color: rgba(199,82,42,0.3); background: var(--terracotta-soft); color: #9f3717; }
+  .action-row button.new { position: relative; }
+  .action-row button.new::after {
+    content: "new"; position: absolute; top: -9px; right: -8px;
+    background: var(--terracotta); color: white; font-family: var(--mono);
+    font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 999px;
+  }
+</style>
+
+<div class="note">
+  <strong>Mockup for SHA-131</strong> — rough outline of where Approve / Reject controls would sit
+  in the context detail panel's action row (<code>src/components/context-workspace.tsx</code>), next to
+  the existing Edit / Correct / Archive buttons. Only shown when the item's review state is
+  <code>pending</code>. Not a pixel-accurate design — illustrates placement and state only.
+</div>
+
+<div class="detail-panel">
+  <div class="detail-head">
+    <span class="type-pill">Note</span>
+    <span class="review-pill pending">Pending review</span>
+  </div>
+  <h2>Note from last week's meeting about fitness</h2>
+  <p class="body">Discussed cardio endurance, strength training, half marathon timing, gym membership updates, and buying new running shoes.</p>
+  <div class="action-row" aria-label="Context actions">
+    <button class="approve new" type="button">Approve</button>
+    <button class="reject new" type="button">Reject</button>
+    <button type="button">Edit</button>
+    <button type="button">Correct</button>
+    <button type="button" style="color:#9f3717;">Archive</button>
+  </div>
+</div>
