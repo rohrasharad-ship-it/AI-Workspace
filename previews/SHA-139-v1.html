@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-139 mockup — Detail view missing fields</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #faf8f4; color: #1f2318; margin: 0; padding: 40px; }
+  .note { max-width: 420px; margin: 0 auto 16px; font-size: 13px; color: #91651f; background: #fff3e0; border: 1px solid #f2994a; border-radius: 8px; padding: 10px 14px; }
+  .panel { max-width: 420px; margin: 0 auto; background: #fffefb; border: 1px solid #e4ded0; border-radius: 16px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  h2 { margin: 0 0 8px; font-size: 20px; }
+  p.body { color: #4a4536; line-height: 1.5; }
+  dl { display: grid; grid-template-columns: 120px 1fr; row-gap: 8px; font-size: 13px; color: #4a4536; margin: 20px 0; }
+  dt { color: #91651f; }
+  dd.new { position: relative; font-weight: 600; }
+  dd.new::after { content: "NEW"; margin-left: 8px; background: #c7522a; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+  <div class="note">Mockup for SHA-139 — adds Linked goals, Status, and Created to the detail view (currently silently dropped). Minimal-effort static frame, not a build.</div>
+  <div class="panel">
+    <h2>Warm, high-protein dinners after heavy workdays</h2>
+    <p class="body">After long workdays, prefer warm, filling dinners with high protein. Avoid cold salads as the main dinner on these days.</p>
+    <dl>
+      <dt>Life areas</dt><dd>Food, Health, Fitness</dd>
+      <dt>Tags</dt><dd>dinner, protein, workday, recovery</dd>
+      <dt>Source</dt><dd>Manual — Seed context card</dd>
+      <dt>Linked context</dt><dd>1 item</dd>
+      <dt>Linked goals</dt><dd class="new">Run a half marathon by October</dd>
+      <dt>Status</dt><dd class="new">Active</dd>
+      <dt>Created</dt><dd class="new">Jun 3, 2026</dd>
+      <dt>Updated</dt><dd>Jun 3, 2026</dd>
+    </dl>
+  </div>
+</body>
+</html>
