@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview: Quick Jump command palette — SHA-147</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; overflow:hidden; }
+.tag { position:fixed; top:10px; left:10px; z-index:999; background:#F59E0B; color:#1E1300; font-size:11px; font-weight:800; padding:4px 9px; border-radius:5px; letter-spacing:0.03em; }
+
+/* ---- reproduced fragment of current toolbar for context ---- */
+#controls { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(10,15,30,0.96); border-bottom:1px solid rgba(255,255,255,0.08); height:56px; }
+#title { font-size:14px; font-weight:700; color:#F8FAFC; white-space:nowrap; }
+#title span { color:#38BDF8; }
+#search { flex:0 1 180px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#E2E8F0; font-size:12px; }
+.filter-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#CBD5E1; font-size:11px; }
+.filter-btn.active { background:rgba(56,189,248,0.2); border-color:#38BDF8; color:#F8FAFC; font-weight:600; }
+#hint-kbd { margin-left:auto; font-size:11px; color:#64748B; display:flex; align-items:center; gap:6px; }
+kbd { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:4px; padding:2px 6px; font-size:10px; font-family:inherit; color:#CBD5E1; }
+
+#canvas-container { position:fixed; top:56px; left:0; right:0; bottom:0; background:radial-gradient(ellipse at center, #0E1629 0%, #0A0F1E 100%); }
+.faux-node { position:absolute; width:34px; height:34px; border-radius:50%; background:#1E293B; border:1.5px solid rgba(255,255,255,0.15); }
+.faux-label { position:absolute; font-size:8px; color:#475569; }
+
+/* ---- new: command palette overlay ---- */
+#palette-backdrop { position:fixed; inset:0; background:rgba(2,6,16,0.72); backdrop-filter:blur(2px); z-index:400; display:flex; align-items:flex-start; justify-content:center; padding-top:12vh; }
+#palette { width:560px; max-width:92vw; background:#0E1629; border:1px solid rgba(56,189,248,0.35); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,0.6); overflow:hidden; }
+#palette-input-row { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,0.08); }
+#palette-icon { color:#38BDF8; font-size:15px; }
+#palette-input { flex:1; background:none; border:none; outline:none; color:#F8FAFC; font-size:16px; }
+#palette-input::placeholder { color:#475569; }
+#palette-esc { font-size:10px; color:#64748B; border:1px solid rgba(255,255,255,0.15); border-radius:4px; padding:2px 6px; }
+#palette-results { max-height:340px; overflow-y:auto; padding:6px; }
+.p-item { display:flex; align-items:center; gap:12px; padding:10px 10px; border-radius:8px; cursor:pointer; }
+.p-item.active { background:rgba(56,189,248,0.14); }
+.p-logo { width:28px; height:28px; border-radius:7px; background:#fff; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; color:#1E293B; flex-shrink:0; }
+.p-text { flex:1; min-width:0; }
+.p-name { font-size:13px; font-weight:700; color:#F8FAFC; }
+.p-name mark { background:none; color:#38BDF8; }
+.p-meta { font-size:10.5px; color:#64748B; margin-top:1px; }
+.p-layer { font-size:9px; color:#94A3B8; background:rgba(255,255,255,0.06); padding:2px 7px; border-radius:9px; flex-shrink:0; }
+#palette-footer { display:flex; gap:14px; padding:9px 16px; border-top:1px solid rgba(255,255,255,0.06); font-size:10px; color:#64748B; }
+#palette-footer span { display:flex; align-items:center; gap:5px; }
+</style>
+</head>
+<body>
+<div class="tag">STATIC PREVIEW · SHA-147 · Quick Jump command palette (not functional)</div>
+
+<div id="controls">
+  <div id="title">AI Landscape <span>2026</span> v4</div>
+  <input id="search" type="text" placeholder="Search..." disabled/>
+  <button class="filter-btn active">All</button>
+  <button class="filter-btn">Hardware</button>
+  <button class="filter-btn">Models</button>
+  <button class="filter-btn">Tools</button>
+  <div id="hint-kbd">Quick Jump <kbd>&#8984;</kbd><kbd>K</kbd></div>
+</div>
+
+<div id="canvas-container">
+  <div class="faux-node" style="top:30%;left:20%"></div>
+  <div class="faux-node" style="top:55%;left:35%"></div>
+  <div class="faux-node" style="top:22%;left:60%"></div>
+  <div class="faux-node" style="top:65%;left:70%"></div>
+  <div class="faux-node" style="top:45%;left:50%"></div>
+  <div class="faux-label" style="top:60%;left:33%">radial map (dimmed behind overlay)</div>
+</div>
+
+<div id="palette-backdrop">
+  <div id="palette">
+    <div id="palette-input-row">
+      <span id="palette-icon">&#9906;</span>
+      <input id="palette-input" placeholder="Jump to a tool, model, or company…" value="claude"/>
+      <span id="palette-esc">ESC</span>
+    </div>
+    <div id="palette-results">
+      <div class="p-item active">
+        <div class="p-logo">C</div>
+        <div class="p-text">
+          <div class="p-name"><mark>Claude</mark> 4.x (Anthropic)</div>
+          <div class="p-meta">Foundation Models · Frontier LLMs</div>
+        </div>
+        <div class="p-layer">Layer 3</div>
+      </div>
+      <div class="p-item">
+        <div class="p-logo">C</div>
+        <div class="p-text">
+          <div class="p-name"><mark>Claude</mark> Code</div>
+          <div class="p-meta">Applications · Coding</div>
+        </div>
+        <div class="p-layer">Layer 5</div>
+      </div>
+      <div class="p-item">
+        <div class="p-logo">C</div>
+        <div class="p-text">
+          <div class="p-name"><mark>Claude</mark> Managed Agents</div>
+          <div class="p-meta">Frameworks &amp; Infra · Agents</div>
+        </div>
+        <div class="p-layer">Layer 4</div>
+      </div>
+    </div>
+    <div id="palette-footer">
+      <span><kbd>&#8593;</kbd><kbd>&#8595;</kbd> navigate</span>
+      <span><kbd>&#8629;</kbd> jump &amp; open panel</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
