@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview: Discover — surprise-me random tool spotlight — SHA-149</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; overflow:hidden; }
+.tag { position:fixed; top:10px; left:10px; z-index:999; background:#F59E0B; color:#1E1300; font-size:11px; font-weight:800; padding:4px 9px; border-radius:5px; letter-spacing:0.03em; }
+
+#controls { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(10,15,30,0.96); border-bottom:1px solid rgba(255,255,255,0.08); height:56px; }
+#title { font-size:14px; font-weight:700; color:#F8FAFC; white-space:nowrap; }
+#title span { color:#38BDF8; }
+#search { flex:0 1 180px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#E2E8F0; font-size:12px; }
+.filter-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#CBD5E1; font-size:11px; }
+.filter-btn.active { background:rgba(56,189,248,0.2); border-color:#38BDF8; color:#F8FAFC; font-weight:600; }
+#layout-toggle, #clear-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(168,85,247,0.15); color:#E0D4FF; font-size:11px; }
+#discover-btn { padding:5px 12px; border-radius:6px; border:1px solid rgba(251,191,36,0.4); background:rgba(251,191,36,0.15); color:#FDE68A; font-size:11px; cursor:pointer; display:flex; align-items:center; gap:6px; font-weight:600; }
+#stats { margin-left:auto; font-size:11px; color:#64748B; }
+
+#canvas-container { position:fixed; top:56px; left:0; right:0; bottom:0; background:radial-gradient(ellipse at center, #0E1629 0%, #0A0F1E 100%); }
+.faux-node { position:absolute; width:30px; height:30px; border-radius:50%; background:#1E293B; border:1.5px solid rgba(255,255,255,0.15); opacity:0.35; }
+.faux-link { position:absolute; height:1px; background:rgba(255,255,255,0.06); transform-origin:0 0; }
+
+#spotlight-glow { position:absolute; top:44%; left:47%; width:70px; height:70px; border-radius:50%; background:radial-gradient(circle, rgba(251,191,36,0.35) 0%, rgba(251,191,36,0) 70%); }
+#spotlight-node { position:absolute; top:47%; left:50%; width:44px; height:44px; border-radius:50%; background:#fff; border:2.5px solid #FBBF24; box-shadow:0 0 22px rgba(251,191,36,0.6); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; color:#1E293B; }
+#spotlight-toast { position:absolute; top:55%; left:50%; transform:translateX(-50%); margin-top:14px; background:#0E1629; border:1px solid rgba(251,191,36,0.35); border-radius:10px; padding:10px 14px; width:220px; box-shadow:0 14px 34px rgba(0,0,0,0.5); }
+#spotlight-toast .st-eyebrow { font-size:9px; color:#FBBF24; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:3px; }
+#spotlight-toast .st-name { font-size:13px; font-weight:700; color:#F8FAFC; }
+#spotlight-toast .st-meta { font-size:10px; color:#64748B; margin-top:2px; }
+</style>
+</head>
+<body>
+<div class="tag">STATIC PREVIEW · SHA-149 · Discover random tool spotlight (not functional)</div>
+
+<div id="controls">
+  <div id="title">AI Landscape <span>2026</span> v4</div>
+  <input id="search" type="text" placeholder="Search..." disabled/>
+  <button class="filter-btn active">All</button>
+  <button class="filter-btn">Hardware</button>
+  <button class="filter-btn">Models</button>
+  <button id="discover-btn">&#127922; Discover</button>
+  <button id="layout-toggle">View: Radial</button>
+  <button id="clear-btn">Clear Selection</button>
+  <div id="stats">128 tools visible</div>
+</div>
+
+<div id="canvas-container">
+  <div class="faux-node" style="top:22%;left:18%"></div>
+  <div class="faux-node" style="top:60%;left:22%"></div>
+  <div class="faux-node" style="top:18%;left:65%"></div>
+  <div class="faux-node" style="top:70%;left:68%"></div>
+  <div class="faux-node" style="top:30%;left:78%"></div>
+  <div class="faux-node" style="top:75%;left:38%"></div>
+
+  <div id="spotlight-glow"></div>
+  <div id="spotlight-node">Q</div>
+  <div id="spotlight-toast">
+    <div class="st-eyebrow">Discovered</div>
+    <div class="st-name">Qdrant</div>
+    <div class="st-meta">Frameworks &amp; Infra · Vector DBs · Layer 4</div>
+  </div>
+</div>
+
+</body>
+</html>
