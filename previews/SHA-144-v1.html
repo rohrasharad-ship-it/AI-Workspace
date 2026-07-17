@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SHA-144 preview — mobile share action</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#0A0F1E; color:#E2E8F0; display:flex; justify-content:center; padding:24px 0; }
+  .frame { width:390px; border:1px solid rgba(255,255,255,0.12); border-radius:20px; overflow:hidden; background:#0A0F1E; }
+  .note { width:390px; margin-bottom:12px; font-size:12px; color:#94A3B8; padding:0 4px; }
+  .note b { color:#38BDF8; }
+  #m-sheet-card { padding:18px; }
+  .m-sheet-top { display:flex; gap:12px; align-items:center; margin-bottom:14px; }
+  .m-sheet-logo { width:52px; height:52px; border-radius:12px; background:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; color:#0A0F1E; flex-shrink:0; }
+  .m-sheet-name { font-size:17px; font-weight:700; }
+  .m-sheet-cat { font-size:12px; color:#94A3B8; margin-top:2px; }
+  .m-sheet-pop-lbl { display:flex; justify-content:space-between; font-size:11px; color:#94A3B8; margin-bottom:4px; }
+  .m-sheet-pop-bar { height:5px; border-radius:3px; background:rgba(255,255,255,0.1); overflow:hidden; margin-bottom:14px; }
+  .m-sheet-pop-bar span { display:block; height:100%; background:#38BDF8; }
+  .m-sheet-desc { font-size:13px; line-height:1.5; color:#CBD5E1; margin-bottom:16px; }
+  .m-sheet-conn-lbl { font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
+  .m-sheet-conns { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+  .m-conn-pill { font-size:11px; background:rgba(148,163,184,0.12); border:1px solid rgba(148,163,184,0.2); border-radius:20px; padding:5px 10px; color:#CBD5E1; }
+  .actions { display:flex; gap:8px; }
+  .m-sheet-link { flex:1; padding:12px; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:10px; color:#38BDF8; text-align:center; font-size:13px; font-weight:600; text-decoration:none; }
+  .m-share-btn { flex:1; padding:12px; background:rgba(167,139,250,0.15); border:1px solid rgba(167,139,250,0.4); border-radius:10px; color:#A78BFA; text-align:center; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .added { position:relative; }
+  .added::after { content:"NEW"; position:absolute; top:-9px; right:-6px; background:#A78BFA; color:#0A0F1E; font-size:8px; font-weight:800; padding:2px 5px; border-radius:5px; letter-spacing:.03em; }
+</style>
+</head>
+<body>
+<div>
+  <div class="note">Mockup for <b>SHA-144</b> — the desktop side panel already has "Copy LinkedIn blurb"; this mobile bottom sheet (today) ends at the visit-site link with no share action. Proposed: mirror it with a compact share button next to Visit.</div>
+  <div class="frame">
+    <div id="m-sheet-card">
+      <div class="m-sheet-top">
+        <div class="m-sheet-logo">FA</div>
+        <div>
+          <div class="m-sheet-name">Figma AI</div>
+          <div class="m-sheet-cat">Tools · Design · Product Design</div>
+        </div>
+      </div>
+      <div class="m-sheet-pop-lbl"><span>Popularity</span><b>82</b></div>
+      <div class="m-sheet-pop-bar"><span style="width:82%"></span></div>
+      <div class="m-sheet-desc">Figma's AI features: Make Designs, Make Prototype, visual search, auto-rename layers. Native design-AI for 4M+ designers.</div>
+      <div class="m-sheet-conn-lbl">Connects to (6)</div>
+      <div class="m-sheet-conns">
+        <span class="m-conn-pill">→ Claude 4.x</span>
+        <span class="m-conn-pill">→ OpenAI GPT-5</span>
+        <span class="m-conn-pill">← Canva Magic Studio</span>
+      </div>
+      <div class="actions">
+        <a class="m-sheet-link" href="#">Visit figma.com →</a>
+        <div class="m-share-btn added">Share</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
