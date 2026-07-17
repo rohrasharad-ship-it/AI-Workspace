@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SHA-145 preview — filtered connections</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#0A0F1E; color:#E2E8F0; display:flex; justify-content:center; padding:24px; }
+  .wrap { display:flex; gap:28px; flex-wrap:wrap; max-width:900px; }
+  .note { width:100%; font-size:12px; color:#94A3B8; margin-bottom:4px; }
+  .note b { color:#38BDF8; }
+  .panel { width:300px; background:#0F1626; border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px; }
+  .panel h4 { margin:0 0 10px; font-size:11px; color:#64748B; text-transform:uppercase; letter-spacing:.05em; }
+  .caption { font-size:12px; font-weight:700; margin-bottom:10px; color:#E2E8F0; }
+  .caption.bad { color:#F87171; }
+  .caption.good { color:#34D399; }
+  .conn-item { display:flex; align-items:center; gap:7px; font-size:11px; color:#CBD5E1; padding:6px 4px; border-radius:5px; }
+  .conn-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; background:#8B5CF6; }
+  .conn-text { flex:1; }
+  .conn-type { font-size:9px; color:#64748B; }
+  .filtered .conn-dot { background:#3A4459; }
+  .filtered .conn-text { color:#475569; text-decoration: line-through; text-decoration-color: rgba(71,85,105,.6); }
+  .badge { font-size:8px; background:rgba(248,113,113,0.15); color:#F87171; border:1px solid rgba(248,113,113,0.3); border-radius:5px; padding:2px 5px; margin-left:auto; font-weight:700; letter-spacing:.02em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="note">Mockup for <b>SHA-145</b> — with "Popularity ≥ 60" active, low-pop nodes are hidden from the graph, but today's side panel (left) still lists connections to them as if nothing were filtered. Proposed (right): mark/dim connections whose other end is currently filtered out.</div>
+  <div class="panel">
+    <h4>Connections</h4>
+    <div class="caption bad">Today — ignores active filters</div>
+    <div class="conn-item"><span class="conn-dot"></span><span class="conn-text">→ Claude 4.x (Anthropic)</span><span class="conn-type">integrates</span></div>
+    <div class="conn-item"><span class="conn-dot"></span><span class="conn-text">→ Meshy (pop 66, filtered out)</span><span class="conn-type">integrates</span></div>
+    <div class="conn-item"><span class="conn-dot"></span><span class="conn-text">← Tripo AI (pop 64, filtered out)</span><span class="conn-type">integrates</span></div>
+  </div>
+  <div class="panel">
+    <h4>Connections</h4>
+    <div class="caption good">Proposed — respects active filters</div>
+    <div class="conn-item"><span class="conn-dot"></span><span class="conn-text">→ Claude 4.x (Anthropic)</span><span class="conn-type">integrates</span></div>
+    <div class="conn-item filtered"><span class="conn-dot"></span><span class="conn-text">→ Meshy</span><span class="badge">HIDDEN</span></div>
+    <div class="conn-item filtered"><span class="conn-dot"></span><span class="conn-text">← Tripo AI</span><span class="badge">HIDDEN</span></div>
+  </div>
+</div>
+</body>
+</html>
