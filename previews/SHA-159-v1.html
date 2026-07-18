@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHA-159 — Offer negotiation assistant preview</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root{
+    --bg:#f8f8f8; --panel:#ffffff; --border:#e2e2e2; --text:#1d1c1d; --muted:#616061;
+    --slack-purple:#4a154b; --green:#2eb67d; --blue:#1264a3;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1a1d21; --panel:#222529; --border:#35373b; --text:#d1d2d3; --muted:#9a9a9a; }
+  }
+  :root[data-theme="dark"]{ --bg:#1a1d21; --panel:#222529; --border:#35373b; --text:#d1d2d3; --muted:#9a9a9a; }
+  :root[data-theme="light"]{ --bg:#f8f8f8; --panel:#ffffff; --border:#e2e2e2; --text:#1d1c1d; --muted:#616061; }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); padding:2rem 1rem; display:flex; justify-content:center;
+  }
+  .app{ width:100%; max-width:560px; }
+  .channel-header{
+    background:var(--slack-purple); color:#fff; padding:0.85rem 1.1rem; border-radius:10px 10px 0 0;
+    font-weight:700; font-size:0.95rem;
+  }
+  .channel-header small{ font-weight:400; opacity:0.75; }
+  .thread{ background:var(--panel); border:1px solid var(--border); border-top:none; border-radius:0 0 10px 10px; padding:1rem 1.1rem 1.4rem; }
+  .msg{ display:flex; gap:0.7rem; padding:0.6rem 0; }
+  .avatar{
+    width:38px; height:38px; border-radius:8px; flex:none;
+    background:linear-gradient(135deg,#2eb67d,#1264a3); display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem;
+  }
+  .msg-body{ min-width:0; flex:1; }
+  .msg-head{ display:flex; align-items:baseline; gap:0.5rem; margin-bottom:0.15rem; }
+  .msg-head .name{ font-weight:700; font-size:0.92rem; }
+  .msg-head .time{ font-size:0.72rem; color:var(--muted); }
+  .card{
+    border:1px solid var(--border); border-left:4px solid var(--green); border-radius:6px;
+    padding:0.85rem 1rem; margin-top:0.4rem; background:var(--bg);
+  }
+  .card h4{ margin:0 0 0.3rem; font-size:0.95rem; }
+  .comp-line{ font-size:0.85rem; color:var(--muted); margin-bottom:0.7rem; }
+  .list{ font-size:0.85rem; margin:0 0 0.8rem; padding-left:1.1rem; }
+  .list li{ margin-bottom:0.4rem; }
+  .actions{ display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .btn{
+    border:1px solid var(--border); border-radius:6px; padding:0.4rem 0.8rem; font-size:0.8rem;
+    background:var(--panel); color:var(--text); cursor:default;
+  }
+  .btn.primary{ background:var(--green); border-color:var(--green); color:#08281c; font-weight:600; }
+  .footer-note{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:1.2rem; }
+</style>
+</head>
+<body>
+  <div class="app">
+    <div class="channel-header">#application-agent · thread <small>Acme Corp — Senior PM</small></div>
+    <div class="thread">
+      <div class="msg">
+        <div class="avatar">🤖</div>
+        <div class="msg-body">
+          <div class="msg-head"><span class="name">Application Agent</span><span class="time">4:47 PM</span></div>
+          <div>Marked this as <strong>Offer</strong> — here's a starting point for the conversation 👇</div>
+          <div class="card">
+            <h4>💰 Offer talking points — Acme Corp</h4>
+            <div class="comp-line">Their offer: $165k base · Your stated range: $175k–$195k (from preferences.yaml)</div>
+            <ul class="list">
+              <li>Open by expressing genuine enthusiasm before naming a number.</li>
+              <li>Anchor near the top of your stated range, not the midpoint.</li>
+              <li>Ask if there's flexibility on base before discussing equity or sign-on.</li>
+              <li>Mention any competing process only if it's true — never bluff.</li>
+            </ul>
+            <div class="actions">
+              <span class="btn primary">Draft reply email</span>
+              <span class="btn">Edit my range</span>
+              <span class="btn">Skip — I've got this</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-note">SHA-159 preview · static mockup, not production code</div>
+</body>
+</html>
