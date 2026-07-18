@@ -4,9 +4,10 @@
 **Triggered by:** The `idea-sweep` routine (or a standalone equivalent) —
 see `routines/README.md`
 
-**Read first:** `agents/shared/openspec.md`, `agents/shared/visual-specs.md`,
-`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
-shared idea-generation guardrails in `routines/README.md`
+**Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
+`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
+`agents/shared/conventions.md`, and the shared idea-generation guardrails in
+`routines/README.md`
 
 ---
 
@@ -40,10 +41,10 @@ do not proceed to step 1.
 5. Create up to 3 issues: status Backlog, label spec-needed, assignee Sharad
    Rohra (never an agent), title starting with one relevant emoji for the
    specific idea (see `agents/shared/conventions.md` — pick what actually
-   fits, not a generic default) followed by the feature name, 2-3 sentence
-   description of the idea and why it fits the product's differentiation
-   goals, suggested priority (default Medium or Low — these are speculative,
-   not confirmed gaps).
+   fits, not a generic default) followed by the feature name, description in
+   the Issue Brief format (see `agents/shared/issue-brief.md` — "Why" should
+   tie to the product's differentiation goals), suggested priority (default
+   Medium or Low — these are speculative, not confirmed gaps).
 6. Every issue from this agent has a visual/UI component almost by definition
    — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`)
    and link it in the issue description. Do not skip this step.

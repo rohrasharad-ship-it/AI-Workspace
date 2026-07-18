@@ -29,8 +29,8 @@ comments. His comment is one of two kinds:
 **Spillover — gaps noticed while building or reviewing:**
 If you notice a gap out of scope for the current issue (missing error state, no
 empty state, accessibility, mobile handling), don't block. File a new Linear
-issue (`Backlog`, `spec-needed`, title + 2-sentence description — see
-`agents/shared/conventions.md` for assignee and title format) and note it in a
+issue (`Backlog`, `spec-needed`, title + Issue Brief description — see
+`agents/shared/conventions.md` and `agents/shared/issue-brief.md`) and note it in a
 comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
 
 **Never:**

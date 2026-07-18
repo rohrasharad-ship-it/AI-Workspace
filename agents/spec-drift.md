@@ -4,9 +4,10 @@
 **Triggered by:** The `idea-sweep` routine (or a standalone equivalent) —
 see `routines/README.md`
 
-**Read first:** `agents/shared/openspec.md`, `agents/shared/visual-specs.md`,
-`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
-shared idea-generation guardrails in `routines/README.md`
+**Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
+`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
+`agents/shared/conventions.md`, and the shared idea-generation guardrails in
+`routines/README.md`
 
 ---
 
@@ -33,8 +34,8 @@ do not proceed to step 1.
 5. Create up to 5 issues for real gaps: status Backlog, label spec-needed,
    assignee Sharad Rohra (never an agent), title starting with one relevant
    emoji (see `agents/shared/conventions.md` — pick what fits, not literally
-   🔧 every time), 2-3 sentence description of the gap and why it matters,
-   suggested priority.
+   🔧 every time), description in the Issue Brief format (see
+   `agents/shared/issue-brief.md`), suggested priority.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
    preview (see `agents/shared/visual-specs.md`) and link it in the issue
    description.

@@ -99,6 +99,8 @@ checking (and posting to Slack) three separate times for the same project.
 - Create issues only as `Backlog` + `spec-needed` — **never `agent-ready`**
 - Assignee is always Sharad Rohra, never an agent (see `agents/shared/conventions.md`)
 - Title starts with one relevant emoji (see `agents/shared/conventions.md`)
+- Description uses the Issue Brief format — five scannable one-liners, no long
+  paragraphs (see `agents/shared/issue-brief.md`)
 - Search Linear first — skip anything already tracked (open or recently closed)
 - No implementation detail — that belongs to the later spec conversation
 - Suggest a priority; Sharad overrides

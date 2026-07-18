@@ -6,7 +6,7 @@ of role — it is the one exception to "only read what your role needs."
 ## New Issue Conventions (applies to every issue any agent creates, anywhere)
 
 Whether it's reviewer spillover, an idea-generation routine, or any future
-issue-creating path — every new Linear issue follows both of these, no exceptions:
+issue-creating path — every new Linear issue follows all of these, no exceptions:
 
 1. **Assignee is always Sharad Rohra.** Never assign an agent directly at
    creation time, and never set a `delegate`. Sharad decides who (if anyone)
@@ -17,6 +17,10 @@ issue-creating path — every new Linear issue follows both of these, no excepti
    — pick the single most relevant one, don't decorate the whole title with
    several. Sharad is visual; he wants to recognize an issue type at a glance
    in a list, not read a sentence to know what it's about.
+3. **Description uses the Issue Brief format** — five scannable one-liners
+   (`In short`, `Problem`, `Solution`, `Why`, `What it looks like`). No long
+   paragraphs at creation time. Full template, rules, and examples:
+   `agents/shared/issue-brief.md`.
 
 ## Cursor Rules (Fallback — Now Confirmed Needed, Not Just Hypothetical)
 
@@ -82,7 +86,7 @@ regardless of which session created them.
    spec-drift routine's housekeeping sweep, an orphaned `preview/*` branch
    whose issue is no longer `spec-needed` (see the Cursor Rules backup
    section above).
-10. **Every new issue is assigned to Sharad Rohra, never an agent, and its title starts with one relevant emoji.** See New Issue Conventions above.
+10. **Every new issue is assigned to Sharad Rohra, never an agent, its title starts with one relevant emoji, and its description uses the Issue Brief format.** See New Issue Conventions above.
 11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
 12. **Visual Self-QA is mandatory for the builder role and all idea-generation routines** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
 13. **Moving an issue to `In Review` happens immediately when a PR opens — never gated on Vercel, screenshots, or anything downstream.** A step failing later must not silently undo or block what already succeeded earlier.
