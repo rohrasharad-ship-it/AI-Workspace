@@ -4,9 +4,9 @@
 **Triggered by:** The `idea-sweep` routine (or a standalone equivalent) —
 see `routines/README.md`
 
-**Read first:** `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
-`agents/shared/conventions.md`, and the shared idea-generation guardrails in
-`routines/README.md`
+**Read first:** `agents/shared/issue-brief.md`, `agents/shared/visual-specs.md`,
+`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
+shared idea-generation guardrails in `routines/README.md`
 
 ---
 
@@ -29,8 +29,10 @@ do not proceed to step 1.
 4. Create up to 5 issues: status Backlog, label spec-needed, assignee Sharad
    Rohra (never an agent), title starting with one relevant emoji (🐛 is the
    default for a generic bug, but pick what fits — see
-   `agents/shared/conventions.md`), 2-3 sentence description with the error and
-   when it fires. Priority High if it hits a core flow, Medium otherwise.
+   `agents/shared/conventions.md`), description in the Issue Brief format (see
+   `agents/shared/issue-brief.md` — "Problem" should state when/how the error
+   fires in plain language). Priority High if it hits a core flow, Medium
+   otherwise.
 5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem (see
    `agents/shared/visual-specs.md`).
