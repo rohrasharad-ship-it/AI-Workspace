@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Preview: Context freshness indicator — SHA-163</title>
+<style>
+  body { margin:0; font-family: -apple-system, Segoe UI, sans-serif; background:#12181a; color:#eef1ea; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:14px; }
+  .card { width:300px; background:#1b2422; border:1px solid #2f3b37; border-radius:12px; padding:18px; position:relative; }
+  .type-pill { font-size:11px; padding:3px 9px; border-radius:999px; background:#68466f; color:#fff; }
+  h3 { margin:10px 0 6px; font-size:16px; }
+  p { margin:0; color:#c3ccc6; font-size:13px; line-height:1.4; }
+  .stale { position:absolute; top:14px; right:14px; font-size:11px; background:#7a4a12; color:#ffe3b3; padding:4px 9px; border-radius:999px; border:1px solid #a3651c; }
+  .caption { font-size:12px; color:#7c8a83; text-align:center; max-width:340px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <span class="stale">Stale — review?</span>
+    <span class="type-pill">Goal</span>
+    <h3>Run a half marathon by October</h3>
+    <p>Build endurance to complete 13.1 miles by October while keeping strength work and recovery visible to fitness and food agents.</p>
+  </div>
+  <div class="caption">Minimal-effort mockup for SHA-163 — an amber "Stale — review?" badge appears on context items untouched past a freshness threshold.</div>
+</body>
+</html>
