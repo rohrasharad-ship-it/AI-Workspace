@@ -19,14 +19,15 @@ modules) — this routine does not duplicate their instructions, it only says
 
 The trigger names one or more projects by their `projects.md` name (e.g.
 "Resume Website"), or says "all projects" to run against every row in
-`projects.md`. Resolve each name to its repo, Linear project, Slack channel,
-and prod URL before running the roles.
+`projects.md`. Resolve each name to its repo, Linear project, Linear project ID,
+Slack channel, and prod URL before running the roles.
 
 ## Pre-flight, per project
 
 Before running any of the three roles for a given project, do the Issue Cap
-check from `routines/README.md` **once** for that project. If it's at or over
-the cap (5 open issues), post the skip message to that project's Slack
+check from `agents/shared/issue-cap.md` **once** for that project (use the
+**Linear Project ID** from `projects.md`, not the display name). If it's at or
+over the cap (5 open issues), post the skip message to that project's Slack
 channel and move on to the next named project — do not run spec-drift,
 bug-error, or market-feature for this one this cycle. Projects under the cap
 proceed normally below.
