@@ -5,7 +5,8 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/issue-cap.md`, `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
+`agents/shared/issue-cap.md`, `agents/shared/linear-slack.md`,
+`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
 `agents/shared/conventions.md`, and the shared idea-generation guardrails in
 `routines/README.md`
 
@@ -37,14 +38,17 @@ do not proceed to step 1.
    🔧 every time), description in the Issue Brief format (see
    `agents/shared/issue-brief.md`), suggested priority.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
-   preview (see `agents/shared/visual-specs.md`) and link it in the issue
-   description.
+   preview (see `agents/shared/visual-specs.md`).
 7. Mandatory, every issue you create: take a real Playwright screenshot of
    the live site area related to this gap (per `agents/shared/visual-self-qa.md`)
    and attach it to the issue via prepare_attachment_upload → PUT →
    create_attachment_from_upload. Never use a base64/inline upload path.
-8. If nothing meaningful is found, create nothing.
-9. **Housekeeping (runs every time, independent of 1-8):** list all remote
+8. On each issue, post a first comment with execution detail: openspec
+   file(s) referenced, codebase areas checked, Linear search terms used for
+   dedupe, and why this isn't a duplicate. Link any visual preview and note
+   any screenshots attached, not in the description.
+9. If nothing meaningful is found, create nothing.
+10. **Housekeeping (runs every time, independent of 1-9):** list all remote
    `preview/*` branches in the target repo. For each, parse the issue ID from
    the branch name (`preview/<issue-id>-v<n>`) and look up that issue in
    Linear. Delete the branch if the issue is no longer labeled `spec-needed`

@@ -31,7 +31,9 @@ If you notice a gap out of scope for the current issue (missing error state, no
 empty state, accessibility, mobile handling), don't block. File a new Linear
 issue (`Backlog`, `spec-needed`, title + Issue Brief description — see
 `agents/shared/conventions.md` and `agents/shared/issue-brief.md`) and note it in a
-comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this."
+comment: "Noticed [gap] — filed SHA-XX separately. Not blocking this." Post
+execution detail (spec refs, areas checked) in the first comment on the new
+issue, same as idea-generation roles.
 
 **Never:**
 - Merge with failing checks

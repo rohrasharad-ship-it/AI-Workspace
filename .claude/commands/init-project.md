@@ -98,6 +98,9 @@ Use the Linear MCP tool to create a new project with:
 - Team: Sharad Rohra
 - Description: $ONE_SENTENCE_DESCRIPTION. Slack: $SLACK_CHANNEL. Repo: $REPO.
 - Priority: Medium
+- After creating the project, configure Linear → Slack bell notifications to
+  $SLACK_CHANNEL (see `agents/shared/linear-slack.md` — enable "Issue created"
+  and run the smoke test).
 
 ### Step E — Update AI-Workspace/projects.md
 Read the current `projects.md` from the AI-Workspace repo and add a new row to

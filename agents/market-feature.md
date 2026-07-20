@@ -5,9 +5,10 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
-`agents/shared/conventions.md`, and the shared idea-generation guardrails in
-`routines/README.md`
+`agents/shared/issue-cap.md`, `agents/shared/linear-slack.md`,
+`agents/shared/visual-specs.md`,
+`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
+shared idea-generation guardrails in `routines/README.md`
 
 ---
 
@@ -46,8 +47,8 @@ do not proceed to step 1.
    tie to the product's differentiation goals), suggested priority (default
    Medium or Low — these are speculative, not confirmed gaps).
 6. Every issue from this agent has a visual/UI component almost by definition
-   — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`)
-   and link it in the issue description. Do not skip this step.
+   — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`).
+   Do not skip this step.
 7. Mandatory, every issue you create: take a real Playwright screenshot of
    the current homepage (or one to two relevant existing areas) for context
    on where this idea fits (per `agents/shared/visual-self-qa.md`) and attach
@@ -55,7 +56,11 @@ do not proceed to step 1.
    create_attachment_from_upload. Never use a base64/inline upload path. This
    is separate from the mockup in step 6 — this one shows the current site,
    not the proposed idea.
-8. If nothing genuinely differentiated comes to mind, create nothing —
+8. On each issue, post a first comment with execution detail: vision/spec
+   references, similar ideas searched in Linear, and why this isn't a
+   duplicate. Link any visual preview and note any screenshots attached, not
+   in the description.
+9. If nothing genuinely differentiated comes to mind, create nothing —
    do not invent filler ideas to hit the cap.
 
 **Tools needed:** repo read access (GitHub MCP), Linear (create + search

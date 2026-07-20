@@ -97,7 +97,8 @@ are not — something external has to trigger them, on a schedule or on demand.
 That's what `routines/` is for: a routine is a named bundle (which roles, which
 projects, what output) that an external trigger invokes by name, with the real
 instructions living here in git, not pasted into any outside tool. Start at
-`routines/README.md`.
+`routines/README.md`. For Linear per-issue Slack notifications (separate from
+the routine summary), see `agents/shared/linear-slack.md`.
 
 ## Projects
 
