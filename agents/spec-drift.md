@@ -37,17 +37,16 @@ do not proceed to step 1.
    emoji (see `agents/shared/conventions.md` — pick what fits, not literally
    🔧 every time), description in the Issue Brief format (see
    `agents/shared/issue-brief.md`), suggested priority.
-6. On each issue, post a first comment with execution detail: openspec
-   file(s) referenced, codebase areas checked, Linear search terms used for
-   dedupe, and why this isn't a duplicate. Link any visual preview here, not
-   in the description.
-7. If the gap has a visual/UI component, attach a minimal-effort visual
-   preview (see `agents/shared/visual-specs.md`) and link it in the first
-   comment.
-8. Mandatory, every issue you create: take a real Playwright screenshot of
+6. If the gap has a visual/UI component, attach a minimal-effort visual
+   preview (see `agents/shared/visual-specs.md`).
+7. Mandatory, every issue you create: take a real Playwright screenshot of
    the live site area related to this gap (per `agents/shared/visual-self-qa.md`)
    and attach it to the issue via prepare_attachment_upload → PUT →
    create_attachment_from_upload. Never use a base64/inline upload path.
+8. On each issue, post a first comment with execution detail: openspec
+   file(s) referenced, codebase areas checked, Linear search terms used for
+   dedupe, and why this isn't a duplicate. Link any visual preview and note
+   any screenshots attached, not in the description.
 9. If nothing meaningful is found, create nothing.
 10. **Housekeeping (runs every time, independent of 1-9):** list all remote
    `preview/*` branches in the target repo. For each, parse the issue ID from

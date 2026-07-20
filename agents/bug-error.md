@@ -34,17 +34,18 @@ do not proceed to step 1.
    `agents/shared/issue-brief.md` — "Problem" should state when/how the error
    fires in plain language). Priority High if it hits a core flow, Medium
    otherwise.
-5. On each issue, post a first comment with execution detail: error message
-   excerpt, log timestamp, Vercel deployment checked, Linear search terms used
-   for dedupe, and why this isn't a duplicate. Link any visual preview here.
-6. If the bug is visual (layout, overlap, broken animation), attach a
+5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem (see
    `agents/shared/visual-specs.md`).
-7. Mandatory, every issue you create: take a real Playwright screenshot of
+6. Mandatory, every issue you create: take a real Playwright screenshot of
    the live production site showing the actual problem (per
    `agents/shared/visual-self-qa.md`) and attach it to the issue via
    prepare_attachment_upload → PUT → create_attachment_from_upload. Never use
    a base64/inline upload path.
+7. On each issue, post a first comment with execution detail: error message
+   excerpt, log timestamp, Vercel deployment checked, Linear search terms used
+   for dedupe, and why this isn't a duplicate. Link any visual preview and
+   note any screenshots attached.
 8. If the site is clean, create nothing.
 
 **Tools needed:** repo read access (GitHub MCP), Linear (create + search
