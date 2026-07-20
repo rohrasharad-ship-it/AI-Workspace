@@ -58,3 +58,48 @@ right — it has to actually look.
 
 This is worth the token cost — Sharad has explicitly said so. Don't skip it
 to save tokens; that defeats the purpose.
+
+## Network-policy fallback (when outbound HTTPS is blocked)
+
+Some Cursor cloud agent sessions run behind a network policy gateway that
+blocks outbound HTTPS before the request reaches the target site. This is
+**environment-dependent** — other sessions on the same repo may reach the
+same URLs fine. The full screenshot flow above is still mandatory whenever
+network access works; this section is only for when it genuinely cannot.
+
+**When to use this fallback:** You attempt step 1 (navigate to the real URL)
+and **cannot reach any external HTTPS target** — confirmed by the policy
+gateway returning 403, connection refused, or an equivalent error *before*
+the request reaches the target site.
+
+**Not this fallback:**
+- **Vercel Deployment Protection / SSO redirects** — the page loads but
+  redirects to `vercel.com/sso-api` or a login screen. Use the preflight
+  check in `agents/builder.md`: flag it, don't attach a login page as
+  evidence.
+- **Missing Playwright browsers** — run `npx playwright install chromium`
+  first. If install itself fails due to network policy, treat that as the
+  trigger above.
+
+**Required behavior (never silent):**
+1. **Do not** attach a fabricated or placeholder screenshot.
+2. **Do not** skip the step with no comment.
+3. **Do** post a Linear comment in this shape:
+
+```
+⚠️ Visual Self-QA blocked — network policy
+
+Could not capture live screenshot: outbound HTTPS blocked by session network policy.
+
+Attempted:
+- <url-1> → <error>
+- <url-2> → <error>
+
+Visual QA deferred to Sharad on the preview/prod URL. All other checks (build, tests) completed as normal.
+```
+
+4. Refresh the Status Snapshot noting "Visual QA blocked (network policy)".
+
+**What stays mandatory:** The **attempt** — agents must try the full flow and
+record the failure honestly. When network is available, the complete
+screenshot + attach + vision-review flow is unchanged.
