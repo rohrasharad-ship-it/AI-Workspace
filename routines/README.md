@@ -77,8 +77,10 @@ the **Linear Project ID** from `projects.md`, not the display name — name
 filters silently return zero for some projects. Paginate through every page and
 count issues whose `statusType` is not `completed`, `canceled`, or `duplicate`.
 
-**If that count is 5 or more, do not run any of the three idea-generation
-roles for this project this cycle.**
+**If that count is 5 or more, do not file new issues for this project this
+cycle.** Bug-error and market-feature skip entirely. Spec-drift still runs
+steps 10–11 (stale-issue sweep + preview-branch housekeeping) even at cap — see
+`routines/idea-sweep.md` pre-flight and `agents/spec-drift.md`.
 
 **This check is per-project, not global** — a full backlog on one project
 never blocks routines on another. With 5 active projects (see `projects.md`),
@@ -115,7 +117,7 @@ checking (and posting to Slack) three separate times for the same project.
 
 | Feeder | Role file | What it does | Default trigger |
 |---|---|---|---|
-| Spec-drift | `agents/spec-drift.md` | Reads openspec/specs/ vs actual code, files issues for what's specced but unbuilt | Weekly (Mon 9am) via `idea-sweep` |
+| Spec-drift | `agents/spec-drift.md` | Reads openspec/specs/ vs actual code, files issues for what's specced but unbuilt; also comments on open Backlog issues that look already resolved | Weekly (Mon 9am) via `idea-sweep` |
 | Bug/error | `agents/bug-error.md` | Reads Vercel runtime errors + logs, files issues for what's breaking in prod | Daily via `idea-sweep` |
 | Market/feature | `agents/market-feature.md` | Reads project vision, proposes brand-new features not yet in the spec or Linear, always with a visual | Weekly (Mon 9am) via `idea-sweep` |
 | Spillover | `agents/reviewer.md` | Agent notices a gap while building or reviewing, files a new Backlog issue, doesn't block current work | Per-issue, not a routine |
