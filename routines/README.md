@@ -89,8 +89,9 @@ unbounded.
 
 **Check once per project per routine run, not once per role.** If `idea-sweep`
 is running all three roles for a project, do this check a single time before
-any of them start — skip all three together if the cap is hit, rather than
-checking (and posting to Slack) three separate times for the same project.
+any of them start — if the cap is hit, skip bug-error and market-feature and
+run spec-drift steps 10–11 only, rather than checking (and posting to Slack)
+three separate times for the same project.
 
 ## Shared guardrails (every idea-generation role, every routine)
 
