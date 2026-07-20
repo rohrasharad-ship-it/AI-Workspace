@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHA-42 — Routine Run Log</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --border: #e8e8ec;
+      --border-strong: #d4d4d8;
+      --text: #18181b;
+      --muted: #71717a;
+      --faint: #a1a1aa;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --zero: #d4d4d8;
+      --radius: 12px;
+      --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--surface);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 52ch;
+    }
+
+    .panel {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .panel-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .toolbar-label {
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+
+    .toolbar-label strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .preview-tag {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead th {
+      text-align: left;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: #fcfcfd;
+      white-space: nowrap;
+    }
+
+    thead th.num {
+      text-align: right;
+      width: 5.5rem;
+    }
+
+    tbody tr {
+      transition: background 0.12s ease;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    tbody tr + tr td {
+      border-top: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.9rem 1.25rem;
+      vertical-align: middle;
+    }
+
+    .date {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .date .time {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--faint);
+      margin-top: 0.1rem;
+    }
+
+    .project {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .count {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+
+    .count.zero {
+      color: var(--zero);
+      font-weight: 400;
+    }
+
+    .count.has-value {
+      color: var(--text);
+    }
+
+    .total {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .total.zero-total {
+      color: var(--faint);
+      font-weight: 500;
+    }
+
+    .footnote {
+      margin-top: 1rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 2rem 1rem 3rem; }
+      h1 { font-size: 1.5rem; }
+      thead th, td { padding-left: 1rem; padding-right: 1rem; }
+      .panel-toolbar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="eyebrow">PM OS · Idea sweep</div>
+      <h1>Routine run log</h1>
+      <p class="lede">Recent idea-sweep runs across projects. One row per firing — date, project, and how many issues each role filed.</p>
+    </header>
+
+    <div class="panel">
+      <div class="panel-toolbar">
+        <span class="toolbar-label"><strong>6</strong> runs in the last 30 days</span>
+        <span class="preview-tag">Spec preview · mock data</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Project</th>
+              <th class="num">Spec-drift</th>
+              <th class="num">Bug/error</th>
+              <th class="num">Market</th>
+              <th class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="date">Jul 20, 2026<span class="time">9:01 AM</span></td>
+              <td class="project">PM OS</td>
+              <td class="count has-value">3</td>
+              <td class="count zero">—</td>
+              <td class="count has-value">2</td>
+              <td class="total">5</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 20, 2026<span class="time">9:00 AM</span></td>
+              <td class="project">Resume Website</td>
+              <td class="count zero">—</td>
+              <td class="count has-value">1</td>
+              <td class="count zero">—</td>
+              <td class="total">1</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 19, 2026<span class="time">9:01 AM</span></td>
+              <td class="project">Resume Website</td>
+              <td class="count zero">—</td>
+              <td class="count has-value">2</td>
+              <td class="count zero">—</td>
+              <td class="total">2</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 15, 2026<span class="time">9:02 AM</span></td>
+              <td class="project">AI Landscape 2026</td>
+              <td class="count zero">—</td>
+              <td class="count zero">—</td>
+              <td class="count has-value">1</td>
+              <td class="total">1</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 14, 2026<span class="time">9:01 AM</span></td>
+              <td class="project">PM OS</td>
+              <td class="count has-value">1</td>
+              <td class="count zero">—</td>
+              <td class="count zero">—</td>
+              <td class="total">1</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 7, 2026<span class="time">9:01 AM</span></td>
+              <td class="project">Resume Website</td>
+              <td class="count has-value">1</td>
+              <td class="count zero">—</td>
+              <td class="count zero">—</td>
+              <td class="total">1</td>
+            </tr>
+            <tr>
+              <td class="date">Jul 7, 2026<span class="time">9:01 AM</span></td>
+              <td class="project">PM OS</td>
+              <td class="count zero">—</td>
+              <td class="count zero">—</td>
+              <td class="count zero">—</td>
+              <td class="total zero-total">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="footnote">Zero counts show as — so you can tell the sweep ran but found nothing. Skipped runs (issue cap) would appear as a separate row state in the real build.</p>
+  </div>
+</body>
+</html>
