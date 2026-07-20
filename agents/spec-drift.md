@@ -21,12 +21,14 @@ see the "who reads how much" table in `agents/shared/openspec.md`.
 **For the target repo and Linear project given at trigger time:**
 
 **Step 0 — Issue Cap pre-flight (gap-filing only).** If `idea-sweep` triggered
-you, this was already checked once for this project before you started — skip
-straight to step 1. If you were triggered standalone (not via `idea-sweep`),
-do the check yourself first: see `agents/shared/issue-cap.md`. If the project
-is at or over the cap, **skip steps 1–9** (do not file new issues) but still
-run steps 10–11 — stale-issue comments and preview-branch housekeeping help
-shrink the backlog and do not count against the cap.
+you, the routine already checked the cap once for this project before you
+started. If that pre-flight put the project at or over the cap, **skip steps
+1–9** and go straight to step 10. Otherwise skip the cap check and go to step
+1. If you were triggered standalone (not via `idea-sweep`), do the check
+yourself first: see `agents/shared/issue-cap.md`. If the project is at or over
+the cap, **skip steps 1–9** (do not file new issues) but still run steps 10–11
+— stale-issue comments and preview-branch housekeeping help shrink the backlog
+and do not count against the cap.
 
 1. Read `openspec/project.md` and every file under `openspec/specs/` to see what
    is planned/specced.
