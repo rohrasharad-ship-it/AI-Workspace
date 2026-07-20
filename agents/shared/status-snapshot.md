@@ -56,6 +56,7 @@ is for humans scanning the issue description and for Slack.
    replace any spec-phase preview URL — do not leave a wireframe link on an
    issue that is now In Review.
 
-**Production domains are not PR previews.** `ai-workspace.vercel.app` in
-particular is misconfigured (stale unrelated app). Always use the branch URL
-from the Vercel bot comment on the PR.
+**Production domains are not PR previews.** The PM OS sandbox lives at
+`ai-workspace-blond.vercel.app` (see `projects.md`). Do not use
+`ai-workspace.vercel.app` — that hostname serves an unrelated app. For PR
+reviews on product repos, always use the branch URL from the Vercel bot comment.
