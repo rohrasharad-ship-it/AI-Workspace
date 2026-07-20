@@ -2,7 +2,7 @@
 <!-- Plain English — what changed, not how -->
 
 ## Preview
-<!-- Vercel preview URL — paste it here -->
+<!-- Vercel preview URL for UI changes; otherwise "N/A (infra-only — verify on GitHub)" -->
 
 ## How to Verify
 1. 

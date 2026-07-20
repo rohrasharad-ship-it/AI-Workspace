@@ -56,7 +56,9 @@ I'll start the moment I see the agent-ready label.
      side-effect of a task, and do not block on its absence.
    - If tests are run and fail, fix them or, if you genuinely cannot, stop and
      flag Sharad on the Linear issue rather than opening a PR with known-failing tests.
-7. Open a PR using `.github/pull_request_template.md`, Vercel preview URL in the body
+7. Open a PR using `.github/pull_request_template.md` — preview per
+   `agents/shared/status-snapshot.md` (Vercel URL for UI; `N/A (infra-only —
+   verify on GitHub)` for AI-Workspace infra/docs)
 8. **Move issue to `In Review` immediately — do this now, not after anything
    below, and as literally the next tool call after the PR is created (before
    drafting the Slack message, before polling Vercel, before anything else).**
@@ -71,7 +73,8 @@ I'll start the moment I see the agent-ready label.
    `agents/shared/conventions.md`'s Cursor Rules section, which does not
    depend on the agent remembering this at all.)
 9. **Get the preview URL as soon as it's knowable — do not wait for the
-   build to finish:**
+   build to finish** (for AI-Workspace infra/docs, skip polling and use
+   `N/A` immediately):
    - Vercel assigns the preview URL the moment the deployment is *created*,
      not when the build succeeds. Poll the PR's checks / the Vercel bot's PR
      comment every ~10-15 seconds, up to about 2 minutes total, and grab the
@@ -107,9 +110,10 @@ I'll start the moment I see the agent-ready label.
      - Never use a production domain as the preview URL.
 10. Once the build actually finishes (not just the URL existing), do **Visual
     Self-QA — mandatory** (see `agents/shared/visual-self-qa.md` for the exact
-    mechanism): screenshot the changed area on the real preview URL, desktop
-    and mobile, actually look at both, attach both screenshots to the Linear
-    issue.
+    mechanism) **unless this is AI-Workspace infra/docs with no UI** — then
+    skip screenshots and verify on GitHub instead. Otherwise: screenshot the
+    changed area on the real preview URL, desktop and mobile, actually look at
+    both, attach both screenshots to the Linear issue.
     - If something looks wrong, fix it, push to the same branch, and post a
       follow-up comment on the Linear issue: "Found and fixed [X] during
       self-QA — preview refreshed at the same URL." Do not re-post to Slack
@@ -120,11 +124,12 @@ I'll start the moment I see the agent-ready label.
     `agents/reviewer.md`). Nothing merges or auto-completes without that
     explicit comment.
 
-**Slack post (every PR, no exceptions — send as soon as the preview URL is known):**
+**Slack post (every PR, no exceptions — send as soon as the preview URL is known,
+or immediately with `N/A` for AI-Workspace infra/docs):**
 ```
 🔍 Ready for your review
 Feature: [issue title]
-Preview: [Vercel preview URL] ← tap this (note if still building)
+Preview: [Vercel preview URL, or "N/A — verify on GitHub" for infra/docs] ← tap this (note if still building)
 What changed: [2 sentences]
 Checks: ✅ build passing, tests passing
 Approve: comment "@<agent> approved" on [Linear issue URL]
