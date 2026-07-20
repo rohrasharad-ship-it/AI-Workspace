@@ -18,6 +18,9 @@
     "url": "https://github.com/rohrasharad-ship-it/AI-Workspace/issues"
   },
   "homepage": "https://github.com/rohrasharad-ship-it/AI-Workspace#readme",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "devDependencies": {
     "@fission-ai/openspec": "^1.6.0"
   }
