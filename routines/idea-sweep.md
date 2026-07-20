@@ -27,8 +27,8 @@ Slack channel, and prod URL before running the roles.
 Before running any of the three roles for a given project, do the Issue Cap
 check from `agents/shared/issue-cap.md` **once** for that project (use the
 **Linear Project ID** from `projects.md`, not the display name). If it's at or
-over the cap (5 open issues), post the skip message to that project's Slack
-channel, then **still run spec-drift steps 10–11 only** (stale-issue sweep +
+over the cap (5 open issues), post the cap skip message (steps 10–11 variant)
+from `agents/shared/issue-cap.md` to that project's Slack channel, then **still run spec-drift steps 10–11 only** (stale-issue sweep +
 preview-branch housekeeping — these shrink the backlog and do not file new
 issues). Skip spec-drift steps 1–9 and skip bug-error and market-feature
 entirely for this project this cycle. Projects under the cap proceed normally
@@ -50,8 +50,9 @@ cron), not something this file needs to enforce.
 ## Output
 
 - Each role files its own Linear issues directly, per its own file.
-- After all roles finish for all named projects, post **one consolidated
-  Slack message per project** (not per role) to that project's Slack channel:
+- After all roles finish, for each project that was **under** the pre-flight
+  cap, post **one consolidated Slack message** (not per role) to that project's
+  Slack channel:
   ```
   🧭 Idea sweep — [Project Name]
   Spec-drift: [N] issues filed, [M] stale issues flagged

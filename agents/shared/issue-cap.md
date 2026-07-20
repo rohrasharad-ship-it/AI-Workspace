@@ -42,12 +42,24 @@ Always use the **Linear Project ID** (UUID) from `projects.md`.
 
 ## Skip message
 
-Post to the project's Slack channel from `projects.md`:
+Post to the project's Slack channel from `projects.md`.
+
+When **spec-drift steps 10–11 will still run** (`idea-sweep` pre-flight at cap,
+or spec-drift triggered standalone):
 
 ```
-⛔ Idea-sweep skipped — [Project Name from projects.md]
-Linear already has [N] open issues (cap: 5 per project). Triage the backlog
-before more get added.
+⛔ Issue cap reached — [Project Name from projects.md]
+Linear already has [N] open issues (cap: 5 per project). No new issues will be
+filed this cycle — triage the backlog before more get added. Stale-issue sweep
+and preview-branch cleanup still run.
+```
+
+Otherwise (bug-error or market-feature standalone at cap):
+
+```
+⛔ Issue cap reached — [Project Name from projects.md]
+Linear already has [N] open issues (cap: 5 per project). No new issues will be
+filed this cycle — triage the backlog before more get added.
 ```
 
 **Check once per project per routine run** — if `idea-sweep` is running all
