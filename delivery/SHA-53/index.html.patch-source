@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>AI Landscape 2026 — Interactive AI Ecosystem Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+<meta name="description" content="156 tools, 310 connections, 6 layers from chip foundries to end-user apps. Explore how the AI stack connects."/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="AI Landscape 2026"/>
+<meta property="og:title" content="AI Landscape 2026 — Interactive AI Ecosystem Map"/>
+<meta property="og:description" content="156 tools, 310 connections, 6 layers from chip foundries to end-user apps. Explore how the AI stack connects."/>
+<meta property="og:url" content="https://ai-landscape-ten.vercel.app/"/>
+<meta property="og:image" content="https://ai-landscape-ten.vercel.app/preview.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="AI Landscape 2026 radial map — 156 tools across six layers from foundries to applications"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="AI Landscape 2026 — Interactive AI Ecosystem Map"/>
+<meta name="twitter:description" content="156 tools, 310 connections, 6 layers from chip foundries to end-user apps. Explore how the AI stack connects."/>
+<meta name="twitter:image" content="https://ai-landscape-ten.vercel.app/preview.png"/>
+<meta name="twitter:image:alt" content="AI Landscape 2026 radial map — 156 tools across six layers from foundries to applications"/>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; }
+#controls { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(10,15,30,0.96); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.08); height:56px; flex-wrap:wrap;}
+#title { font-size:14px; font-weight:700; color:#F8FAFC; white-space:nowrap; }
+#title span { color:#38BDF8; }
+#search { flex:0 1 180px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#E2E8F0; font-size:12px; outline:none; }
+.filter-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#CBD5E1; font-size:11px; cursor:pointer; white-space:nowrap; }
+.filter-btn:hover { background:rgba(255,255,255,0.12); }
+.filter-btn.active { background:rgba(56,189,248,0.2); border-color:#38BDF8; color:#F8FAFC; font-weight:600; }
+#slider-wrap, #slider-wrap-link { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.05); padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); }
+#slider-wrap label, #slider-wrap-link label { font-size:11px; color:#94A3B8; white-space:nowrap; }
+#pop-slider { width:130px; accent-color:#38BDF8; cursor:pointer; }
+#pop-value { font-size:12px; font-weight:700; color:#38BDF8; min-width:28px; text-align:center; }
+#stats { margin-left:auto; font-size:11px; color:#64748B; white-space:nowrap; }
+#layout-toggle, #clear-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(168,85,247,0.15); color:#E0D4FF; font-size:11px; cursor:pointer; }
+#layout-toggle:hover, #clear-btn:hover { background:rgba(168,85,247,0.3); }
+#canvas-container { position:fixed; top:56px; left:0; right:0; bottom:0; overflow:hidden; }
+#canvas { display:block; width:100%; height:100%; background:radial-gradient(ellipse at center, #0E1629 0%, #0A0F1E 100%); }
+#tooltip { position:fixed; pointer-events:none; background:rgba(10,15,30,0.98); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; max-width:320px; z-index:200; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.6); }
+#tooltip .tt-name { font-size:14px; font-weight:700; color:#F8FAFC; margin-bottom:3px; }
+#tooltip .tt-cats { font-size:10px; color:#64748B; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em; }
+#tooltip .tt-desc { font-size:11px; color:#CBD5E1; line-height:1.4; margin-bottom:6px; }
+#tooltip .tt-meta { font-size:10px; color:#94A3B8; display:flex; gap:10px; }
+#tooltip .tt-pop { color:#38BDF8; font-weight:700; }
+#tooltip .tt-conn-name { font-size:12px; font-weight:700; color:#FBBF24; margin-bottom:4px; }
+#tooltip .tt-conn-type { font-size:10px; color:#94A3B8; text-transform:uppercase; letter-spacing:0.05em; }
+#legend { position:fixed; bottom:14px; left:14px; z-index:100; background:rgba(10,15,30,0.92); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 13px; max-width:230px; }
+#legend h4 { font-size:9px; color:#64748B; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
+.legend-item { display:flex; align-items:center; gap:6px; margin-bottom:4px; font-size:10px; color:#CBD5E1; }
+.legend-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.legend-line { width:18px; height:2px; flex-shrink:0; }
+.ring-legend { cursor:pointer; padding:2px 4px; margin:-2px -4px; border-radius:3px; }
+.ring-legend:hover { background:rgba(255,255,255,0.06); }
+.link { fill:none; opacity:0.07; cursor:pointer; }
+.link.highlight { opacity:0.9; }
+.link.dim { opacity:0.02; }
+.link.selected-arrow { opacity:1; stroke-width:3.5px !important; }
+.bubble-label { text-shadow: 0 1px 4px #0A0F1E, 0 0 10px #0A0F1E; cursor:pointer; }
+.bubble-hull { cursor:pointer; transition:fill-opacity 0.2s; }
+.bubble-hull.bubble-dim { opacity:0.15; }
+.bubble-hull.bubble-selected { fill-opacity:0.28 !important; stroke-width:3px !important; }
+#side-panel { position:fixed; top:56px; right:-340px; width:320px; bottom:0; background:rgba(10,15,30,0.98); border-left:1px solid rgba(255,255,255,0.1); z-index:150; transition:right 0.25s cubic-bezier(.4,0,.2,1); overflow-y:auto; display:flex; flex-direction:column; }
+#side-panel.open { right:0; }
+#sp-header { display:flex; align-items:flex-start; justify-content:space-between; padding:16px 14px 12px; border-bottom:1px solid rgba(255,255,255,0.08); }
+#sp-name { font-size:16px; font-weight:700; color:#F8FAFC; flex:1; line-height:1.3; }
+#sp-close { background:none; border:none; color:#64748B; font-size:20px; cursor:pointer; padding:0; margin-left:8px; line-height:1; flex-shrink:0; }
+#sp-close:hover { color:#E2E8F0; }
+.sp-section { padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.sp-label { font-size:9px; text-transform:uppercase; letter-spacing:0.08em; color:#64748B; margin-bottom:5px; }
+#sp-cats { font-size:10px; color:#94A3B8; margin-bottom:6px; }
+.sp-pop-bar { height:4px; background:rgba(255,255,255,0.08); border-radius:2px; }
+#sp-pop-fill { display:block; height:100%; border-radius:2px; background:#38BDF8; transition:width 0.3s; }
+#sp-desc { font-size:12px; color:#CBD5E1; line-height:1.55; }
+.sp-conn-item { display:flex; align-items:center; gap:7px; font-size:11px; color:#CBD5E1; padding:4px 2px; border-radius:3px; cursor:pointer; }
+.sp-conn-item:hover { background:rgba(255,255,255,0.05); }
+.sp-conn-item.active { background:rgba(251,191,36,0.12); }
+.sp-conn-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.sp-conn-type { font-size:9px; color:#64748B; margin-left:auto; }
+.sp-conn-name { font-size:9px; color:#FBBF24; display:block; margin-top:1px; font-style:italic; }
+.sp-conn-text { flex:1; display:flex; flex-direction:column; }
+#sp-actions { padding:12px 14px; margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+#sp-link { display:block; padding:8px 12px; background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.25); border-radius:6px; color:#38BDF8; font-size:12px; text-decoration:none; text-align:center; }
+#sp-link:hover { background:rgba(56,189,248,0.2); }
+#sp-linkedin-btn { padding:8px 12px; background:rgba(10,102,194,0.18); border:1px solid rgba(10,102,194,0.4); border-radius:6px; color:#93C5FD; font-size:12px; text-align:center; cursor:pointer; }
+#sp-linkedin-btn:hover { background:rgba(10,102,194,0.3); }
+.legend-type-item { cursor:pointer; border-radius:4px; padding:2px 5px; margin:-2px -5px; transition:opacity 0.15s; user-select:none; }
+.legend-type-item:hover { background:rgba(255,255,255,0.07); }
+.legend-type-item.inactive { opacity:0.3; }
+.node { cursor:pointer; }
+.node.dim { opacity:0.1; }
+.node-circle { stroke-width:1.5px; }
+.node-circle.highlight { stroke:#F8FAFC; stroke-width:2.5px; }
+.label { font-size:8px; font-weight:600; pointer-events:none; text-anchor:middle; fill:#E2E8F0; }
+.label.dim { opacity:0.15; }
+.ring-label { font-weight:700; letter-spacing:0.1em; text-transform:uppercase; pointer-events:auto; fill-opacity:0.8; cursor:pointer; text-shadow: 0 1px 4px #0A0F1E, 0 0 10px #0A0F1E; }
+.ring-label:hover { fill-opacity:1; }
+.sector-label { font-weight:600; letter-spacing:0.04em; text-transform:uppercase; pointer-events:none; }
+#zoom { position:fixed; bottom:14px; right:14px; z-index:100; display:flex; gap:4px; }
+#zoom button { width:34px; height:34px; background:rgba(10,15,30,0.92); border:1px solid rgba(255,255,255,0.15); color:#CBD5E1; border-radius:6px; cursor:pointer; font-size:15px; }
+#zoom button:hover { background:rgba(255,255,255,0.12); }
+#hint { position:fixed; top:66px; left:50%; transform:translateX(-50%); font-size:10px; color:#64748B; z-index:50; pointer-events:none; background:rgba(10,15,30,0.7); padding:3px 10px; border-radius:4px; }
+
+/* ===== MOBILE (separate DOM, rendered when IS_MOBILE) ===== */
+#m-app { position:fixed; inset:0; display:none; flex-direction:column; background:#0A0F1E; color:#E2E8F0; overflow:hidden; z-index:300; }
+#m-app.active { display:flex; }
+#m-header { padding:14px 14px 10px; background:linear-gradient(180deg,#0E1629 0%,#0A0F1E 100%); border-bottom:1px solid rgba(255,255,255,0.08); flex-shrink:0; }
+#m-title-row { display:flex; align-items:baseline; justify-content:space-between; }
+#m-title { font-size:20px; font-weight:800; letter-spacing:-0.02em; }
+#m-title span { color:#38BDF8; }
+#m-sub { font-size:11px; color:#64748B; }
+#m-search { width:100%; margin-top:10px; padding:10px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#E2E8F0; font-size:14px; outline:none; -webkit-appearance:none; }
+#m-search::placeholder { color:#475569; }
+#m-chips { display:flex; gap:6px; margin-top:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; }
+#m-chips::-webkit-scrollbar { display:none; }
+.m-chip { flex-shrink:0; padding:7px 13px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:#CBD5E1; font-size:12px; font-weight:600; cursor:pointer; }
+.m-chip.active { background:rgba(56,189,248,0.18); border-color:#38BDF8; color:#F8FAFC; }
+#m-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:40px; }
+.m-layer { padding:0 12px 18px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.m-layer-head { display:flex; align-items:center; gap:8px; padding:14px 4px 10px; position:sticky; top:0; background:#0A0F1E; z-index:2; border-bottom:1px solid rgba(255,255,255,0.04); }
+.m-layer-bar { width:3px; height:18px; background:var(--lc); border-radius:2px; }
+.m-layer-num { font-size:10px; font-weight:800; color:var(--lc); letter-spacing:0.1em; }
+.m-layer-name { font-size:15px; font-weight:700; color:#F8FAFC; flex:1; }
+.m-layer-count { font-size:11px; color:#64748B; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:10px; }
+.m-cat { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748B; margin:12px 4px 6px; }
+.m-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+.m-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px 4px 7px; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; min-height:74px; transition:transform 0.1s, background 0.15s; }
+.m-card:active { background:rgba(56,189,248,0.12); transform:scale(0.96); }
+.m-logo-wrap { width:34px; height:34px; border-radius:8px; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+.m-logo-wrap img { width:100%; height:100%; object-fit:cover; }
+.m-init { color:#1E293B; font-weight:800; font-size:11px; }
+.m-name { font-size:9.5px; line-height:1.2; color:#CBD5E1; text-align:center; word-wrap:break-word; max-width:100%; }
+.m-empty { padding:50px 20px; text-align:center; color:#475569; font-size:13px; }
+#m-sheet { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:400; display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+#m-sheet.open { opacity:1; pointer-events:auto; }
+#m-sheet-card { width:100%; max-height:78vh; background:#0E1629; border-radius:18px 18px 0 0; padding:18px 18px 28px; overflow-y:auto; position:relative; transform:translateY(100%); transition:transform 0.25s cubic-bezier(.4,0,.2,1); }
+#m-sheet.open #m-sheet-card { transform:translateY(0); }
+#m-sheet-close { position:absolute; top:8px; right:10px; background:none; border:none; color:#64748B; font-size:30px; line-height:1; cursor:pointer; }
+.m-sheet-top { display:flex; gap:12px; align-items:center; margin-bottom:14px; padding-right:32px; }
+.m-sheet-logo { width:52px; height:52px; border-radius:12px; background:#fff; flex-shrink:0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.m-sheet-logo img { width:100%; height:100%; object-fit:cover; }
+.m-sheet-name { font-size:19px; font-weight:800; color:#F8FAFC; line-height:1.2; }
+.m-sheet-cat { font-size:11px; color:#64748B; margin-top:3px; }
+.m-sheet-pop { margin-bottom:14px; }
+.m-sheet-pop-lbl { font-size:10px; color:#94A3B8; margin-bottom:5px; display:flex; justify-content:space-between; }
+.m-sheet-pop-lbl b { color:#38BDF8; }
+.m-sheet-pop-bar { height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+.m-sheet-pop-bar span { display:block; height:100%; background:linear-gradient(90deg,#38BDF8,#A78BFA); }
+.m-sheet-desc { font-size:13.5px; line-height:1.55; color:#CBD5E1; margin-bottom:14px; }
+.m-sheet-conn-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748B; margin-bottom:8px; }
+.m-sheet-conns { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+.m-conn-pill { font-size:11px; padding:5px 9px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:#CBD5E1; }
+.m-conn-pill em { color:#94A3B8; font-style:normal; font-size:9px; margin-left:4px; text-transform:uppercase; letter-spacing:0.04em; }
+.m-sheet-link { display:block; padding:11px 14px; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:10px; color:#38BDF8; text-align:center; font-size:13px; font-weight:600; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div id="controls">
+  <div id="title">AI Landscape <span>2026</span> v4</div>
+  <input id="search" type="text" placeholder="Search..."/>
+  <div id="slider-wrap">
+    <label>Popularity &ge;</label>
+    <input id="pop-slider" type="range" min="0" max="100" step="5" value="60"/>
+    <span id="pop-value">60</span>
+  </div>
+  <div id="slider-wrap-link" class="slider-wrap-cls">
+    <label>Link &ge;</label>
+    <input id="link-slider" type="range" min="1" max="5" step="1" value="1"/>
+    <span id="link-value" style="color:#A78BFA">1</span>
+  </div>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="Hardware">Hardware</button>
+  <button class="filter-btn" data-cat="Models">Models</button>
+  <button class="filter-btn" data-cat="Creative AI">Creative</button>
+  <button class="filter-btn" data-cat="Tools">Tools</button>
+  <button class="filter-btn" data-cat="Infrastructure">Infra</button>
+  <button class="filter-btn" data-cat="Emerging">Emerging</button>
+  <button id="layout-toggle">View: Radial</button>
+  <button id="clear-btn">Clear Selection</button>
+  <div id="stats"></div>
+</div>
+
+<div id="canvas-container">
+  <svg id="canvas"></svg>
+</div>
+<div id="hint">Click node or bubble to focus · Click a ring name to isolate a layer · Click an arrow for connection detail</div>
+
+<div id="tooltip"></div>
+
+<div id="legend">
+  <h4>Connection type <span style="color:#475569;font-weight:400">(click to toggle)</span></h4>
+  <div class="legend-item legend-type-item" data-types="manufactures,powers"><div class="legend-line" style="background:#F59E0B"></div>manufactures / powers</div>
+  <div class="legend-item legend-type-item" data-types="hosts,runs"><div class="legend-line" style="background:#8B5CF6"></div>hosts / runs</div>
+  <div class="legend-item legend-type-item" data-types="built-on"><div class="legend-line" style="background:#06B6D4"></div>built-on</div>
+  <div class="legend-item legend-type-item" data-types="integrates,routes,monitors,guards"><div class="legend-line" style="background:#94A3B8"></div>integrates / routes / guards</div>
+  <h4 style="margin-top:8px">Rings (center → outer, click to isolate)</h4>
+  <div class="legend-item ring-legend" data-layer="0"><div class="legend-dot" style="background:#B45309"></div>Foundry</div>
+  <div class="legend-item ring-legend" data-layer="1"><div class="legend-dot" style="background:#F59E0B"></div>Chip Designers</div>
+  <div class="legend-item ring-legend" data-layer="2"><div class="legend-dot" style="background:#06B6D4"></div>Cloud / Hubs</div>
+  <div class="legend-item ring-legend" data-layer="3"><div class="legend-dot" style="background:#3B82F6"></div>Foundation Models</div>
+  <div class="legend-item ring-legend" data-layer="4"><div class="legend-dot" style="background:#A855F7"></div>Frameworks &amp; Infra</div>
+  <div class="legend-item ring-legend" data-layer="5"><div class="legend-dot" style="background:#10B981"></div>Applications</div>
+</div>
+
+<div id="zoom">
+  <button id="zin" title="Zoom in">+</button>
+  <button id="zout" title="Zoom out">&minus;</button>
+  <button id="zfit" title="Fit">&#9633;</button>
+</div>
+
+<div id="side-panel">
+  <div id="sp-header">
+    <div id="sp-name"></div>
+    <button id="sp-close">&times;</button>
+  </div>
+  <div class="sp-section">
+    <div class="sp-label">Category</div>
+    <div id="sp-cats"></div>
+    <div class="sp-pop-bar"><span id="sp-pop-fill"></span></div>
+  </div>
+  <div class="sp-section">
+    <div class="sp-label">About</div>
+    <div id="sp-desc"></div>
+  </div>
+  <div class="sp-section" id="sp-conn-section">
+    <div class="sp-label">Connections (click to view arrow & name)</div>
+    <div id="sp-connections"></div>
+  </div>
+  <div id="sp-actions">
+    <a id="sp-link" target="_blank" rel="noopener">Visit site &rarr;</a>
+    <button id="sp-linkedin-btn">Copy LinkedIn blurb</button>
+  </div>
+</div>
+
+<script>
+// ==== DATA: NODES ====
+const NODES = [
+  // L0 Foundries
+  {"id":"TSMC","name":"TSMC","superCat":"Hardware","category":"Foundries","subCat":"Leading Foundries","desc":"70% global foundry revenue share. 3nm in production, 2nm upcoming. $100B US investment (5 new fabs).","pop":100,"layer":0,"domain":"tsmc.com"},
+  {"id":"Samsung Foundry","name":"Samsung Foundry","superCat":"Hardware","category":"Foundries","subCat":"Leading Foundries","desc":"World's #2 foundry. 2nm Gate-All-Around production 2025. Makes Exynos, Google Tensor, and third-party AI chips.","pop":70,"layer":0,"domain":"samsung.com"},
+  {"id":"Intel Foundry","name":"Intel IFS","superCat":"Hardware","category":"Foundries","subCat":"US Foundries","desc":"Intel Foundry Services. 18A node live 2025. US government $8.5B CHIPS Act funding. Microsoft, Amazon as customers.","pop":55,"layer":0,"domain":"intel.com"},
+  {"id":"SMIC","name":"SMIC","superCat":"Hardware","category":"Foundries","subCat":"Chinese Foundries","desc":"China's top foundry. 7nm without EUV, working on 5nm. Critical supplier for Huawei Ascend AI chips under US export controls.","pop":60,"layer":0,"domain":"smics.com","imgUrl":"https://logo.clearbit.com/smics.com"},
+
+  // L1 Chip Designers
+  {"id":"NVIDIA","name":"NVIDIA","superCat":"Hardware","category":"Chip Designers","subCat":"GPU Makers","desc":"Dominant AI GPU maker with ~90% market share. Blackwell Ultra (B300) shipping; acquired Groq for $20B.","pop":100,"layer":1,"domain":"nvidia.com"},
+  {"id":"AMD","name":"AMD","superCat":"Hardware","category":"Chip Designers","subCat":"GPU Makers","desc":"Primary NVIDIA challenger. MI350/MI355X with 4x perf vs MI300X; MI400 full-rack solution planned.","pop":75,"layer":1,"domain":"amd.com"},
+  {"id":"Google TPU","name":"Google TPU","superCat":"Hardware","category":"Chip Designers","subCat":"Cloud Silicon","desc":"Custom Tensor Processing Units powering Gemini. TPU v5p and Trillium generation available on GCP.","pop":80,"layer":1,"domain":"cloud.google.com"},
+  {"id":"AWS Trainium","name":"AWS Trainium","superCat":"Hardware","category":"Chip Designers","subCat":"Cloud Silicon","desc":"Trainium3 chips (Dec 2025) 40% more energy-efficient. $38B multi-year deal with OpenAI.","pop":70,"layer":1,"domain":"aws.amazon.com"},
+  {"id":"Apple Neural Engine","name":"Apple Silicon","superCat":"Hardware","category":"Chip Designers","subCat":"Edge AI","desc":"Neural Engine in M5 chip. Developing Baltra AI server chip with Broadcom for internal inference (2026).","pop":85,"layer":1,"domain":"apple.com"},
+  {"id":"Qualcomm NPU","name":"Qualcomm","superCat":"Hardware","category":"Chip Designers","subCat":"Edge AI","desc":"Hexagon NPU in Snapdragon; Cloud AI 100 for data centers. Expanding into AI PCs with Snapdragon X Elite.","pop":70,"layer":1,"domain":"qualcomm.com"},
+  {"id":"Groq","name":"Groq","superCat":"Hardware","category":"Chip Designers","subCat":"ASIC","desc":"Ultra-low latency LPU inference architecture. Acquired by NVIDIA for ~$20B (Dec 2025). GroqCloud still operates.","pop":70,"layer":1,"domain":"groq.com"},
+  {"id":"Cerebras","name":"Cerebras","superCat":"Hardware","category":"Chip Designers","subCat":"ASIC","desc":"Wafer-Scale Engine (WSE-3) delivers ~3,000 tokens/sec on 120B models. CS-3 for on-prem training.","pop":72,"layer":1,"domain":"cerebras.ai"},
+
+  // L2 Cloud / Hubs
+  {"id":"AWS Bedrock","name":"AWS Bedrock","superCat":"Infrastructure","category":"Cloud Platforms","subCat":"AWS","desc":"Managed access to foundation models (Claude, Llama) via API. Full ML lifecycle with SageMaker.","pop":85,"layer":2,"domain":"aws.amazon.com"},
+  {"id":"Azure AI","name":"Azure AI","superCat":"Infrastructure","category":"Cloud Platforms","subCat":"Azure","desc":"Azure OpenAI Service + ML platform. Deep Microsoft ecosystem integration. SOC 2, HIPAA compliant.","pop":85,"layer":2,"domain":"azure.microsoft.com"},
+  {"id":"Google Vertex AI","name":"Vertex AI","superCat":"Infrastructure","category":"Cloud Platforms","subCat":"GCP","desc":"Gemini models, managed pipelines, AutoML, Model Garden. BigQuery integration for analytics.","pop":80,"layer":2,"domain":"cloud.google.com"},
+  {"id":"Together AI","name":"Together AI","superCat":"Infrastructure","category":"Cloud Platforms","subCat":"Open Model Inference","desc":"AI acceleration cloud for 200+ open-source models. Training + serving in one API. $3.3B valuation.","pop":75,"layer":2,"domain":"together.ai"},
+  {"id":"Hugging Face","name":"Hugging Face","superCat":"Infrastructure","category":"Model Hub","subCat":"Ecosystem","desc":"Most comprehensive ecosystem. 500K+ models. AutoTrain, Transformers, TRL. Supports LoRA, QLoRA, full fine-tuning.","pop":100,"layer":2,"domain":"huggingface.co"},
+  {"id":"Replicate","name":"Replicate","superCat":"Infrastructure","category":"Model Hub","subCat":"Model Deployment","desc":"One-click deployment for open-source models via API. Dominant for image/video model inference.","pop":70,"layer":2,"domain":"replicate.com"},
+
+  // L3 Foundation Models
+  {"id":"OpenAI GPT-5","name":"GPT-5","superCat":"Models","category":"Frontier LLMs","subCat":"US Labs","desc":"GPT-5.4 is highest-intelligence model. GPT-5 Mini offers near-flagship performance at low cost. Codex for agentic coding.","pop":100,"layer":3,"domain":"openai.com"},
+  {"id":"Claude 4.x (Anthropic)","name":"Claude 4.x","superCat":"Models","category":"Frontier LLMs","subCat":"US Labs","desc":"Opus 4.6 among top-ranked. Sonnet 4.5 excels at coding with 1M token context. Known for safety and reliability.","pop":90,"layer":3,"domain":"anthropic.com"},
+  {"id":"Gemini 3.x (Google)","name":"Gemini 3.x","superCat":"Models","category":"Frontier LLMs","subCat":"US Labs","desc":"3.1 Pro leads on 12/18 benchmarks. Flash variant offers Pro-level intelligence at high speed.","pop":85,"layer":3,"domain":"deepmind.google"},
+  {"id":"Grok 4","name":"Grok 4","superCat":"Models","category":"Frontier LLMs","subCat":"US Labs","desc":"xAI's frontier model with real-time web and X/Twitter access. Strong at science and math reasoning.","pop":85,"layer":3,"domain":"x.ai"},
+  {"id":"Mistral 3","name":"Mistral 3","superCat":"Models","category":"Frontier LLMs","subCat":"European Labs","desc":"French AI leader. Dec 2025: 10-model release with frontier MoE flagship + 9 compact edge models.","pop":70,"layer":3,"domain":"mistral.ai"},
+  {"id":"DeepSeek V3/R1","name":"DeepSeek","superCat":"Models","category":"Frontier LLMs","subCat":"Chinese Labs","desc":"Sparked the DeepSeek moment Jan 2025. V3.2 competes with GPT-5 on reasoning. MIT licensed open weights.","pop":85,"layer":3,"domain":"deepseek.com"},
+  {"id":"Qwen 3.5 (Alibaba)","name":"Qwen 3.5","superCat":"Models","category":"Frontier LLMs","subCat":"Chinese Labs","desc":"32.1% of China's enterprise LLM market. MoE architecture with multimodal reasoning and ultra-long context.","pop":75,"layer":3,"domain":"alibaba.com"},
+  {"id":"Kimi K2.5 (Moonshot)","name":"Kimi K2.5","superCat":"Models","category":"Frontier LLMs","subCat":"Chinese Labs","desc":"China's fastest decacorn ($18B). K2.5 adds agent swarm (100 sub-agents). MIT licensed.","pop":70,"layer":3,"domain":"moonshot.ai"},
+  {"id":"GLM-5","name":"GLM-5","superCat":"Models","category":"Frontier LLMs","subCat":"Chinese Labs","desc":"Zhipu AI's frontier model. Strong bilingual reasoning and tool use. Backed by Alibaba, Tencent, Saudi Aramco.","pop":65,"layer":3,"domain":"zhipuai.cn"},
+  {"id":"MiniMax M2.5","name":"MiniMax M2.5","superCat":"Models","category":"Frontier LLMs","subCat":"Chinese Labs","desc":"MiniMax's efficient MoE model. Strong multimodal + long-context reasoning. Powers Talkie and Hailuo AI.","pop":62,"layer":3,"domain":"minimax.io"},
+
+  {"id":"Llama 4","name":"Llama 4","superCat":"Models","category":"Open Weight Models","subCat":"Meta","desc":"Most deployed open-weight family. Scout (10M ctx), Maverick (1M ctx). Battle-tested backbone of open-source ecosystem.","pop":95,"layer":3,"domain":"meta.com"},
+  {"id":"Gemma 4","name":"Gemma 4","superCat":"Models","category":"Open Weight Models","subCat":"Google","desc":"Google's open-weight family. Shares research lineage with Gemini. Strong on-device inference and fine-tuning.","pop":68,"layer":3,"domain":"ai.google.dev"},
+  {"id":"Phi-4","name":"Phi-4","superCat":"Models","category":"Open Weight Models","subCat":"Microsoft","desc":"Microsoft's small language model. 14B params outperforms many 70B+ models on reasoning. MIT licensed.","pop":65,"layer":3,"domain":"microsoft.com"},
+
+  {"id":"Stable Diffusion","name":"Stable Diffusion","superCat":"Creative AI","category":"Foundation Media","subCat":"Image Model","desc":"The open-source image standard. Full local control, massive LoRA/fine-tuning ecosystem.","pop":90,"layer":3,"domain":"stability.ai"},
+  {"id":"Flux 2","name":"Flux 2","superCat":"Creative AI","category":"Foundation Media","subCat":"Image Model","desc":"Black Forest Labs' pinnacle open-weight image generator. Flux 2 Max for pro quality.","pop":70,"layer":3,"domain":"blackforestlabs.ai"},
+  {"id":"Whisper (OpenAI)","name":"Whisper","superCat":"Creative AI","category":"Foundation Media","subCat":"Speech Model","desc":"OpenAI's open-source STT. 680K hours training, 99 languages. V3 Turbo: 5.4x speed.","pop":90,"layer":3,"domain":"openai.com"},
+  {"id":"Seedance","name":"Seedance","superCat":"Creative AI","category":"Foundation Media","subCat":"Video Model","desc":"ByteDance's foundation video model. Seedance 2.0 delivers cinematic-quality text-to-video; powers Higgsfield and CapCut.","pop":70,"layer":3,"domain":"bytedance.com"},
+  {"id":"Lyria 3","name":"Lyria 3","superCat":"Creative AI","category":"Foundation Media","subCat":"Music Model","desc":"Google DeepMind's latest music-generation foundation model. High-fidelity instrumental + vocal synthesis; powers YouTube Shorts and Google music tools.","pop":68,"layer":3,"domain":"deepmind.google","imgUrl":"https://logo.clearbit.com/deepmind.google"},
+
+  // L4 Frameworks & Infra
+  {"id":"LangChain","name":"LangChain","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Orchestration","desc":"Most widely adopted LLM app framework. Modular chaining of LLMs with tools, memory, APIs.","pop":95,"layer":4,"domain":"langchain.com"},
+  {"id":"LangGraph","name":"LangGraph","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Graph Agents","desc":"Graph-based orchestration for stateful multi-step agents. v1.0 GA with Agent Protocol.","pop":90,"layer":4,"domain":"langchain.com"},
+  {"id":"LlamaIndex","name":"LlamaIndex","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"RAG","desc":"Specializes in connecting LLMs to data. Essential for RAG and knowledge-base applications.","pop":75,"layer":4,"domain":"llamaindex.ai"},
+  {"id":"CrewAI","name":"CrewAI","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Multi-Agent","desc":"Role-playing AI agent teams. Crew metaphor for collaborative workflows. Best for SMBs.","pop":70,"layer":4,"domain":"crewai.com"},
+  {"id":"AutoGen","name":"AutoGen","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Multi-Agent","desc":"Microsoft's multi-agent conversation framework. Async messaging, cross-language support in v0.4.","pop":78,"layer":4,"domain":"microsoft.com"},
+  {"id":"Pydantic AI","name":"Pydantic AI","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Type-Safe","desc":"Type-safe agent framework. Structured outputs via Pydantic schemas. Built by Pydantic team for production reliability.","pop":68,"layer":4,"domain":"pydantic.dev"},
+  {"id":"Semantic Kernel","name":"Semantic Kernel","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Enterprise","desc":"Microsoft's enterprise-grade AI orchestration SDK. C#/Python/Java. Deep Azure + M365 integration.","pop":65,"layer":4,"domain":"microsoft.com"},
+  {"id":"MCP (Model Context Protocol)","name":"MCP","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Protocol","desc":"Anthropic's protocol for connecting models to tools. Becoming the standard integration protocol.","pop":85,"layer":4,"domain":"anthropic.com"},
+  {"id":"Vapi","name":"Vapi","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Voice Agents","desc":"Developer platform for voice AI phone agents. Orchestrates STT + LLM + TTS in one pipeline.","pop":72,"layer":4,"domain":"vapi.ai"},
+  {"id":"Paperclip","name":"Paperclip","superCat":"Infrastructure","category":"Agent Frameworks","subCat":"Agent OS","desc":"Open-source OS for zero-human AI companies. Org-chart multi-agent orchestration with budget control.","pop":68,"layer":4,"domain":"paperclip.ing"},
+  {"id":"Claude Managed Agents","name":"Claude Agents","superCat":"Infrastructure","category":"Agents","subCat":"B2B Platform","desc":"Anthropic's managed agentic workflows.","pop":85,"layer":4,"domain":"anthropic.com"},
+
+  {"id":"Ollama","name":"Ollama","superCat":"Infrastructure","category":"Local Inference","subCat":"CLI Runner","desc":"Single-binary CLI with built-in model registry and OpenAI-compatible API. Standard first tool for local LLM dev.","pop":95,"layer":4,"domain":"ollama.com"},
+  {"id":"LM Studio","name":"LM Studio","superCat":"Infrastructure","category":"Local Inference","subCat":"Desktop App","desc":"Visual desktop app for browsing/downloading/chatting with models. Searches Hugging Face directly.","pop":90,"layer":4,"domain":"lmstudio.ai"},
+  {"id":"llama.cpp","name":"llama.cpp","superCat":"Infrastructure","category":"Local Inference","subCat":"Engine","desc":"Foundational C/C++ engine underneath Ollama, LM Studio. 98.6K GitHub stars.","pop":90,"layer":4,"domain":"ggml.ai"},
+  {"id":"vLLM","name":"vLLM","superCat":"Infrastructure","category":"Local Inference","subCat":"Server","desc":"Industry-standard production inference engine. PagedAttention, continuous batching, speculative decoding.","pop":85,"layer":4,"domain":"vllm.ai"},
+
+  {"id":"OpenRouter","name":"OpenRouter","superCat":"Infrastructure","category":"LLM Routing","subCat":"Multi-Provider","desc":"Single API for 400+ models from 60+ providers. Auto-routing for speed or cost optimization.","pop":75,"layer":4,"domain":"openrouter.ai"},
+  {"id":"LiteLLM","name":"LiteLLM","superCat":"Infrastructure","category":"LLM Routing","subCat":"SDK Proxy","desc":"Open-source SDK + proxy that unifies 100+ LLM APIs into OpenAI format. Standard for provider-agnostic code.","pop":78,"layer":4,"domain":"litellm.ai"},
+
+  {"id":"Pinecone","name":"Pinecone","superCat":"Infrastructure","category":"Vector DBs","subCat":"Managed Cloud","desc":"Fully managed cloud vector DB. Zero-ops, BYOC deployment. Pinecone Assistant wraps full RAG pipeline.","pop":85,"layer":4,"domain":"pinecone.io"},
+  {"id":"Weaviate","name":"Weaviate","superCat":"Infrastructure","category":"Vector DBs","subCat":"Hybrid Search","desc":"Graph-based vector DB with hybrid search (vector + keyword). Native BM25 + vector fusion.","pop":70,"layer":4,"domain":"weaviate.io"},
+  {"id":"Milvus","name":"Milvus","superCat":"Infrastructure","category":"Vector DBs","subCat":"GPU Scale","desc":"GPU-accelerated for massive scale. Managed version: Zilliz Cloud. Billion-scale deployments.","pop":70,"layer":4,"domain":"milvus.io"},
+  {"id":"pgvector","name":"pgvector","superCat":"Infrastructure","category":"Vector DBs","subCat":"Postgres","desc":"PostgreSQL extension. 471 QPS at 99% recall. Zero extra infrastructure for Postgres users.","pop":75,"layer":4,"domain":"postgresql.org"},
+  {"id":"Qdrant","name":"Qdrant","superCat":"Infrastructure","category":"Vector DBs","subCat":"Open Source","desc":"Rust-based vector search engine with superior payload filtering. Zero-copy SIMD acceleration.","pop":73,"layer":4,"domain":"qdrant.tech"},
+
+  {"id":"LangSmith","name":"LangSmith","superCat":"Infrastructure","category":"Observability","subCat":"Tracing","desc":"LangChain's tracing, evaluation and prompt management. Deepest LangChain/LangGraph integration.","pop":70,"layer":4,"domain":"smith.langchain.com"},
+  {"id":"Langfuse","name":"Langfuse","superCat":"Infrastructure","category":"Observability","subCat":"Open Source","desc":"Open-source LLM observability. Self-hosted logging, eval, prompt versioning. Framework-agnostic.","pop":72,"layer":4,"domain":"langfuse.com"},
+  {"id":"Weights & Biases","name":"Weights & Biases","superCat":"Infrastructure","category":"Observability","subCat":"MLOps","desc":"Industry-standard MLOps/LLMOps platform. W&B Models + W&B Weave. Acquired by CoreWeave.","pop":85,"layer":4,"domain":"wandb.ai"},
+  {"id":"Comet ML","name":"Comet ML","superCat":"Infrastructure","category":"Observability","subCat":"Experiment Tracking","desc":"AI developer platform with Opik open-source LLMOps. 150K+ developers.","pop":70,"layer":4,"domain":"comet.com"},
+
+  {"id":"Scale AI","name":"Scale AI","superCat":"Infrastructure","category":"Data & Eval","subCat":"Data Labeling","desc":"Industry-leading data platform. AI pre-labeling + human annotation. Clients: OpenAI, Meta, US gov.","pop":80,"layer":4,"domain":"scale.com"},
+  {"id":"LMSYS Chatbot Arena","name":"LM Arena","superCat":"Infrastructure","category":"Data & Eval","subCat":"Benchmarks","desc":"Crowdsourced Elo-style human preference rankings. Industry-standard LLM benchmark.","pop":70,"layer":4,"domain":"lmarena.ai"},
+
+  {"id":"Apify","name":"Apify","superCat":"Infrastructure","category":"Web Data","subCat":"Scraping","desc":"De facto standard for web scraping at scale. 4000+ ready-made Actors. MCP server available.","pop":75,"layer":4,"domain":"apify.com"},
+  {"id":"Firecrawl","name":"Firecrawl","superCat":"Infrastructure","category":"Web Data","subCat":"LLM-Ready","desc":"High-fidelity scraping API converting websites to LLM-ready markdown. Built for AI ingestion.","pop":73,"layer":4,"domain":"firecrawl.dev"},
+
+  {"id":"NemoClaw","name":"NemoClaw","superCat":"Infrastructure","category":"AI Safety","subCat":"Agent Security","desc":"NVIDIA's security layer wrapping OpenClaw with enterprise-grade privacy controls. Sandboxed agent execution.","pop":55,"layer":4,"domain":"nvidia.com"},
+  {"id":"Lakera Guard","name":"Lakera Guard","superCat":"Infrastructure","category":"AI Safety","subCat":"Prompt Security","desc":"Real-time defense against prompt injection, data leakage, and jailbreaks. Low-latency API. ISO 27001.","pop":65,"layer":4,"domain":"lakera.ai"},
+  {"id":"NeMo Guardrails","name":"NeMo Guardrails","superCat":"Infrastructure","category":"AI Safety","subCat":"Policy Rails","desc":"NVIDIA open-source toolkit for adding programmable guardrails to LLM apps. Topic, safety, and factuality rails.","pop":68,"layer":4,"domain":"nvidia.com"},
+
+  // L5 Applications
+  {"id":"GitHub Copilot","name":"GitHub Copilot","superCat":"Tools","category":"Coding","subCat":"Editor Plugin","desc":"Most widely adopted: 15M+ developers. Multi-model support. Coding agent for PRs.","pop":100,"layer":5,"domain":"github.com"},
+  {"id":"Cursor","name":"Cursor","superCat":"Tools","category":"Coding","subCat":"AI IDE","desc":"AI-first IDE. $2B+ ARR, $29.3B valuation. Parallel agents (up to 8 simultaneous).","pop":95,"layer":5,"domain":"cursor.com"},
+  {"id":"Claude Code","name":"Claude Code","superCat":"Tools","category":"Coding","subCat":"Terminal Agent","desc":"Terminal-first coding agent. 80.9% SWE-bench. Agent Teams (Feb 2026).","pop":85,"layer":5,"domain":"anthropic.com"},
+  {"id":"Windsurf (Codeium)","name":"Windsurf","superCat":"Tools","category":"Coding","subCat":"AI IDE","desc":"Acquired by OpenAI ~$3B. Cascade agent with 5 parallel agents. Best value at $15/mo.","pop":70,"layer":5,"domain":"codeium.com"},
+  {"id":"Cline","name":"Cline","superCat":"Tools","category":"Coding","subCat":"VS Code Agent","desc":"Open-source autonomous VS Code coding agent. Plan/Act mode, bring-your-own-model. 30K+ GitHub stars.","pop":70,"layer":5,"domain":"cline.bot"},
+  {"id":"Amazon Q Developer","name":"Amazon Q Dev","superCat":"Tools","category":"Coding","subCat":"Enterprise IDE","desc":"AWS coding assistant with deep AWS SDK awareness. Code transformations, security scans, test generation.","pop":68,"layer":5,"domain":"aws.amazon.com"},
+
+  {"id":"Lovable","name":"Lovable","superCat":"Tools","category":"Vibe Coding","subCat":"App Builder","desc":"Chat-based full-stack app generation. $400M ARR. Automated RLS security scanning.","pop":83,"layer":5,"domain":"lovable.dev"},
+  {"id":"v0","name":"v0 (Vercel)","superCat":"Tools","category":"Vibe Coding","subCat":"UI Generator","desc":"Vercel's AI UI component generator. Production-ready React/Next.js from prompts.","pop":77,"layer":5,"domain":"v0.dev"},
+  {"id":"Bolt","name":"Bolt.new","superCat":"Tools","category":"Vibe Coding","subCat":"App Builder","desc":"StackBlitz AI full-stack builder running in-browser. Powered by WebContainers.","pop":74,"layer":5,"domain":"bolt.new"},
+  {"id":"Replit","name":"Replit","superCat":"Tools","category":"Vibe Coding","subCat":"Browser IDE","desc":"AI-first browser IDE. Agent v3 autonomously builds, tests, deploys. $10M→$100M ARR in 9 months.","pop":85,"layer":5,"domain":"replit.com"},
+  {"id":"Emergent","name":"Emergent","superCat":"Tools","category":"Vibe Coding","subCat":"App Builder","desc":"YC-backed vibe-coding. $50M ARR, 5M+ users, $300M valuation (SoftBank/Khosla).","pop":76,"layer":5,"domain":"emergent.sh"},
+  {"id":"NxCode","name":"NxCode","superCat":"Tools","category":"Vibe Coding","subCat":"No-Code AI","desc":"AI-first no-code app builder. Natural-language to production apps with hosted backend and auth.","pop":62,"layer":5,"domain":"nxcode.ai"},
+
+  {"id":"Claude Design","name":"Claude Design","superCat":"Tools","category":"Design","subCat":"Conversational UI","desc":"Anthropic's conversational UI prototyping. Ingests wireframes, Figma, codebases.","pop":77,"layer":5,"domain":"anthropic.com"},
+  {"id":"Google Stitch","name":"Google Stitch","superCat":"Tools","category":"Design","subCat":"Voice Design","desc":"Voice-prompted AI UI generator. Autonomous multi-page interface generation. Exports HTML/Tailwind.","pop":72,"layer":5,"domain":"google.com"},
+  {"id":"Canva Magic Studio","name":"Canva","superCat":"Tools","category":"Design","subCat":"Visual Design","desc":"AI-enhanced design. Magic Design, background removal, AI image gen, brand kit.","pop":90,"layer":5,"domain":"canva.com"},
+  {"id":"Figma AI","name":"Figma AI","superCat":"Tools","category":"Design","subCat":"Product Design","desc":"Figma's AI features: Make Designs, Make Prototype, visual search, auto-rename layers. Native design-AI for 4M+ designers.","pop":82,"layer":5,"domain":"figma.com","imgUrl":"https://logo.clearbit.com/figma.com"},
+
+  {"id":"Microsoft Copilot","name":"MS Copilot","superCat":"Tools","category":"Productivity","subCat":"Office Suite","desc":"AI across Word, Excel, PowerPoint, Teams, Outlook. Copilot Studio for custom agents.","pop":90,"layer":5,"domain":"microsoft.com"},
+  {"id":"Notion AI","name":"Notion AI","superCat":"Tools","category":"Productivity","subCat":"Notes & Docs","desc":"AI summarization, generation, Q&A across workspace.","pop":80,"layer":5,"domain":"notion.com"},
+  {"id":"Grammarly","name":"Grammarly","superCat":"Tools","category":"Productivity","subCat":"Writing","desc":"AI writing with real-time suggestions. Brand voice consistency for teams.","pop":85,"layer":5,"domain":"grammarly.com"},
+  {"id":"Gamma","name":"Gamma","superCat":"Tools","category":"Productivity","subCat":"Presentations","desc":"AI presentations in under 60 seconds. 70M+ users, ~$100M ARR.","pop":70,"layer":5,"domain":"gamma.app"},
+  {"id":"DeepL","name":"DeepL","superCat":"Tools","category":"Productivity","subCat":"Translation","desc":"Superior accuracy vs Google Translate. Natural fluency across 30+ languages.","pop":75,"layer":5,"domain":"deepl.com"},
+  {"id":"Numerous.ai","name":"Numerous.ai","superCat":"Tools","category":"Productivity","subCat":"Spreadsheet AI","desc":"AI assistant for Excel and Google Sheets. Bulk sentiment, formula generation.","pop":70,"layer":5,"domain":"numerous.ai"},
+  {"id":"Taskade","name":"Taskade","superCat":"Tools","category":"Productivity","subCat":"AI Workspace","desc":"Unified AI project/task workspace. Custom AI agents automate docs, tasks, and team workflows.","pop":68,"layer":5,"domain":"taskade.com"},
+  {"id":"Wispr Flow","name":"Wispr Flow","superCat":"Tools","category":"Productivity","subCat":"Voice Dictation","desc":"AI voice dictation that writes like you do in any app. 4x faster than typing; instant formatting.","pop":65,"layer":5,"domain":"wisprflow.ai"},
+  {"id":"Claude CoWork","name":"Claude CoWork","superCat":"Tools","category":"Productivity","subCat":"Workspace","desc":"Collaborative workspace powered by Claude.","pop":80,"layer":5,"domain":"anthropic.com"},
+  {"id":"Gemini for Workspace","name":"Gemini Workspace","superCat":"Tools","category":"Productivity","subCat":"Office Suite","desc":"Gemini 3.x integrated across Gmail, Docs, Sheets, Slides, Meet. Enterprise AI for Google Workspace customers.","pop":85,"layer":5,"domain":"workspace.google.com","imgUrl":"https://logo.clearbit.com/workspace.google.com"},
+
+  // OS Assistants (new subcategory)
+  {"id":"Apple Intelligence","name":"Apple Intelligence","superCat":"Tools","category":"OS Assistants","subCat":"Device AI","desc":"On-device + Private Cloud Compute AI across iPhone, iPad, Mac. Writing Tools, Genmoji, Image Playground, Siri upgrades.","pop":90,"layer":5,"domain":"apple.com","imgUrl":"https://logo.clearbit.com/apple.com"},
+
+  {"id":"Zapier","name":"Zapier","superCat":"Tools","category":"Automation","subCat":"Workflow","desc":"Connects 7000+ apps with AI automation. Tables, AI Chatbots, model orchestration.","pop":90,"layer":5,"domain":"zapier.com"},
+  {"id":"Make","name":"Make","superCat":"Tools","category":"Automation","subCat":"Workflow","desc":"Visual workflow automation with complex multi-step scenarios. Strong for data transformation.","pop":70,"layer":5,"domain":"make.com"},
+  {"id":"n8n","name":"n8n","superCat":"Tools","category":"Automation","subCat":"Open Source","desc":"Open-source AI workflow automation. AI Agent node. 230K+ users, $2.5B valuation.","pop":82,"layer":5,"domain":"n8n.io"},
+  {"id":"Clay","name":"Clay","superCat":"Tools","category":"Automation","subCat":"GTM Enrichment","desc":"AI-powered GTM data enrichment. Claygent + 150+ providers. 300K+ teams, $3.1B valuation.","pop":72,"layer":5,"domain":"clay.com"},
+  {"id":"Google Opal","name":"Google Opal","superCat":"Tools","category":"Automation","subCat":"No-Code AI","desc":"Experimental no-code Gemini 2.5 Pro workflow builder. Visual model chaining.","pop":70,"layer":5,"domain":"google.com"},
+  {"id":"Gumloop","name":"Gumloop","superCat":"Tools","category":"Automation","subCat":"No-Code AI","desc":"No-code AI automation platform. Drag-and-drop multi-step AI workflows with 140+ integrations.","pop":64,"layer":5,"domain":"gumloop.com"},
+  {"id":"Lindy AI","name":"Lindy AI","superCat":"Tools","category":"Automation","subCat":"AI Employees","desc":"No-code AI employees. Email, calendar, sales, and support agents. $50M+ funding.","pop":66,"layer":5,"domain":"lindy.ai"},
+
+  {"id":"Perplexity","name":"Perplexity","superCat":"Tools","category":"Research","subCat":"AI Search","desc":"AI search engine with cited conversational answers. Deep Research mode for reports.","pop":90,"layer":5,"domain":"perplexity.ai"},
+  {"id":"NotebookLM","name":"NotebookLM","superCat":"Tools","category":"Research","subCat":"Knowledge","desc":"Google's AI notebook grounded in user's own sources. Added presentation generation.","pop":75,"layer":5,"domain":"notebooklm.google"},
+  {"id":"Gemini Deep Research","name":"Gemini Research","superCat":"Tools","category":"Research","subCat":"AI Search","desc":"Autonomous multi-step web research by Google. Feeds intelligence into NotebookLM.","pop":80,"layer":5,"domain":"gemini.google.com"},
+  {"id":"Julius AI","name":"Julius AI","superCat":"Tools","category":"Research","subCat":"Data Analysis","desc":"AI data analyst. CSV, Excel, Snowflake, BigQuery. Natural-language Q&A, sandboxed Python.","pop":68,"layer":5,"domain":"julius.ai"},
+  {"id":"Elicit","name":"Elicit","superCat":"Tools","category":"Research","subCat":"Academic","desc":"AI research assistant for scientific literature. Searches 125M papers, extracts data, systematic reviews.","pop":68,"layer":5,"domain":"elicit.com"},
+  {"id":"Consensus","name":"Consensus","superCat":"Tools","category":"Research","subCat":"Academic","desc":"Evidence-based AI search engine for academic research. Surfaces scientific consensus with citations.","pop":67,"layer":5,"domain":"consensus.app"},
+
+  {"id":"Midjourney","name":"Midjourney","superCat":"Creative AI","category":"Image Gen","subCat":"Proprietary","desc":"Pioneer of AI art. V7 model. Exceptional artistic quality.","pop":95,"layer":5,"domain":"midjourney.com"},
+  {"id":"GPT Image 1/1.5 (OpenAI)","name":"GPT Image","superCat":"Creative AI","category":"Image Gen","subCat":"Proprietary","desc":"Highest LM Arena score (1264). Best text rendering. Conversational editing.","pop":90,"layer":5,"domain":"openai.com"},
+  {"id":"Adobe Firefly","name":"Firefly","superCat":"Creative AI","category":"Image Gen","subCat":"Enterprise","desc":"Commercially safe with licensed training data. Integrated into Photoshop.","pop":80,"layer":5,"domain":"adobe.com"},
+  {"id":"Ideogram","name":"Ideogram","superCat":"Creative AI","category":"Image Gen","subCat":"Text-in-Image","desc":"Best-in-class AI image generator for text-in-image accuracy (~90%). V3 leads typography niche.","pop":72,"layer":5,"domain":"ideogram.ai"},
+  {"id":"Recraft","name":"Recraft","superCat":"Creative AI","category":"Image Gen","subCat":"Vector SVG","desc":"Only AI tool generating native SVG vectors. V4 beats Midjourney on HF benchmark.","pop":73,"layer":5,"domain":"recraft.ai"},
+  {"id":"Nano Banana 2","name":"Nano Banana 2","superCat":"Creative AI","category":"Image Gen","subCat":"Proprietary","desc":"Google DeepMind's viral image-edit model (Gemini image). Best-in-class instruction-following edits, character consistency, multi-turn image chats.","pop":88,"layer":5,"domain":"deepmind.google","imgUrl":"https://logo.clearbit.com/deepmind.google"},
+  {"id":"Leonardo AI","name":"Leonardo AI","superCat":"Creative AI","category":"Image Gen","subCat":"Creator Platform","desc":"Image-gen platform for game, film, and creator workflows. Phoenix model + Canvas editor. Acquired by Canva (2024).","pop":75,"layer":5,"domain":"leonardo.ai","imgUrl":"https://logo.clearbit.com/leonardo.ai"},
+  {"id":"Photoroom","name":"Photoroom","superCat":"Creative AI","category":"Image Gen","subCat":"Photo Editing","desc":"AI photo editor used by 250M+ users. Background removal, AI backgrounds, batch editing for e-commerce.","pop":74,"layer":5,"domain":"photoroom.com","imgUrl":"https://logo.clearbit.com/photoroom.com"},
+
+  {"id":"Google Veo 3.1","name":"Google Veo","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"Best-in-class prompt adherence, native audio, 4K near-photorealistic.","pop":85,"layer":5,"domain":"deepmind.google"},
+  {"id":"Runway Gen-4.5","name":"Runway","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"Pioneer of AI video editing + generation.","pop":80,"layer":5,"domain":"runwayml.com"},
+  {"id":"Kling 2.6/3.0","name":"Kling","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"Simultaneous audio-visual 1080p/30fps up to 2 min. 10M+ videos produced.","pop":70,"layer":5,"domain":"kling.ai"},
+  {"id":"Luma AI","name":"Luma AI","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"Dream Machine + Ray 3. Best physics-based realism. $4B valuation.","pop":82,"layer":5,"domain":"lumalabs.ai"},
+  {"id":"Pika","name":"Pika","superCat":"Creative AI","category":"Video Gen","subCat":"Social Video","desc":"Fast social-first AI video with built-in Sound Effects Engine.","pop":72,"layer":5,"domain":"pika.art"},
+  {"id":"Higgsfield","name":"Higgsfield","superCat":"Creative AI","category":"Video Gen","subCat":"Multi-Model","desc":"Aggregates Sora 2, Veo 3.1, Kling 3.0, Seedance 2.0 in one studio. ~4M videos/day.","pop":72,"layer":5,"domain":"higgsfield.ai"},
+  {"id":"CapCut","name":"CapCut","superCat":"Creative AI","category":"Video Gen","subCat":"AI Editor","desc":"World's most-downloaded video editing app (ByteDance). AI auto-captions, voice changer, avatars.","pop":88,"layer":5,"domain":"capcut.com"},
+  {"id":"Sora","name":"Sora","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"OpenAI's flagship video generator. Sora 2 delivers long-form, physically consistent clips with native audio. Sora.com social feed.","pop":92,"layer":5,"domain":"sora.com","imgUrl":"https://logo.clearbit.com/openai.com"},
+  {"id":"Hailuo","name":"Hailuo","superCat":"Creative AI","category":"Video Gen","subCat":"Text-to-Video","desc":"MiniMax's consumer video app. Photo-realistic text/image-to-video, motion control, multi-shot scenes. Dominant in APAC.","pop":80,"layer":5,"domain":"hailuoai.video","imgUrl":"https://logo.clearbit.com/minimax.io"},
+
+  {"id":"HeyGen","name":"HeyGen","superCat":"Creative AI","category":"Avatar & Voice","subCat":"AI Avatar","desc":"100+ AI avatars, 175+ languages. Avatar IV is most photorealistic.","pop":70,"layer":5,"domain":"heygen.com"},
+  {"id":"Synthesia","name":"Synthesia","superCat":"Creative AI","category":"Avatar & Voice","subCat":"AI Avatar","desc":"Pioneered AI avatar video. $4B valuation. 60%+ of Fortune 100.","pop":75,"layer":5,"domain":"synthesia.io"},
+  {"id":"ElevenLabs","name":"ElevenLabs","superCat":"Creative AI","category":"Avatar & Voice","subCat":"Voice Cloning","desc":"Gold standard for voice cloning. $11B valuation. Turbo v2.5 in 32 languages.","pop":95,"layer":5,"domain":"elevenlabs.io"},
+  {"id":"Descript","name":"Descript","superCat":"Creative AI","category":"Avatar & Voice","subCat":"AV Editor","desc":"AI-first text-based video/podcast editor. Edit by editing transcript. Overdub voice cloning.","pop":74,"layer":5,"domain":"descript.com"},
+
+  {"id":"Suno","name":"Suno","superCat":"Creative AI","category":"Music Gen","subCat":"AI Music","desc":"Best AI music generator. Full songs with vocals, lyrics. ~100M users.","pop":90,"layer":5,"domain":"suno.com"},
+  {"id":"Udio","name":"Udio","superCat":"Creative AI","category":"Music Gen","subCat":"AI Music","desc":"Strong on instrumentals. Settled with UMG. Competitive with Suno.","pop":70,"layer":5,"domain":"udio.com"},
+
+  {"id":"Deepgram","name":"Deepgram","superCat":"Creative AI","category":"Speech & STT","subCat":"Real-time","desc":"Nova-3 achieves 5.26% WER. Best for real-time transcription and voice agents.","pop":70,"layer":5,"domain":"deepgram.com"},
+  {"id":"Otter.ai","name":"Otter.ai","superCat":"Creative AI","category":"Speech & STT","subCat":"Meetings","desc":"Real-time meeting transcription and note-taking.","pop":70,"layer":5,"domain":"otter.ai"},
+
+  {"id":"OpenClaw","name":"OpenClaw","superCat":"Infrastructure","category":"Agents","subCat":"Personal Agent","desc":"Open-source personal AI agent connecting 20+ messaging platforms. 247K+ stars.","pop":80,"layer":5,"domain":"github.com"},
+  {"id":"Manus AI","name":"Manus AI","superCat":"Infrastructure","category":"Agents","subCat":"General Agent","desc":"General-purpose autonomous agent. 86.5% on GAIA. Acquired by Meta ~$2B.","pop":70,"layer":5,"domain":"manus.im"},
+  {"id":"OpenAI Operator","name":"Operator","superCat":"Infrastructure","category":"Agents","subCat":"Browser Agent","desc":"Web browsing agent in ChatGPT. Executes multi-step web tasks autonomously.","pop":75,"layer":5,"domain":"openai.com"},
+  {"id":"Relevance AI","name":"Relevance AI","superCat":"Infrastructure","category":"Agents","subCat":"B2B Platform","desc":"B2B autonomous AI workforce. Copilot-to-autopilot maturity model. SOC 2 compliant.","pop":77,"layer":5,"domain":"relevanceai.com"},
+  {"id":"Devin","name":"Devin","superCat":"Infrastructure","category":"Agents","subCat":"SWE Agent","desc":"Autonomous AI software engineer. Writes code, runs tests, creates PRs. Cognition AI: $10.2B.","pop":78,"layer":5,"domain":"devin.ai"},
+  {"id":"Polsia","name":"Polsia","superCat":"Infrastructure","category":"Agents","subCat":"Autonomous Builder","desc":"Autonomous AI company builder. $1M ARR in 30 days post-launch.","pop":62,"layer":5,"domain":"polsia.com"},
+  {"id":"Skyvern","name":"Skyvern","superCat":"Infrastructure","category":"Agents","subCat":"Browser Agent","desc":"Open-source LLM + computer vision browser automation agent. 13K+ GitHub stars. YC W24.","pop":64,"layer":5,"domain":"skyvern.com"},
+
+  {"id":"ChatGPT Chat","name":"ChatGPT","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"OpenAI's flagship conversational interface.","pop":100,"layer":5,"domain":"chatgpt.com"},
+  {"id":"Claude Chat","name":"Claude","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"Anthropic's flagship chat interface.","pop":95,"layer":5,"domain":"claude.ai"},
+  {"id":"Gemini Chat","name":"Gemini Chat","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"Google's flagship conversational AI.","pop":95,"layer":5,"domain":"gemini.google.com"},
+  {"id":"Grok Chat","name":"Grok Chat","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"xAI's consumer chatbot on Grok 4. Real-time X/Twitter feed awareness. Imagine video gen built in.","pop":78,"layer":5,"domain":"x.ai"},
+  {"id":"Meta AI","name":"Meta AI","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"Meta's Llama-powered assistant across WhatsApp, Instagram, Messenger, and Ray-Ban Meta glasses. Billion+ MAU reach.","pop":85,"layer":5,"domain":"meta.ai","imgUrl":"https://logo.clearbit.com/meta.com"},
+  {"id":"Character.ai","name":"Character.ai","superCat":"Tools","category":"Chat","subCat":"Companion AI","desc":"Role-play and companion chatbot platform. 20M+ MAU, highest-engagement AI app by time-spent. Founders returned to Google.","pop":80,"layer":5,"domain":"character.ai","imgUrl":"https://logo.clearbit.com/character.ai"},
+  {"id":"DeepSeek Chat","name":"DeepSeek Chat","superCat":"Tools","category":"Chat","subCat":"Consumer Chatbot","desc":"DeepSeek's free consumer chatbot on V3/R1. Viral adoption Jan 2025; #1 App Store globally for reasoning-grade free chat.","pop":82,"layer":5,"domain":"deepseek.com","imgUrl":"https://logo.clearbit.com/deepseek.com"},
+
+  {"id":"Harvey","name":"Harvey","superCat":"Tools","category":"Legal AI","subCat":"Law Firm Copilot","desc":"AI copilot for lawyers. Contract review, case research, drafting. Used by 235+ elite law firms. $5B valuation.","pop":72,"layer":5,"domain":"harvey.ai"},
+  {"id":"Spellbook","name":"Spellbook","superCat":"Tools","category":"Legal AI","subCat":"Contract AI","desc":"AI contract drafting and review in MS Word. Redlines, risk flags, clause library. 2500+ firms.","pop":63,"layer":5,"domain":"spellbook.legal"},
+
+  {"id":"Abridge","name":"Abridge","superCat":"Tools","category":"Healthcare AI","subCat":"Clinical Scribe","desc":"AI medical scribe generating clinical notes from doctor-patient conversations. Epic-integrated. $2.75B valuation.","pop":70,"layer":5,"domain":"abridge.com"},
+
+  {"id":"Meshy","name":"Meshy","superCat":"Creative AI","category":"3D Gen","subCat":"Text-to-3D","desc":"Text and image to 3D mesh generator. Game-ready PBR textures, auto-rigging. Used in Unity and Unreal workflows.","pop":66,"layer":5,"domain":"meshy.ai"},
+  {"id":"Tripo AI","name":"Tripo AI","superCat":"Creative AI","category":"3D Gen","subCat":"Text-to-3D","desc":"High-fidelity 3D asset generation from text/images. 30s production-ready mesh. Tripo 3.0 animation support.","pop":64,"layer":5,"domain":"tripo3d.ai"},
+
+  {"id":"Boston Dynamics","name":"Boston Dynamics","superCat":"Emerging","category":"Robotics","subCat":"Humanoid","desc":"Electric Atlas entering production 2026. Spot + Stretch commercially deployed.","pop":85,"layer":5,"domain":"bostondynamics.com"},
+  {"id":"Tesla Optimus","name":"Optimus","superCat":"Emerging","category":"Robotics","subCat":"Humanoid","desc":"Gen 3 demonstrated autonomous task learning. Targeting mass production.","pop":80,"layer":5,"domain":"tesla.com"},
+  {"id":"Figure AI","name":"Figure AI","superCat":"Emerging","category":"Robotics","subCat":"Humanoid","desc":"General-purpose humanoid (Figure 03). $39B Series C. BMW Spartanburg pilot.","pop":70,"layer":5,"domain":"figure.ai"}
+];
+
+// ==== DATA: LINKS ====
+const LINKS_RAW = [
+  // L0 → L1
+  ["TSMC","NVIDIA","manufactures",5,"Fabricates Blackwell B300 GPUs on 3nm"],
+  ["TSMC","AMD","manufactures",5,"Fabricates MI355X on 3nm"],
+  ["TSMC","Apple Neural Engine","manufactures",5,"Fabricates M-series and Neural Engine"],
+  ["TSMC","Qualcomm NPU","manufactures",4,"Fabricates Snapdragon + Cloud AI 100"],
+  ["TSMC","Groq","manufactures",3,"Fabricates LPU inference chips"],
+  ["TSMC","Google TPU","manufactures",4,"Fabricates TPU v5p and Trillium"],
+  ["TSMC","AWS Trainium","manufactures",4,"Fabricates Trainium3"],
+  ["TSMC","Cerebras","manufactures",3,"Fabricates wafer-scale WSE-3"],
+  ["Samsung Foundry","NVIDIA","manufactures",3,"Dual-sources select Blackwell dies"],
+  ["Samsung Foundry","Qualcomm NPU","manufactures",3,"Fabricates Exynos and legacy Snapdragon"],
+  ["Intel Foundry","AWS Trainium","manufactures",2,"Secondary-source AWS networking chips"],
+  ["SMIC","Qualcomm NPU","manufactures",2,"Fabricates mid-range Snapdragon for China market"],
+
+  // L1 → L2
+  ["NVIDIA","AWS Bedrock","powers",5,"H100/B200 clusters power Bedrock inference"],
+  ["NVIDIA","Azure AI","powers",5,"GB200 NVL72 racks power Azure OpenAI"],
+  ["NVIDIA","Google Vertex AI","powers",4,"Supplements TPU with Blackwell GPUs"],
+  ["NVIDIA","Hugging Face","powers",4,"Powers Inference Endpoints and DGX Cloud"],
+  ["NVIDIA","Replicate","powers",4,"H100/A100 pool for on-demand model inference"],
+  ["NVIDIA","Together AI","powers",4,"H200 clusters for open-model inference"],
+  ["AMD","Azure AI","powers",3,"MI300X clusters for Azure ND-MI300x VMs"],
+  ["AMD","AWS Bedrock","powers",3,"AMD Instinct option in EC2 AI instances"],
+  ["Google TPU","Google Vertex AI","powers",5,"Trillium TPUs serve Gemini on Vertex"],
+  ["AWS Trainium","AWS Bedrock","powers",5,"Trainium3 serves Claude/Llama on Bedrock"],
+  ["Cerebras","Together AI","powers",2,"CS-3 offered as fast-inference option"],
+  ["Groq","OpenRouter","powers",3,"GroqCloud routes ultra-low-latency inference"],
+
+  // L2 → L3
+  ["AWS Bedrock","Claude 4.x (Anthropic)","hosts",5,"Primary enterprise distribution for Claude"],
+  ["AWS Bedrock","Llama 4","hosts",4,"Meta official Bedrock distribution"],
+  ["AWS Bedrock","Mistral 3","hosts",3,"Mistral Large on Bedrock"],
+  ["AWS Bedrock","DeepSeek V3/R1","hosts",2,"DeepSeek available via Bedrock Marketplace"],
+  ["Azure AI","OpenAI GPT-5","hosts",5,"Exclusive enterprise-tier distribution for GPT"],
+  ["Azure AI","Mistral 3","hosts",3,"Mistral Large strategic partnership"],
+  ["Azure AI","Llama 4","hosts",3,"Azure ML Model Catalog"],
+  ["Azure AI","Phi-4","hosts",4,"Microsoft's own small model on Azure"],
+  ["Google Vertex AI","Gemini 3.x (Google)","hosts",5,"Native hosting for Gemini"],
+  ["Google Vertex AI","Claude 4.x (Anthropic)","hosts",3,"Claude on Vertex via partnership"],
+  ["Google Vertex AI","Llama 4","hosts",3,"Vertex Model Garden"],
+  ["Google Vertex AI","Gemma 4","hosts",4,"Native Gemma hosting on Vertex"],
+  ["Google Vertex AI","Lyria 3","hosts",3,"Vertex hosts Lyria music model API"],
+  ["Hugging Face","Llama 4","hosts",5,"Canonical distribution point"],
+  ["Hugging Face","Mistral 3","hosts",4,"Canonical open-weight distribution"],
+  ["Hugging Face","DeepSeek V3/R1","hosts",4,"Canonical Chinese open-weight hub"],
+  ["Hugging Face","Qwen 3.5 (Alibaba)","hosts",3,"Qwen weights distributed via HF"],
+  ["Hugging Face","Kimi K2.5 (Moonshot)","hosts",2,"Moonshot releases on HF"],
+  ["Hugging Face","GLM-5","hosts",2,"Zhipu open weights distribution"],
+  ["Hugging Face","MiniMax M2.5","hosts",2,"MiniMax weights on HF"],
+  ["Hugging Face","Gemma 4","hosts",3,"Google's canonical Gemma publish location"],
+  ["Hugging Face","Phi-4","hosts",3,"Microsoft Phi published on HF"],
+  ["Hugging Face","Stable Diffusion","hosts",4,"Stability releases weights on HF"],
+  ["Hugging Face","Flux 2","hosts",3,"Black Forest Labs publishes on HF"],
+  ["Hugging Face","Whisper (OpenAI)","hosts",3,"OpenAI Whisper weights on HF"],
+  ["Replicate","Stable Diffusion","hosts",4,"Flagship hosted image model"],
+  ["Replicate","Flux 2","hosts",3,"Flux versions hosted on Replicate"],
+  ["Replicate","Llama 4","hosts",2,"Llama available for inference"],
+  ["Replicate","Seedance","hosts",3,"Seedance video model hosted for API access"],
+  ["Together AI","Llama 4","hosts",4,"Fastest Llama inference on GPU cloud"],
+  ["Together AI","DeepSeek V3/R1","hosts",4,"Fastest DeepSeek-R1 on GPU cloud"],
+  ["Together AI","Mistral 3","hosts",3,"Mistral models hosted for inference"],
+  ["Together AI","Qwen 3.5 (Alibaba)","hosts",3,"Qwen models hosted for inference"],
+
+  // L3 ↔ L4
+  ["MCP (Model Context Protocol)","Claude 4.x (Anthropic)","built-on",5,"Authored by Anthropic alongside Claude"],
+  ["Seedance","CapCut","integrates",4,"Seedance video model powers CapCut AI features"],
+
+  // L4 → L3
+  ["LangChain","OpenAI GPT-5","integrates",5,"Native GPT chat provider"],
+  ["LangChain","Claude 4.x (Anthropic)","integrates",5,"Native Anthropic chat provider"],
+  ["LangChain","Gemini 3.x (Google)","integrates",4,"Native Gemini chat provider"],
+  ["LangChain","Mistral 3","integrates",3,"Mistral chat provider"],
+  ["LangChain","Ollama","integrates",3,"Ollama runner integration"],
+  ["LangGraph","LangChain","built-on",5,"Graph orchestration built on LangChain primitives"],
+  ["CrewAI","LangChain","built-on",3,"Agents compose LangChain tools"],
+  ["LlamaIndex","OpenAI GPT-5","integrates",4,"Primary LLM for RAG"],
+  ["LlamaIndex","Claude 4.x (Anthropic)","integrates",4,"Claude for long-context RAG"],
+  ["LlamaIndex","Gemini 3.x (Google)","integrates",3,"Gemini RAG integration"],
+  ["AutoGen","OpenAI GPT-5","integrates",4,"Default conversation agent backend"],
+  ["AutoGen","Claude 4.x (Anthropic)","integrates",3,"Claude-backed conversation agents"],
+  ["AutoGen","Azure AI","integrates",4,"Native Azure OpenAI integration"],
+  ["Semantic Kernel","Azure AI","built-on",5,"Microsoft-native orchestration layer over Azure OpenAI"],
+  ["Semantic Kernel","OpenAI GPT-5","integrates",4,"Default LLM provider"],
+  ["Pydantic AI","OpenAI GPT-5","integrates",3,"Structured outputs via GPT function calling"],
+  ["Pydantic AI","Claude 4.x (Anthropic)","integrates",3,"Claude provider with Pydantic schemas"],
+  ["Pydantic AI","Gemini 3.x (Google)","integrates",3,"Gemini structured output integration"],
+  ["MCP (Model Context Protocol)","OpenAI GPT-5","integrates",3,"OpenAI adopted MCP as standard"],
+  ["Vapi","OpenAI GPT-5","integrates",3,"GPT LLM in voice agent pipeline"],
+  ["Vapi","Claude 4.x (Anthropic)","integrates",3,"Claude LLM in voice agent pipeline"],
+  ["Vapi","Deepgram","integrates",4,"Deepgram STT in voice pipeline"],
+  ["Vapi","ElevenLabs","integrates",4,"ElevenLabs TTS in voice pipeline"],
+  ["Paperclip","OpenAI GPT-5","integrates",3,"GPT as org-agent backend"],
+  ["Paperclip","Claude 4.x (Anthropic)","integrates",3,"Claude as org-agent backend"],
+
+  // Routing
+  ["OpenRouter","OpenAI GPT-5","routes",4,"Unified routing to GPT endpoints"],
+  ["OpenRouter","Claude 4.x (Anthropic)","routes",4,"Unified routing to Claude endpoints"],
+  ["OpenRouter","Gemini 3.x (Google)","routes",3,"Unified routing to Gemini"],
+  ["OpenRouter","Llama 4","routes",3,"Routes Llama via open-inference providers"],
+  ["OpenRouter","DeepSeek V3/R1","routes",3,"Routes DeepSeek endpoints"],
+  ["OpenRouter","Qwen 3.5 (Alibaba)","routes",2,"Routes Qwen endpoints"],
+  ["OpenRouter","Kimi K2.5 (Moonshot)","routes",2,"Routes Kimi endpoints"],
+  ["OpenRouter","Mistral 3","routes",2,"Routes Mistral endpoints"],
+  ["OpenRouter","Grok 4","routes",3,"Routes xAI Grok endpoints"],
+  ["LiteLLM","OpenAI GPT-5","routes",4,"OpenAI SDK-compatible wrapper"],
+  ["LiteLLM","Claude 4.x (Anthropic)","routes",4,"Unified Anthropic wrapper"],
+  ["LiteLLM","Gemini 3.x (Google)","routes",3,"Unified Gemini wrapper"],
+  ["LiteLLM","AWS Bedrock","routes",4,"Bedrock in OpenAI-format"],
+  ["LiteLLM","Azure AI","routes",4,"Azure OpenAI unified access"],
+
+  // Local inference
+  ["Ollama","Llama 4","runs",5,"Default local runner for Llama"],
+  ["Ollama","Mistral 3","runs",3,"Local Mistral models"],
+  ["Ollama","DeepSeek V3/R1","runs",3,"Local DeepSeek distillations"],
+  ["Ollama","Qwen 3.5 (Alibaba)","runs",2,"Local Qwen models"],
+  ["Ollama","Gemma 4","runs",3,"Local Gemma models"],
+  ["Ollama","Phi-4","runs",3,"Local Phi model"],
+  ["llama.cpp","Llama 4","runs",5,"Reference CPU/GPU inference engine"],
+  ["llama.cpp","Mistral 3","runs",3,"Mistral local inference"],
+  ["llama.cpp","Gemma 4","runs",3,"Gemma local inference"],
+  ["LM Studio","llama.cpp","built-on",4,"Desktop GUI over llama.cpp"],
+  ["LM Studio","Ollama","integrates",3,"Imports Ollama model library"],
+  ["vLLM","Llama 4","runs",4,"High-throughput Llama serving"],
+  ["vLLM","Mistral 3","runs",3,"High-throughput Mistral serving"],
+  ["vLLM","NVIDIA","integrates",4,"Optimized for CUDA / PagedAttention"],
+
+  // Vector DBs
+  ["LangChain","Pinecone","integrates",4,"Vector store retriever"],
+  ["LangChain","Weaviate","integrates",3,"Hybrid-search retriever"],
+  ["LangChain","Milvus","integrates",3,"GPU-scale retriever"],
+  ["LangChain","pgvector","integrates",3,"Postgres retriever"],
+  ["LangChain","Qdrant","integrates",3,"Qdrant retriever"],
+  ["LlamaIndex","Pinecone","integrates",3,"RAG pipeline retriever"],
+  ["LlamaIndex","Weaviate","integrates",2,"RAG pipeline retriever"],
+  ["LlamaIndex","Milvus","integrates",2,"RAG pipeline retriever"],
+  ["LlamaIndex","Qdrant","integrates",3,"Qdrant-backed RAG"],
+
+  // Observability
+  ["LangSmith","LangChain","monitors",5,"Native tracing for LangChain apps"],
+  ["LangSmith","LangGraph","monitors",4,"Native tracing for LangGraph apps"],
+  ["Langfuse","LangChain","monitors",3,"Open-source tracing for LangChain"],
+  ["Langfuse","LangGraph","monitors",3,"Open-source tracing for LangGraph"],
+  ["Weights & Biases","Hugging Face","integrates",4,"Fine-tune logging integration"],
+  ["Weights & Biases","OpenAI GPT-5","integrates",3,"Logs GPT fine-tunes + evals"],
+  ["Weights & Biases","Llama 4","integrates",3,"Training logs for Llama fine-tunes"],
+  ["Weights & Biases","LangChain","integrates",3,"Traces LangChain executions"],
+  ["Comet ML","OpenAI GPT-5","monitors",3,"Opik traces GPT calls"],
+  ["Comet ML","Claude 4.x (Anthropic)","monitors",3,"Opik traces Claude calls"],
+  ["Comet ML","LangChain","integrates",3,"Traces LangChain workflows"],
+
+  // Safety
+  ["NemoClaw","NVIDIA","built-on",4,"Built on NVIDIA enterprise AI stack"],
+  ["NemoClaw","OpenClaw","integrates",3,"Wraps OpenClaw with enterprise controls"],
+  ["Lakera Guard","OpenAI GPT-5","guards",4,"Prompt-injection defense for GPT apps"],
+  ["Lakera Guard","Claude 4.x (Anthropic)","guards",3,"Prompt-injection defense for Claude apps"],
+  ["NeMo Guardrails","OpenAI GPT-5","guards",3,"Topic/safety rails for GPT"],
+  ["NeMo Guardrails","Llama 4","guards",3,"Topic/safety rails for Llama"],
+  ["NeMo Guardrails","NVIDIA","built-on",4,"Open-source toolkit from NVIDIA"],
+
+  // Web data
+  ["Firecrawl","LangChain","integrates",3,"Markdown loader for RAG"],
+  ["Apify","LangChain","integrates",2,"Actor data loader for LangChain"],
+
+  // Scale/Arena
+  ["Scale AI","OpenAI GPT-5","integrates",3,"Data labeling + RLHF pipelines"],
+  ["Scale AI","Claude 4.x (Anthropic)","integrates",3,"Data partner for Anthropic"],
+  ["Scale AI","Llama 4","integrates",3,"Evaluation data partner"],
+  ["LMSYS Chatbot Arena","OpenAI GPT-5","integrates",3,"Benchmarks GPT in public arena"],
+  ["LMSYS Chatbot Arena","Claude 4.x (Anthropic)","integrates",3,"Benchmarks Claude in public arena"],
+  ["LMSYS Chatbot Arena","Gemini 3.x (Google)","integrates",3,"Benchmarks Gemini in public arena"],
+
+  // L5 → L3/L4
+  // Coding
+  ["GitHub Copilot","OpenAI GPT-5","built-on",5,"Original Codex/GPT lineage"],
+  ["GitHub Copilot","Claude 4.x (Anthropic)","integrates",3,"Multi-model Claude option"],
+  ["GitHub Copilot","Azure AI","integrates",4,"Microsoft Azure hosting"],
+  ["Cursor","Claude 4.x (Anthropic)","integrates",5,"Sonnet is the primary Cursor model"],
+  ["Cursor","OpenAI GPT-5","integrates",4,"GPT in model picker"],
+  ["Cursor","Gemini 3.x (Google)","integrates",3,"Gemini in model picker"],
+  ["Cursor","MCP (Model Context Protocol)","integrates",3,"Cursor is an MCP host"],
+  ["Claude Code","Claude 4.x (Anthropic)","built-on",5,"First-party Anthropic CLI agent"],
+  ["Claude Code","MCP (Model Context Protocol)","integrates",4,"Native MCP host and client"],
+  ["Windsurf (Codeium)","Claude 4.x (Anthropic)","integrates",4,"Cascade agent primary LLM"],
+  ["Windsurf (Codeium)","OpenAI GPT-5","integrates",3,"GPT fallback in Cascade"],
+  ["Cline","Claude 4.x (Anthropic)","integrates",5,"Preferred model for Plan/Act mode"],
+  ["Cline","OpenAI GPT-5","integrates",3,"GPT provider option"],
+  ["Cline","MCP (Model Context Protocol)","integrates",4,"MCP tool host in VS Code"],
+  ["Amazon Q Developer","AWS Bedrock","built-on",5,"Runs on Bedrock foundation models"],
+  ["Amazon Q Developer","Claude 4.x (Anthropic)","integrates",4,"Claude is primary Q coding model"],
+
+  // Vibe Coding
+  ["Lovable","OpenAI GPT-5","built-on",4,"GPT generates full-stack scaffolds"],
+  ["Lovable","Claude 4.x (Anthropic)","integrates",3,"Claude option for complex refactors"],
+  ["v0","OpenAI GPT-5","built-on",4,"GPT generates React/Next components"],
+  ["Bolt","OpenAI GPT-5","built-on",3,"GPT code generation backend"],
+  ["Bolt","Claude 4.x (Anthropic)","integrates",3,"Claude option in Bolt"],
+  ["Replit","OpenAI GPT-5","integrates",3,"GPT in Replit Agent"],
+  ["Replit","Claude 4.x (Anthropic)","integrates",3,"Claude in Replit Agent v3"],
+  ["Replit","Azure AI","integrates",3,"Azure partnership for hosted GPT"],
+  ["Emergent","OpenAI GPT-5","integrates",3,"Wingman agent uses GPT"],
+  ["Emergent","Claude 4.x (Anthropic)","integrates",3,"Wingman agent uses Claude"],
+  ["NxCode","OpenAI GPT-5","integrates",3,"GPT drives app generation"],
+  ["NxCode","Claude 4.x (Anthropic)","integrates",3,"Claude option for backend logic"],
+
+  // Design
+  ["Claude Design","Claude 4.x (Anthropic)","built-on",5,"First-party Anthropic design tool"],
+  ["Claude Design","Claude Code","integrates",5,"Hands off directly to Claude Code"],
+  ["Google Stitch","Gemini 3.x (Google)","built-on",4,"Gemini generates UI from voice"],
+  ["Google Stitch","Google Vertex AI","integrates",3,"Exports to AI Studio"],
+  ["Canva Magic Studio","OpenAI GPT-5","integrates",3,"GPT copywriting + Magic Write"],
+  ["Canva Magic Studio","Stable Diffusion","integrates",4,"Image gen backbone"],
+  ["Canva Magic Studio","Flux 2","integrates",3,"Flux for premium image gen"],
+  ["Canva Magic Studio","Leonardo AI","integrates",3,"Canva acquired Leonardo for image gen"],
+  ["Figma AI","OpenAI GPT-5","integrates",3,"GPT powers Make Designs + Make Prototype"],
+  ["Figma AI","Claude 4.x (Anthropic)","integrates",3,"Claude option in Figma Make"],
+
+  // Productivity
+  ["Microsoft Copilot","OpenAI GPT-5","built-on",5,"Office backed by GPT"],
+  ["Microsoft Copilot","Azure AI","built-on",5,"Runs on Azure OpenAI Service"],
+  ["Notion AI","OpenAI GPT-5","integrates",4,"Primary LLM for workspace AI"],
+  ["Notion AI","Claude 4.x (Anthropic)","integrates",3,"Claude option for long docs"],
+  ["Grammarly","OpenAI GPT-5","integrates",4,"GenAI tone + rewrite"],
+  ["Gamma","Claude 4.x (Anthropic)","integrates",3,"Claude for deck content"],
+  ["Gamma","OpenAI GPT-5","integrates",3,"GPT for deck content"],
+  ["DeepL","OpenAI GPT-5","integrates",2,"DeepL Write LLM component"],
+  ["Numerous.ai","OpenAI GPT-5","integrates",3,"GPT powers cell formulas"],
+  ["Taskade","OpenAI GPT-5","integrates",3,"GPT-backed custom agents"],
+  ["Taskade","Claude 4.x (Anthropic)","integrates",3,"Claude-backed custom agents"],
+  ["Wispr Flow","Whisper (OpenAI)","built-on",4,"Whisper under the hood for ASR"],
+  ["Wispr Flow","OpenAI GPT-5","integrates",3,"GPT rewrites dictation fluently"],
+  ["Gemini for Workspace","Gemini 3.x (Google)","built-on",5,"Workspace AI powered by Gemini 3.x"],
+  ["Gemini for Workspace","Google Vertex AI","integrates",4,"Enterprise deployment via Vertex"],
+
+  // OS Assistants
+  ["Apple Intelligence","Apple Neural Engine","built-on",5,"Runs on-device via Apple Silicon Neural Engine"],
+  ["Apple Intelligence","OpenAI GPT-5","integrates",4,"ChatGPT fallback for complex queries"],
+  ["Apple Intelligence","Claude 4.x (Anthropic)","integrates",3,"Claude integration reportedly added 2026"],
+
+  // Automation
+  ["Zapier","OpenAI GPT-5","integrates",4,"Built-in AI actions via GPT"],
+  ["Zapier","Claude 4.x (Anthropic)","integrates",3,"Claude in AI actions"],
+  ["Make","OpenAI GPT-5","integrates",3,"GPT module in scenarios"],
+  ["Make","Claude 4.x (Anthropic)","integrates",2,"Claude module in scenarios"],
+  ["n8n","OpenAI GPT-5","integrates",4,"AI Agent node default provider"],
+  ["n8n","Claude 4.x (Anthropic)","integrates",3,"Claude in AI Agent node"],
+  ["n8n","MCP (Model Context Protocol)","integrates",3,"MCP server node"],
+  ["Clay","OpenAI GPT-5","integrates",3,"GPT powers Claygent research"],
+  ["Clay","Claude 4.x (Anthropic)","integrates",3,"Claude alternative in Claygent"],
+  ["Google Opal","Gemini 3.x (Google)","built-on",4,"Visual chaining of Gemini"],
+  ["Gumloop","OpenAI GPT-5","integrates",3,"GPT drives workflow steps"],
+  ["Gumloop","Claude 4.x (Anthropic)","integrates",3,"Claude drives workflow steps"],
+  ["Lindy AI","OpenAI GPT-5","integrates",3,"GPT drives Lindy employees"],
+  ["Lindy AI","Claude 4.x (Anthropic)","integrates",3,"Claude drives Lindy employees"],
+
+  // Research
+  ["Perplexity","OpenAI GPT-5","integrates",4,"GPT synthesis mode"],
+  ["Perplexity","Claude 4.x (Anthropic)","integrates",4,"Claude Pro Search"],
+  ["Perplexity","Mistral 3","integrates",2,"Mistral model option"],
+  ["NotebookLM","Gemini 3.x (Google)","built-on",5,"Gemini grounds notebook sources"],
+  ["Gemini Deep Research","Gemini 3.x (Google)","built-on",5,"Gemini multi-step researcher"],
+  ["Gemini Deep Research","NotebookLM","integrates",4,"Research outputs flow to NotebookLM"],
+  ["Julius AI","OpenAI GPT-5","integrates",3,"GPT generates Python analysis"],
+  ["Elicit","Claude 4.x (Anthropic)","integrates",3,"Claude for paper summarization"],
+  ["Elicit","OpenAI GPT-5","integrates",3,"GPT for paper Q&A"],
+  ["Consensus","OpenAI GPT-5","integrates",3,"GPT generates consensus summaries"],
+
+  // Image/Video/Audio/3D
+  ["Adobe Firefly","OpenAI GPT-5","integrates",2,"GPT copy-ideation"],
+  ["Adobe Firefly","Stable Diffusion","integrates",3,"SD lineage for open options"],
+  ["GPT Image 1/1.5 (OpenAI)","OpenAI GPT-5","built-on",5,"Native multimodal image gen"],
+  ["Nano Banana 2","Gemini 3.x (Google)","built-on",5,"Gemini-native image edit model"],
+  ["Leonardo AI","Stable Diffusion","integrates",3,"SD-family lineage for Phoenix model"],
+  ["Photoroom","Stable Diffusion","integrates",3,"SD backbone for generative edits"],
+  ["Photoroom","OpenAI GPT-5","integrates",2,"GPT for prompt understanding"],
+  ["Google Veo 3.1","Gemini 3.x (Google)","built-on",5,"Gemini-family video model"],
+  ["Google Veo 3.1","Google Vertex AI","integrates",3,"Veo on Vertex API"],
+  ["Sora","OpenAI GPT-5","built-on",4,"Shares OpenAI multimodal research lineage"],
+  ["Hailuo","MiniMax M2.5","built-on",5,"Consumer video app on MiniMax models"],
+  ["Higgsfield","Seedance","integrates",4,"Aggregates Seedance"],
+  ["Higgsfield","Google Veo 3.1","integrates",3,"Aggregates Veo"],
+  ["Higgsfield","Kling 2.6/3.0","integrates",3,"Aggregates Kling"],
+  ["Higgsfield","Sora","integrates",3,"Aggregates Sora"],
+  ["HeyGen","ElevenLabs","integrates",4,"Voice layer for avatars"],
+  ["HeyGen","OpenAI GPT-5","integrates",2,"GPT scripts for avatars"],
+  ["Synthesia","ElevenLabs","integrates",4,"Voice layer for enterprise avatars"],
+  ["Synthesia","OpenAI GPT-5","integrates",2,"GPT scripts for avatars"],
+  ["Descript","Whisper (OpenAI)","integrates",3,"Whisper powers transcription"],
+  ["Descript","ElevenLabs","integrates",3,"Voice cloning for Overdub"],
+  ["Otter.ai","Whisper (OpenAI)","integrates",4,"Whisper backbone for STT"],
+  ["Otter.ai","OpenAI GPT-5","integrates",3,"GPT meeting summaries"],
+  ["Deepgram","NVIDIA","powers",3,"CUDA-accelerated Nova-3 inference"],
+  ["Meshy","OpenAI GPT-5","integrates",3,"GPT improves prompt understanding"],
+  ["Tripo AI","OpenAI GPT-5","integrates",3,"GPT for prompt refinement"],
+  ["Suno","Lyria 3","integrates",2,"Music-gen ecosystem peer; shared research lineage"],
+
+  // Agents
+  ["OpenClaw","OpenAI GPT-5","integrates",3,"GPT brain for personal agent"],
+  ["OpenClaw","Claude 4.x (Anthropic)","integrates",3,"Claude brain for personal agent"],
+  ["Manus AI","Claude 4.x (Anthropic)","built-on",4,"Primary reasoning model"],
+  ["Manus AI","OpenAI GPT-5","integrates",2,"GPT fallback"],
+  ["OpenAI Operator","OpenAI GPT-5","built-on",5,"GPT-Computer-Use branded as Operator"],
+  ["Relevance AI","OpenAI GPT-5","integrates",4,"GPT powers many Relevance agents"],
+  ["Relevance AI","Claude 4.x (Anthropic)","integrates",3,"Claude as optional agent brain"],
+  ["Relevance AI","LangChain","integrates",2,"LangChain tool integrations"],
+  ["Devin","Claude 4.x (Anthropic)","integrates",3,"Claude in Devin coding stack"],
+  ["Devin","OpenAI GPT-5","integrates",3,"GPT in Devin coding stack"],
+  ["Polsia","OpenAI GPT-5","integrates",3,"GPT-backed company agents"],
+  ["Polsia","Claude 4.x (Anthropic)","integrates",2,"Claude-backed company agents"],
+  ["Skyvern","OpenAI GPT-5","integrates",3,"GPT-vision plans browser steps"],
+  ["Skyvern","Claude 4.x (Anthropic)","integrates",3,"Claude vision alternative"],
+
+  // Chat / Legal / Healthcare
+  ["ChatGPT Chat","OpenAI GPT-5","built-on",5,"Powered by GPT-5"],
+  ["Claude Chat","Claude 4.x (Anthropic)","built-on",5,"Powered by Claude 4.x"],
+  ["Claude CoWork","Claude 4.x (Anthropic)","built-on",4,"Powered by Claude 4.x"],
+  ["Claude Managed Agents","Claude 4.x (Anthropic)","built-on",5,"Managed by Claude 4.x"],
+  ["Gemini Chat","Gemini 3.x (Google)","built-on",5,"Powered by Gemini 3.x"],
+  ["Grok Chat","Grok 4","built-on",5,"Consumer chat on Grok 4"],
+  ["Meta AI","Llama 4","built-on",5,"Powered by Llama 4 across Meta apps"],
+  ["Character.ai","Gemini 3.x (Google)","integrates",3,"Founders returned to Google; deep Gemini collaboration"],
+  ["DeepSeek Chat","DeepSeek V3/R1","built-on",5,"Consumer app on DeepSeek V3/R1"],
+  ["Harvey","OpenAI GPT-5","built-on",4,"GPT-class models fine-tuned on legal corpus"],
+  ["Harvey","Azure AI","integrates",3,"Enterprise Azure deployment"],
+  ["Spellbook","OpenAI GPT-5","integrates",4,"GPT for contract redlines"],
+  ["Abridge","OpenAI GPT-5","integrates",3,"GPT for summarization"],
+  ["Abridge","Claude 4.x (Anthropic)","integrates",3,"Claude for long-context notes"],
+
+  // Robotics
+  ["Boston Dynamics","NVIDIA","powers",4,"Jetson Thor onboard compute"],
+  ["Tesla Optimus","NVIDIA","powers",3,"Dojo + H100 training stack"],
+  ["Figure AI","OpenAI GPT-5","integrates",3,"Helix/GPT multimodal stack"],
+  ["Figure AI","NVIDIA","powers",3,"NVIDIA compute for training"],
+
+  // BUBBLE-LEVEL
+  ["bub:4:Vector DBs","LangChain","integrates",3,"LangChain integrates with every major vector DB"],
+  ["bub:4:Vector DBs","LlamaIndex","integrates",3,"LlamaIndex retrieves from every major vector DB"],
+  ["bub:4:Local Inference","bub:3:Open Weight Models","runs",4,"All local-inference runtimes serve open-weight models"],
+  ["bub:4:LLM Routing","bub:3:Frontier LLMs","routes",4,"Routers front every frontier provider"],
+  ["bub:4:Observability","bub:4:Agent Frameworks","monitors",3,"Observability platforms trace all agent frameworks"],
+  ["bub:4:AI Safety","bub:4:Agent Frameworks","guards",3,"Safety layers wrap agent framework calls"],
+  ["bub:0:Foundries","bub:1:Chip Designers","manufactures",5,"Foundries fabricate every chip designer's silicon"],
+  ["bub:1:GPU Makers","bub:2:Cloud Platforms","powers",4,"GPU fleets are the substrate of every cloud platform"],
+  ["bub:2:Cloud Platforms","bub:3:Frontier LLMs","hosts",4,"Hyperscaler clouds host frontier-lab APIs"],
+  ["bub:2:Model Hub","bub:3:Open Weight Models","hosts",5,"Hubs are the canonical distribution for open weights"],
+  ["TSMC","bub:1:Chip Designers","manufactures",5,"TSMC fabricates ~70% of global AI silicon"],
+  ["bub:5:Coding","bub:3:Frontier LLMs","built-on",4,"Every AI coding tool runs on frontier LLMs"],
+  ["bub:5:Vibe Coding","bub:3:Frontier LLMs","built-on",4,"Vibe-coding platforms orchestrate frontier LLMs"],
+  ["bub:5:Video Gen","bub:3:Foundation Media","built-on",4,"Video apps build on foundation video/image models"],
+  ["bub:5:Image Gen","bub:3:Foundation Media","built-on",4,"Image apps build on Stable Diffusion / Flux / GPT Image"],
+  ["bub:5:Legal AI","bub:3:Frontier LLMs","built-on",3,"Legal apps fine-tune on top of frontier LLMs"],
+  ["bub:5:Healthcare AI","bub:3:Frontier LLMs","built-on",3,"Clinical apps fine-tune on frontier LLMs"],
+  ["bub:5:3D Gen","bub:3:Foundation Media","built-on",3,"3D gen uses image/diffusion priors"],
+  ["bub:5:Automation","bub:4:Agent Frameworks","integrates",3,"Automation platforms embed agent-framework nodes"],
+  ["bub:5:Agents","bub:4:Agent Frameworks","built-on",4,"Production agents build on agent frameworks"],
+  ["bub:5:Research","bub:3:Frontier LLMs","integrates",3,"Research apps rely on frontier LLMs for synthesis"],
+  ["bub:5:Chat","bub:3:Frontier LLMs","built-on",5,"All consumer chat apps are UIs over frontier LLMs"],
+  ["bub:5:Music Gen","bub:3:Foundation Media","built-on",3,"Music apps build on foundation music models"],
+  ["bub:5:OS Assistants","bub:3:Frontier LLMs","integrates",3,"OS-level assistants route to frontier LLMs"]
+];
+
+const LAYER_NAMES = ["Foundry","Chip Designers","Cloud / Hubs","Foundation Models","Frameworks & Infra","Applications","End Users"];
+const LAYER_COLORS = ["#B45309","#F59E0B","#06B6D4","#3B82F6","#A855F7","#10B981","#F43F5E"];
+const EDGE_COLOR = {
+  "manufactures":"#F59E0B","powers":"#F59E0B",
+  "hosts":"#8B5CF6","runs":"#8B5CF6",
+  "built-on":"#06B6D4",
+  "integrates":"#94A3B8","routes":"#94A3B8","monitors":"#94A3B8","guards":"#94A3B8"
+};
+
+// ==== MOBILE DETECTION ====
+const IS_MOBILE = window.matchMedia("(max-width: 768px)").matches || (('ontouchstart' in window) && window.innerWidth < 900);
+
+if (IS_MOBILE) {
+  renderMobile();
+} else {
+
+// ==== SETUP ====
+const svg = d3.select("#canvas");
+const tooltip = d3.select("#tooltip");
+const container = document.getElementById("canvas-container");
+let W = container.clientWidth, H = container.clientHeight;
+svg.attr("width", W).attr("height", H);
+
+const zoomG = svg.append("g").attr("class", "zoom-root");
+const ringG  = zoomG.append("g").attr("class", "rings");
+const hullG  = zoomG.append("g").attr("class", "hulls");
+const linkG  = zoomG.append("g").attr("class", "links");
+const nodeG  = zoomG.append("g").attr("class", "nodes");
+
+const defs = svg.append("defs");
+Object.entries(EDGE_COLOR).forEach(([type, color]) => {
+  const safe = type.replace(/[^a-z0-9]/gi, "_");
+  defs.append("marker")
+    .attr("id", `arrow_${safe}`)
+    .attr("viewBox", "0 -5 10 10").attr("refX", 10).attr("refY", 0)
+    .attr("markerUnits", "userSpaceOnUse")
+    .attr("markerWidth", 14).attr("markerHeight", 14)
+    .attr("orient", "auto")
+    .append("path").attr("d", "M0,-5L10,0L0,5").attr("fill", color).attr("opacity", 0.85);
+});
+
+const zoomBehavior = d3.zoom().scaleExtent([0.15, 6]).on("zoom", ev => {
+  zoomG.attr("transform", ev.transform);
+});
+svg.call(zoomBehavior);
+
+// ==== STATE ====
+let radialMode = true;
+let popThreshold = IS_MOBILE ? 75 : 60;
+let linkWeightThreshold = 1;
+let activeCat = "all";
+let searchTerm = "";
+let activeTypes = new Set(["manufactures","powers","hosts","runs","built-on","integrates","routes","monitors","guards"]);
+let selection = null;
+let selectedArrowId = null;
+
+const SIM_NODES = NODES.slice();
+
+// ==== BUBBLES ====
+const BUBBLE_COLORS = {
+  "Coding":"#3B82F6","Productivity":"#8B5CF6","Design":"#EC4899",
+  "Automation":"#F59E0B","Research":"#06B6D4","Image Gen":"#EF4444",
+  "Video Gen":"#F97316","Avatar & Voice":"#A78BFA","Music Gen":"#10B981",
+  "Speech & STT":"#14B8A6","Agents":"#6366F1","Robotics":"#94A3B8",
+  "Vibe Coding":"#22D3EE","Chat":"#60A5FA","Legal AI":"#D4A373",
+  "Healthcare AI":"#06D6A0","3D Gen":"#BB86FC","OS Assistants":"#F472B6",
+  "Agent Frameworks":"#A855F7","Local Inference":"#C084FC","LLM Routing":"#F0ABFC",
+  "Vector DBs":"#D8B4FE","Observability":"#E9D5FF","Data & Eval":"#DDD6FE",
+  "Web Data":"#C4B5FD","AI Safety":"#FCA5A5",
+  "Frontier LLMs":"#3B82F6","Open Weight Models":"#60A5FA","Foundation Media":"#7DD3FC",
+  "Cloud Platforms":"#06B6D4","Model Hub":"#22D3EE",
+  "GPU Makers":"#F59E0B","Cloud Silicon":"#FBBF24","Edge AI":"#FCD34D","ASIC":"#FDE68A",
+  "Foundries":"#B45309","Leading Foundries":"#B45309","US Foundries":"#B45309","Chinese Foundries":"#B45309"
+};
+
+function bubbleKeyFor(n) {
+  if (n.layer === 1) return n.subCat;
+  if (n.layer === 0) return n.category;
+  return n.category;
+}
+
+const BUBBLE_GROUPS = {};
+SIM_NODES.forEach(n => {
+  if (n.layer < 1 || n.layer > 5) return;
+  const key = bubbleKeyFor(n);
+  const id = `${n.layer}:${key}`;
+  if (!BUBBLE_GROUPS[id]) {
+    BUBBLE_GROUPS[id] = {
+      id, bubId: `bub:${id}`, layer: n.layer, key,
+      label: key, color: BUBBLE_COLORS[key] || LAYER_COLORS[n.layer] || "#64748B",
+      memberIds: []
+    };
+  }
+  BUBBLE_GROUPS[id].memberIds.push(n.id);
+});
+const ALL_BUBBLES = Object.values(BUBBLE_GROUPS);
+
+function isBubbleRef(s) { return typeof s === "string" && s.startsWith("bub:"); }
+function bubbleRefToId(s) { return s.replace(/^bub:/, ""); }
+
+let arrowIdCounter = 0;
+const LINKS = LINKS_RAW.map(([s, t, type, w, name]) => ({
+  arrowId: `arrow_${arrowIdCounter++}`,
+  sourceRef: s, targetRef: t,
+  sourceIsBubble: isBubbleRef(s),
+  targetIsBubble: isBubbleRef(t),
+  type, weight: w,
+  name: name || autoName(type, s, t)
+}));
+
+function autoName(type, s, t) {
+  const tN = isBubbleRef(t) ? bubbleRefToId(t).split(":")[1] : (NODES.find(n => n.id === t)?.name || t);
+  const sN = isBubbleRef(s) ? bubbleRefToId(s).split(":")[1] : (NODES.find(n => n.id === s)?.name || s);
+  switch(type) {
+    case "manufactures": return `${sN} fabricates ${tN}`;
+    case "powers": return `${sN} powers ${tN}`;
+    case "hosts": return `${sN} hosts ${tN}`;
+    case "runs": return `${sN} runs ${tN}`;
+    case "built-on": return `${sN} built on ${tN}`;
+    case "integrates": return `${sN} integrates with ${tN}`;
+    case "routes": return `${sN} routes to ${tN}`;
+    case "monitors": return `${sN} monitors ${tN}`;
+    case "guards": return `${sN} guards ${tN}`;
+    default: return `${sN} ↔ ${tN}`;
+  }
+}
+
+// ==== RADIAL LAYOUT ====
+// v4: L5 gets a bigger annulus; inner layers compressed slightly so outer ring has breathing room.
+const RING_FRACTIONS = [
+  [0.000, 0.090],  // L0
+  [0.090, 0.185],  // L1
+  [0.185, 0.280],  // L2
+  [0.280, 0.430],  // L3
+  [0.430, 0.580],  // L4
+  [0.580, 1.000],  // L5 (wider)
+];
+
+function getR() { return Math.min(W, H) * 0.48; } // v4: slightly larger usable radius
+function getRadii(layer) {
+  const R = getR();
+  const [f0, f1] = RING_FRACTIONS[layer] || [0, 0.1];
+  return { inner: R * f0, outer: R * f1, mid: R * (f0 + f1) / 2 };
+}
+
+const layerCategoryInfo = {};
+
+function precomputeAngles() {
+  for (let layer = 1; layer <= 5; layer++) {
+    const layerNodes = SIM_NODES.filter(n => n.layer === layer);
+    if (!layerNodes.length) continue;
+
+    const cats = [];
+    layerNodes.forEach(n => { if (!cats.includes(n.category)) cats.push(n.category); });
+
+    const totalNodes = layerNodes.length;
+    const numCats = cats.length;
+    // v4: wider gap so bubbles in same ring don't touch
+    const gapPerSector = numCats > 1 ? (layer === 5 ? 0.10 : 0.08) : 0;
+    const totalGap = gapPerSector * numCats;
+    const availableAngle = 2 * Math.PI - totalGap;
+
+    let currentAngle = -Math.PI / 2;
+    const catInfo = [];
+
+    cats.forEach(cat => {
+      const catNodes = layerNodes.filter(n => n.category === cat);
+      // minimum span so small categories still get visible room
+      const rawSpan = availableAngle * (catNodes.length / totalNodes);
+      const minSpan = layer === 5 ? 0.13 : 0.10;
+      const span = Math.max(rawSpan, minSpan);
+      const endAngle = currentAngle + span;
+      const midAngle = currentAngle + span / 2;
+
+      catInfo.push({ category: cat, nodes: catNodes, startAngle: currentAngle, endAngle, midAngle });
+
+      catNodes.forEach((n, i) => {
+        const count = catNodes.length;
+        if (count === 1) n._targetAngle = midAngle;
+        else {
+          const pad = span * 0.1;
+          n._targetAngle = currentAngle + pad + (i / (count - 1)) * (span - 2 * pad);
+        }
+      });
+
+      currentAngle = endAngle + gapPerSector;
+    });
+    layerCategoryInfo[layer] = catInfo;
+  }
+}
+precomputeAngles();
+
+// ==== DRAW RINGS ====
+function drawRingBackgrounds() {
+  ringG.selectAll("*").remove();
+  defs.selectAll("[id^='arc_label_']").remove();
+  const cx = W / 2, cy = H / 2;
+
+  const l0 = getRadii(0);
+  const g0 = ringG.append("g").attr("class", "ring ring-0");
+  g0.append("circle")
+    .attr("cx", cx).attr("cy", cy).attr("r", l0.outer)
+    .attr("fill", LAYER_COLORS[0] + "22").attr("stroke", LAYER_COLORS[0] + "60").attr("stroke-width", 1.5);
+  g0.append("text")
+    .attr("class", "ring-label").attr("data-layer", 0)
+    .attr("x", cx).attr("y", cy - l0.outer + 12)
+    .attr("text-anchor", "middle").attr("dominant-baseline", "auto")
+    .attr("font-size", "9px").attr("fill", LAYER_COLORS[0])
+    .text(LAYER_NAMES[0]);
+
+  for (let layer = 1; layer <= 5; layer++) {
+    const { inner, outer } = getRadii(layer);
+    const color = LAYER_COLORS[layer];
+    const g = ringG.append("g").attr("class", `ring ring-${layer}`);
+
+    if (layer === 5) {
+      g.append("circle")
+        .attr("cx", cx).attr("cy", cy).attr("r", outer)
+        .attr("fill", "none").attr("stroke", color + "22")
+        .attr("stroke-width", 1).attr("stroke-dasharray", "6,4");
+      g.append("circle")
+        .attr("cx", cx).attr("cy", cy).attr("r", inner)
+        .attr("fill", "none").attr("stroke", color + "22")
+        .attr("stroke-width", 1).attr("stroke-dasharray", "3,4");
+    } else {
+      const fullArc = d3.arc().innerRadius(inner).outerRadius(outer).startAngle(0).endAngle(2 * Math.PI);
+      g.append("path").attr("d", fullArc).attr("transform", `translate(${cx},${cy})`)
+        .attr("fill", color + "18").attr("stroke", color + "50").attr("stroke-width", 1.5);
+    }
+
+    // Ring label INSIDE ring near top edge
+    const labelY = cy - outer + 14;
+    g.append("text")
+      .attr("class", "ring-label").attr("data-layer", layer)
+      .attr("x", cx).attr("y", labelY)
+      .attr("text-anchor", "middle").attr("dominant-baseline", "auto")
+      .attr("font-size", layer === 5 ? "11px" : "10px")
+      .attr("fill", color)
+      .text(LAYER_NAMES[layer])
+      .on("click", (ev) => { ev.stopPropagation(); selectLayer(layer); });
+  }
+
+  ringG.selectAll("text.ring-label").on("click", function(ev) {
+    ev.stopPropagation();
+    const l = +d3.select(this).attr("data-layer");
+    selectLayer(l);
+  });
+}
+drawRingBackgrounds();
+
+// ==== LAYER 0 PLACEMENT ====
+function placeL0() {
+  const l0Nodes = SIM_NODES.filter(n => n.layer === 0);
+  const tsmc = l0Nodes.find(n => n.id === "TSMC");
+  const others = l0Nodes.filter(n => n.id !== "TSMC");
+  const cx = W / 2, cy = H / 2;
+  const { outer } = getRadii(0);
+  if (tsmc) { tsmc._targetAngle = 0; tsmc._isCenter = true; }
+  others.forEach((n, i) => {
+    const ang = -Math.PI / 2 + (i / others.length) * 2 * Math.PI;
+    n._targetAngle = ang;
+    n._l0Radius = outer * 0.55;
+  });
+}
+placeL0();
+
+function layerX(layer) { const pad = 60; return pad + (W - 2 * pad) * (layer / 5); }
+const layerCatOrder = {};
+SIM_NODES.forEach(n => {
+  if (!layerCatOrder[n.layer]) layerCatOrder[n.layer] = [];
+  if (!layerCatOrder[n.layer].includes(n.category)) layerCatOrder[n.layer].push(n.category);
+});
+function categoryY(n) {
+  const cats = layerCatOrder[n.layer] || [];
+  const idx = cats.indexOf(n.category);
+  const total = cats.length;
+  if (total <= 1) return H / 2;
+  return 90 + (H - 150) * (idx / (total - 1));
+}
+
+function nodeRadius(n) {
+  const base = IS_MOBILE ? 9 : 7;
+  const scale = IS_MOBILE ? 11 : 9;
+  return base + (n.pop / 100) * scale;
+}
+
+// ==== BUBBLES DRAW ====
+const curveGen = d3.line().curve(d3.curveCatmullRomClosed.alpha(0.5));
+
+function getBubblePath(memberIds, padding) {
+  if (padding === undefined) padding = 24;
+  const pts = SIM_NODES.filter(n => memberIds.includes(n.id) && isVisible(n) && n.x !== undefined).map(n => [n.x, n.y]);
+  if (!pts.length) return null;
+  if (pts.length === 1) {
+    const px = pts[0][0], py = pts[0][1], r = padding + 14;
+    return `M${px - r},${py} A${r},${r} 0 1,0 ${px + r},${py} A${r},${r} 0 1,0 ${px - r},${py}`;
+  }
+  if (pts.length === 2) {
+    const mx = (pts[0][0] + pts[1][0]) / 2, my = (pts[0][1] + pts[1][1]) / 2;
+    pts.push([mx + (pts[1][1] - pts[0][1]) * 0.5, my - (pts[1][0] - pts[0][0]) * 0.5]);
+  }
+  const hull = d3.polygonHull(pts);
+  if (!hull) return null;
+  const hcx = hull.reduce((s, p) => s + p[0], 0) / hull.length;
+  const hcy = hull.reduce((s, p) => s + p[1], 0) / hull.length;
+  const padded = hull.map(([hx, hy]) => {
+    const dx = hx - hcx, dy = hy - hcy, len = Math.sqrt(dx * dx + dy * dy) || 1;
+    return [hx + dx / len * padding, hy + dy / len * padding];
+  });
+  return curveGen(padded);
+}
+
+function bubbleCentroid(bubId) {
+  const grp = BUBBLE_GROUPS[bubId];
+  if (!grp) return null;
+  const members = SIM_NODES.filter(n => grp.memberIds.includes(n.id) && n.x !== undefined);
+  if (!members.length) return null;
+  const cx = members.reduce((s, n) => s + n.x, 0) / members.length;
+  // Pin endpoint to the bubble label (topmost member y - 14)
+  const cy = Math.min(...members.map(n => n.y)) - 14;
+  return { x: cx, y: cy, r: 8 };
+}
+
+function bubbleDrag(grp) {
+  let ox, oy, startPos;
+  return d3.drag()
+    .on("start", (ev) => {
+      if (!ev.active) sim.alphaTarget(0.3).restart();
+      ox = ev.x; oy = ev.y;
+      startPos = SIM_NODES.filter(n => grp.memberIds.includes(n.id)).map(n => ({ node: n, x: n.x, y: n.y }));
+      startPos.forEach(({ node }) => { node.fx = node.x; node.fy = node.y; });
+    })
+    .on("drag", (ev) => {
+      const dx = ev.x - ox, dy = ev.y - oy;
+      startPos.forEach(({ node, x, y }) => { node.fx = x + dx; node.fy = y + dy; });
+    })
+    .on("end", (ev) => {
+      if (!ev.active) sim.alphaTarget(0);
+      startPos.forEach(({ node }) => { node.fx = null; node.fy = null; });
+    });
+}
+
+function redrawBubbles() {
+  if (!radialMode) { hullG.selectAll("*").remove(); return; }
+  const bubbleData = ALL_BUBBLES
+    .filter(b => b.layer >= 1 && b.layer <= 5)
+    .map(grp => {
+      const members = SIM_NODES.filter(n => grp.memberIds.includes(n.id) && isVisible(n));
+      return { ...grp, members, path: getBubblePath(grp.memberIds, grp.layer === 5 ? 22 : 14) };
+    })
+    .filter(d => d.path && d.members.length > 0);
+
+  const sel = hullG.selectAll("path.bubble-hull").data(bubbleData, d => d.id);
+  sel.join(
+    enter => enter.append("path").attr("class", "bubble-hull")
+      .attr("fill-opacity", 0.1).attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "5,3")
+      .each(function(d) { d3.select(this).call(bubbleDrag(d)); })
+      .on("click", (ev, d) => { ev.stopPropagation(); selectBubble(d.id); }),
+    update => update,
+    exit => exit.remove()
+  )
+  .attr("d", d => d.path)
+  .attr("fill", d => d.color)
+  .attr("stroke", d => d.color + "99");
+
+  hullG.selectAll("text.bubble-label").data(bubbleData, d => d.id)
+    .join("text").attr("class", "bubble-label")
+    .attr("text-anchor", "middle").attr("font-size", d => d.layer === 5 ? "10px" : "9px")
+    .attr("font-weight", "700").attr("pointer-events", "all")
+    .attr("fill", d => d.color)
+    .attr("x", d => d.members.reduce((s, n) => s + n.x, 0) / d.members.length)
+    .attr("y", d => Math.min(...d.members.map(n => n.y)) - 14)
+    .text(d => d.label)
+    .on("click", (ev, d) => { ev.stopPropagation(); selectBubble(d.id); });
+
+  applyHighlights();
+}
+
+// ==== FORCES ====
+function forceAngular() {
+  function force(alpha) {
+    const cx = W / 2, cy = H / 2;
+    SIM_NODES.forEach(n => {
+      if (n.layer === 0) return;
+      if (n._targetAngle === undefined) return;
+      const dx = n.x - cx, dy = n.y - cy;
+      const r = Math.sqrt(dx * dx + dy * dy) || 0.001;
+      const curAngle = Math.atan2(dy, dx);
+      let diff = n._targetAngle - curAngle;
+      while (diff > Math.PI) diff -= 2 * Math.PI;
+      while (diff < -Math.PI) diff += 2 * Math.PI;
+      const tx = -dy / r, ty = dx / r;
+      // v4: stronger angular pull on L5 to keep categories in their sector
+      const mult = n.layer === 5 ? 14 : 22;
+      const f = diff * 0.85 * alpha * mult;
+      n.vx += tx * f; n.vy += ty * f;
+    });
+  }
+  return force;
+}
+
+function forceL0() {
+  function force(alpha) {
+    const cx = W / 2, cy = H / 2;
+    SIM_NODES.filter(n => n.layer === 0).forEach(n => {
+      let tx, ty;
+      if (n.id === "TSMC") { tx = cx; ty = cy; }
+      else {
+        const r = n._l0Radius || getRadii(0).outer * 0.55;
+        tx = cx + r * Math.cos(n._targetAngle);
+        ty = cy + r * Math.sin(n._targetAngle);
+      }
+      n.vx += (tx - n.x) * 0.25 * alpha * 4;
+      n.vy += (ty - n.y) * 0.25 * alpha * 4;
+    });
+  }
+  return force;
+}
+
+function initRadialPositions() {
+  const cx = W / 2, cy = H / 2;
+  SIM_NODES.forEach(n => {
+    if (n.layer === 0) {
+      if (n.id === "TSMC") { n.x = cx; n.y = cy; }
+      else {
+        const r = n._l0Radius || getRadii(0).outer * 0.55;
+        n.x = cx + r * Math.cos(n._targetAngle || 0);
+        n.y = cy + r * Math.sin(n._targetAngle || 0);
+      }
+    } else {
+      const { mid } = getRadii(n.layer);
+      const a = n._targetAngle !== undefined ? n._targetAngle : 0;
+      n.x = cx + mid * Math.cos(a) + (Math.random() - 0.5) * 3;
+      n.y = cy + mid * Math.sin(a) + (Math.random() - 0.5) * 3;
+    }
+    n.vx = n.vy = 0;
+  });
+}
+initRadialPositions();
+
+const CLUSTER_LINKS = [];
+ALL_BUBBLES.forEach(grp => {
+  for (let i = 0; i < grp.memberIds.length - 1; i++) {
+    CLUSTER_LINKS.push({ source: grp.memberIds[i], target: grp.memberIds[i + 1], type: "_cluster", weight: 0 });
+  }
+});
+
+const SIM_NODE_LINKS = LINKS
+  .filter(l => !l.sourceIsBubble && !l.targetIsBubble)
+  .map(l => ({ source: l.sourceRef, target: l.targetRef, type: l.type, weight: l.weight }));
+
+const ALL_SIM_LINKS = [...SIM_NODE_LINKS, ...CLUSTER_LINKS];
+
+// v4: bigger collision radius so nodes don't merge
+const sim = d3.forceSimulation(SIM_NODES)
+  .force("link", d3.forceLink(ALL_SIM_LINKS).id(d => d.id)
+    .distance(d => d.type === "_cluster" ? 48 : 80)
+    .strength(d => d.type === "_cluster" ? 0.12 : 0.015))
+  .force("radial", d3.forceRadial(n => n.layer === 0 ? 0 : getRadii(n.layer).mid, W / 2, H / 2)
+    .strength(n => n.layer === 0 ? 0 : (n.layer === 5 ? 0.25 : 0.9)))
+  .force("angular", forceAngular())
+  .force("l0", forceL0())
+  .force("collision", d3.forceCollide().radius(d => nodeRadius(d) + 11).strength(0.95))
+  .force("charge", d3.forceManyBody().strength(d => d.layer === 5 ? -45 : -18));
+
+sim.on("tick", ticked);
+
+// ==== LINKS ====
+const link = linkG.selectAll("path.link")
+  .data(LINKS, d => d.arrowId).join("path")
+  .attr("class", "link")
+  .attr("data-arrow-id", d => d.arrowId)
+  .attr("stroke", d => EDGE_COLOR[d.type] || "#94A3B8")
+  .attr("stroke-width", d => 0.7 + (d.weight - 1) * 0.35)
+  .attr("marker-end", d => `url(#arrow_${(d.type||"").replace(/[^a-z0-9]/gi,"_")})`)
+  .style("cursor", "pointer")
+  .on("click", (ev, d) => { ev.stopPropagation(); selectArrow(d, ev); })
+  .on("mouseover", (ev, d) => {
+    tooltip.style("display", "block").html(
+      `<div class="tt-conn-name">${d.name}</div>
+       <div class="tt-conn-type">${d.type} · weight ${d.weight}</div>`
+    );
+  })
+  .on("mousemove", (ev) => tooltip.style("left", (ev.clientX + 14) + "px").style("top", (ev.clientY + 14) + "px"))
+  .on("mouseout", () => tooltip.style("display", "none"));
+
+// ==== NODES ====
+const node = nodeG.selectAll("g.node")
+  .data(SIM_NODES, d => d.id)
+  .join("g").attr("class", "node")
+  .call(d3.drag()
+    .on("start", (ev, d) => { if (!ev.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+    .on("drag",  (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+    .on("end",   (ev, d) => { if (!ev.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }))
+  .on("mouseover", onHover)
+  .on("mouseout", onUnhover)
+  .on("mousemove", onMove);
+
+node.append("circle")
+  .attr("class", "node-circle")
+  .attr("r", d => nodeRadius(d))
+  .attr("fill", "#ffffff")
+  .attr("stroke", d => LAYER_COLORS[d.layer] || "#475569")
+  .attr("stroke-width", 2);
+
+function initials(name) {
+  const p = name.split(/[\s\-]+/).filter(Boolean);
+  return p.length === 1 ? p[0].slice(0, 2).toUpperCase() : (p[0][0] + p[1][0]).toUpperCase();
+}
+
+node.each(function(d) {
+  if (d.domain || d.imgUrl) {
+    const clipId = "clip_" + d.id.replace(/[^a-z0-9]/gi, "_");
+    defs.append("clipPath").attr("id", clipId).append("circle").attr("r", nodeRadius(d) - 2);
+    const imgSrc = d.imgUrl || `https://www.google.com/s2/favicons?domain=${d.domain}&sz=256`;
+    const img = d3.select(this).append("image")
+      .attr("href", imgSrc)
+      .attr("x", -(nodeRadius(d) - 2)).attr("y", -(nodeRadius(d) - 2))
+      .attr("width", (nodeRadius(d) - 2) * 2).attr("height", (nodeRadius(d) - 2) * 2)
+      .attr("clip-path", `url(#${clipId})`).attr("preserveAspectRatio", "xMidYMid slice");
+    img.on("error", function() {
+      // fallback chain: try google favicon of domain, then initials
+      const me = d3.select(this);
+      if (d.domain && me.attr("href") !== `https://www.google.com/s2/favicons?domain=${d.domain}&sz=256`) {
+        me.attr("href", `https://www.google.com/s2/favicons?domain=${d.domain}&sz=256`);
+        return;
+      }
+      me.remove();
+      d3.select(this.parentNode).append("text")
+        .attr("text-anchor", "middle").attr("dy", "0.35em")
+        .attr("font-size", nodeRadius(d) * 0.55).attr("fill", "#1E293B")
+        .attr("font-weight", 700).attr("pointer-events", "none").text(initials(d.name));
+    });
+  } else {
+    d3.select(this).append("text")
+      .attr("text-anchor", "middle").attr("dy", "0.35em")
+      .attr("font-size", nodeRadius(d) * 0.55).attr("fill", "#1E293B")
+      .attr("font-weight", 700).attr("pointer-events", "none").text(initials(d.name));
+  }
+});
+
+nodeG.selectAll("g.node").append("text")
+  .attr("class", "label")
+  .attr("dy", d => nodeRadius(d) + 11)
+  .text(d => d.name);
+
+function getEndpoint(ref, isBubble) {
+  if (isBubble) {
+    const bid = bubbleRefToId(ref);
+    const c = bubbleCentroid(bid);
+    if (c) return { x: c.x, y: c.y, r: c.r, isBubble: true };
+    return null;
+  }
+  const n = typeof ref === "object" ? ref : SIM_NODES.find(x => x.id === ref);
+  if (!n || n.x === undefined) return null;
+  return { x: n.x, y: n.y, r: nodeRadius(n) + 4, isBubble: false };
+}
+
+function ticked() {
+  const cx = W / 2, cy = H / 2;
+  link.attr("d", d => {
+    const s = getEndpoint(d.sourceRef, d.sourceIsBubble);
+    const t = getEndpoint(d.targetRef, d.targetIsBubble);
+    if (!s || !t) return null;
+    const dx = t.x - s.x, dy = t.y - s.y, len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const sx = s.x + (dx/len) * s.r, sy = s.y + (dy/len) * s.r;
+    const ex = t.x - (dx/len) * t.r, ey = t.y - (dy/len) * t.r;
+    const mx = (sx + ex) / 2, my = (sy + ey) / 2;
+    const pull = 0.18;
+    const qx = mx + (cx - mx) * pull, qy = my + (cy - my) * pull;
+    return `M${sx},${sy}Q${qx},${qy} ${ex},${ey}`;
+  });
+  node.attr("transform", d => `translate(${d.x},${d.y})`);
+  redrawBubbles();
+}
+
+// ==== INTERACTIONS ====
+function nodeNeighbors(id) {
+  const s = new Set([id]);
+  LINKS.forEach(l => {
+    if (l.sourceIsBubble || l.targetIsBubble) return;
+    if (l.sourceRef === id) s.add(l.targetRef);
+    if (l.targetRef === id) s.add(l.sourceRef);
+  });
+  return s;
+}
+
+function onHover(ev, d) {
+  if (selection) return;
+  const nb = nodeNeighbors(d.id);
+  node.classed("dim", n => !nb.has(n.id));
+  link.classed("highlight", l => !l.sourceIsBubble && !l.targetIsBubble && (l.sourceRef === d.id || l.targetRef === d.id))
+      .classed("dim", l => {
+        if (l.sourceIsBubble || l.targetIsBubble) return true;
+        return l.sourceRef !== d.id && l.targetRef !== d.id;
+      });
+  tooltip.style("display", "block").html(
+    `<div class="tt-name">${d.name}</div>
+     <div class="tt-cats">${d.superCat} &middot; ${d.category} &middot; ${d.subCat}</div>
+     <div class="tt-desc">${d.desc}</div>
+     <div class="tt-meta"><span class="tt-pop">Popularity ${d.pop}</span><span>Ring: ${LAYER_NAMES[d.layer]}</span></div>`
+  );
+}
+function onUnhover() {
+  if (!selection) applyHighlights();
+  tooltip.style("display", "none");
+}
+function onMove(ev) {
+  tooltip.style("left", (ev.clientX + 14) + "px").style("top", (ev.clientY + 14) + "px");
+}
+
+function selectNode(d) {
+  selection = { kind: "node", id: d.id };
+  selectedArrowId = null;
+  openSidePanel(d);
+  applyHighlights();
+}
+function selectBubble(bubId) {
+  selection = { kind: "bubble", id: bubId };
+  selectedArrowId = null;
+  openBubblePanel(bubId);
+  applyHighlights();
+}
+function selectLayer(layer) {
+  selection = { kind: "layer", id: `L${layer}`, layer };
+  selectedArrowId = null;
+  closeSidePanel();
+  applyHighlights();
+}
+function clearSelection() {
+  selection = null;
+  selectedArrowId = null;
+  closeSidePanel();
+  applyHighlights();
+}
+function selectArrow(l, ev) {
+  selectedArrowId = l.arrowId;
+  link.classed("selected-arrow", x => x.arrowId === l.arrowId);
+  tooltip.style("display", "block")
+    .style("left", (ev.clientX + 14) + "px").style("top", (ev.clientY + 14) + "px")
+    .html(`<div class="tt-conn-name">${l.name}</div>
+           <div class="tt-conn-type">${l.type} · weight ${l.weight}</div>
+           <div class="tt-desc" style="margin-top:6px">${l.sourceIsBubble ? "📦 " : ""}${refLabel(l.sourceRef)} → ${l.targetIsBubble ? "📦 " : ""}${refLabel(l.targetRef)}</div>`);
+}
+
+function refLabel(ref) {
+  if (isBubbleRef(ref)) {
+    const key = bubbleRefToId(ref).split(":").slice(1).join(":");
+    return key + " (bubble)";
+  }
+  return NODES.find(n => n.id === ref)?.name || ref;
+}
+
+function applyHighlights() {
+  if (!selection) {
+    node.classed("dim", n => !isVisible(n));
+    link.classed("highlight", false).classed("dim", l => !isLinkVisible(l));
+    hullG.selectAll("path.bubble-hull").classed("bubble-dim", false).classed("bubble-selected", false);
+    link.classed("selected-arrow", l => l.arrowId === selectedArrowId);
+    return;
+  }
+
+  if (selection.kind === "layer") {
+    const L = selection.layer;
+    node.classed("dim", n => n.layer !== L);
+    link.classed("highlight", false).classed("dim", true);
+    hullG.selectAll("path.bubble-hull").classed("bubble-dim", d => d.layer !== L).classed("bubble-selected", false);
+  } else if (selection.kind === "node") {
+    const id = selection.id;
+    const nb = new Set([id]);
+    LINKS.forEach(l => {
+      if (l.sourceIsBubble || l.targetIsBubble) return;
+      if (l.sourceRef === id) nb.add(l.targetRef);
+      if (l.targetRef === id) nb.add(l.sourceRef);
+    });
+    node.classed("dim", n => !nb.has(n.id));
+    link.classed("highlight", l => !l.sourceIsBubble && !l.targetIsBubble && (l.sourceRef === id || l.targetRef === id))
+        .classed("dim", l => {
+          if (l.sourceIsBubble || l.targetIsBubble) return true;
+          return l.sourceRef !== id && l.targetRef !== id;
+        });
+    hullG.selectAll("path.bubble-hull").classed("bubble-dim", true).classed("bubble-selected", false);
+  } else if (selection.kind === "bubble") {
+    const bubId = selection.id;
+    const grp = BUBBLE_GROUPS[bubId];
+    const bubRef = `bub:${bubId}`;
+    const memberSet = new Set(grp ? grp.memberIds : []);
+    node.classed("dim", n => !memberSet.has(n.id));
+    link.classed("highlight", l => l.sourceRef === bubRef || l.targetRef === bubRef)
+        .classed("dim", l => l.sourceRef !== bubRef && l.targetRef !== bubRef);
+    hullG.selectAll("path.bubble-hull")
+      .classed("bubble-selected", d => d.id === bubId)
+      .classed("bubble-dim", d => d.id !== bubId);
+  }
+  link.classed("selected-arrow", l => l.arrowId === selectedArrowId);
+}
+
+function isVisible(n) {
+  if (n.pop < popThreshold) return false;
+  if (activeCat !== "all" && n.superCat !== activeCat) return false;
+  if (searchTerm && !n.name.toLowerCase().includes(searchTerm) && !n.id.toLowerCase().includes(searchTerm)) return false;
+  return true;
+}
+function isLinkVisible(l) {
+  if (l.weight < linkWeightThreshold) return false;
+  if (!activeTypes.has(l.type)) return false;
+  if (!l.sourceIsBubble) {
+    const s = SIM_NODES.find(n => n.id === l.sourceRef);
+    if (!s || !isVisible(s)) return false;
+  } else {
+    const grp = BUBBLE_GROUPS[bubbleRefToId(l.sourceRef)];
+    if (!grp || !grp.memberIds.some(id => { const n = SIM_NODES.find(x => x.id === id); return n && isVisible(n); })) return false;
+  }
+  if (!l.targetIsBubble) {
+    const t = SIM_NODES.find(n => n.id === l.targetRef);
+    if (!t || !isVisible(t)) return false;
+  } else {
+    const grp = BUBBLE_GROUPS[bubbleRefToId(l.targetRef)];
+    if (!grp || !grp.memberIds.some(id => { const n = SIM_NODES.find(x => x.id === id); return n && isVisible(n); })) return false;
+  }
+  return true;
+}
+function applyFilters() {
+  node.style("display", n => isVisible(n) ? null : "none");
+  link.style("display", l => isLinkVisible(l) ? null : "none");
+  const shown = SIM_NODES.filter(isVisible).length;
+  const shownLinks = LINKS.filter(isLinkVisible).length;
+  document.getElementById("stats").textContent = `${shown} nodes / ${shownLinks} links`;
+  redrawBubbles();
+}
+
+// ==== UI ====
+document.getElementById("pop-slider").addEventListener("input", e => {
+  popThreshold = +e.target.value;
+  document.getElementById("pop-value").textContent = popThreshold;
+  applyFilters();
+});
+const linkSlider = document.getElementById("link-slider");
+linkSlider.style.accentColor = "#A78BFA";
+linkSlider.addEventListener("input", e => {
+  linkWeightThreshold = +e.target.value;
+  document.getElementById("link-value").textContent = linkWeightThreshold;
+  applyFilters();
+});
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeCat = btn.dataset.cat;
+    applyFilters();
+  });
+});
+document.getElementById("search").addEventListener("input", e => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  applyFilters();
+});
+document.getElementById("clear-btn").addEventListener("click", clearSelection);
+
+const layoutBtn = document.getElementById("layout-toggle");
+layoutBtn.addEventListener("click", () => {
+  radialMode = !radialMode;
+  layoutBtn.textContent = radialMode ? "View: Radial" : "View: Force";
+  if (radialMode) {
+    sim.force("radial", d3.forceRadial(n => n.layer === 0 ? 0 : getRadii(n.layer).mid, W / 2, H / 2)
+        .strength(n => n.layer === 0 ? 0 : (n.layer === 5 ? 0.25 : 0.9)))
+       .force("angular", forceAngular())
+       .force("l0", forceL0())
+       .force("x", null).force("y", null);
+    ringG.style("display", null);
+    initRadialPositions();
+  } else {
+    sim.force("radial", null).force("angular", null).force("l0", null)
+       .force("x", d3.forceX(d => layerX(d.layer)).strength(0.92))
+       .force("y", d3.forceY(d => categoryY(d)).strength(0.3));
+    ringG.style("display", "none");
+  }
+  sim.alpha(0.9).restart();
+});
+
+document.getElementById("zin").addEventListener("click", () => svg.transition().call(zoomBehavior.scaleBy, 1.3));
+document.getElementById("zout").addEventListener("click", () => svg.transition().call(zoomBehavior.scaleBy, 1 / 1.3));
+document.getElementById("zfit").addEventListener("click", () => svg.transition().call(zoomBehavior.transform, d3.zoomIdentity));
+
+window.addEventListener("resize", () => {
+  W = container.clientWidth; H = container.clientHeight;
+  svg.attr("width", W).attr("height", H);
+  if (radialMode) {
+    precomputeAngles(); placeL0(); drawRingBackgrounds();
+    sim.force("radial", d3.forceRadial(n => n.layer === 0 ? 0 : getRadii(n.layer).mid, W / 2, H / 2)
+        .strength(n => n.layer === 0 ? 0 : (n.layer === 5 ? 0.25 : 0.9)));
+    sim.force("angular", forceAngular());
+    sim.force("l0", forceL0());
+    initRadialPositions();
+  } else {
+    sim.force("x", d3.forceX(d => layerX(d.layer)).strength(0.92));
+    sim.force("y", d3.forceY(d => categoryY(d)).strength(0.3));
+  }
+  sim.alpha(0.5).restart();
+});
+
+document.querySelectorAll(".legend-type-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const types = item.dataset.types.split(",");
+    const allActive = types.every(t => activeTypes.has(t));
+    if (allActive) types.forEach(t => activeTypes.delete(t));
+    else types.forEach(t => activeTypes.add(t));
+    item.classList.toggle("inactive", !types.every(t => activeTypes.has(t)));
+    applyFilters();
+  });
+});
+document.querySelectorAll(".ring-legend").forEach(item => {
+  item.addEventListener("click", () => selectLayer(+item.dataset.layer));
+});
+
+// ==== SIDE PANEL ====
+const sidePanel = document.getElementById("side-panel");
+document.getElementById("sp-close").addEventListener("click", () => clearSelection());
+svg.on("click", () => clearSelection());
+
+function closeSidePanel() { sidePanel.classList.remove("open"); }
+
+function openSidePanel(d) {
+  sidePanel.classList.add("open");
+  document.getElementById("sp-name").textContent = d.name;
+  document.getElementById("sp-cats").textContent = `${d.superCat} · ${d.category} · ${d.subCat}`;
+  document.getElementById("sp-pop-fill").style.width = d.pop + "%";
+  document.getElementById("sp-desc").textContent = d.desc;
+
+  const conns = LINKS.filter(l => {
+    if (l.sourceIsBubble || l.targetIsBubble) return false;
+    return l.sourceRef === d.id || l.targetRef === d.id;
+  });
+  document.getElementById("sp-connections").innerHTML = conns.map(l => {
+    const other = l.sourceRef === d.id ? l.targetRef : l.sourceRef;
+    const dir = l.sourceRef === d.id ? "→" : "←";
+    const col = EDGE_COLOR[l.type] || "#94A3B8";
+    return `<div class="sp-conn-item" data-arrow-id="${l.arrowId}">
+      <span class="sp-conn-dot" style="background:${col}"></span>
+      <span class="sp-conn-text">
+        <span>${dir} ${refLabel(other)}</span>
+        <span class="sp-conn-name">${l.name}</span>
+      </span>
+      <span class="sp-conn-type">${l.type}</span>
+    </div>`;
+  }).join("") || '<div style="font-size:10px;color:#64748B">No direct connections.</div>';
+
+  document.querySelectorAll(".sp-conn-item").forEach(el => {
+    el.addEventListener("click", () => {
+      const id = el.dataset.arrowId;
+      const l = LINKS.find(x => x.arrowId === id);
+      if (!l) return;
+      document.querySelectorAll(".sp-conn-item").forEach(e => e.classList.remove("active"));
+      el.classList.add("active");
+      selectedArrowId = id;
+      link.classed("selected-arrow", x => x.arrowId === id);
+    });
+  });
+
+  const spLink = document.getElementById("sp-link");
+  if (d.domain) { spLink.href = "https://" + d.domain; spLink.style.display = "block"; }
+  else spLink.style.display = "none";
+
+  document.getElementById("sp-linkedin-btn").onclick = () => {
+    const tag = "#" + d.category.replace(/[\s&/]+/g, "");
+    const blurb = `🚀 ${d.name}\n\n${d.desc}\n\n${tag} #AI #AITools #AILandscape2026`;
+    navigator.clipboard.writeText(blurb).then(() => {
+      const btn = document.getElementById("sp-linkedin-btn");
+      btn.textContent = "Copied ✓";
+      setTimeout(() => { btn.textContent = "Copy LinkedIn blurb"; }, 2000);
+    });
+  };
+}
+
+function openBubblePanel(bubId) {
+  const grp = BUBBLE_GROUPS[bubId];
+  if (!grp) return;
+  sidePanel.classList.add("open");
+  document.getElementById("sp-name").textContent = grp.label + " (bubble)";
+  document.getElementById("sp-cats").textContent = `Layer ${grp.layer}: ${LAYER_NAMES[grp.layer]} · ${grp.memberIds.length} members`;
+  document.getElementById("sp-pop-fill").style.width = "100%";
+  document.getElementById("sp-desc").textContent = "Members: " + grp.memberIds.map(id => {
+    const n = NODES.find(x => x.id === id); return n ? n.name : id;
+  }).join(", ");
+
+  const bubRef = `bub:${bubId}`;
+  const conns = LINKS.filter(l => l.sourceRef === bubRef || l.targetRef === bubRef);
+  document.getElementById("sp-connections").innerHTML = conns.map(l => {
+    const other = l.sourceRef === bubRef ? l.targetRef : l.sourceRef;
+    const dir = l.sourceRef === bubRef ? "→" : "←";
+    const col = EDGE_COLOR[l.type] || "#94A3B8";
+    const otherIsBub = l.sourceRef === bubRef ? l.targetIsBubble : l.sourceIsBubble;
+    return `<div class="sp-conn-item" data-arrow-id="${l.arrowId}">
+      <span class="sp-conn-dot" style="background:${col}"></span>
+      <span class="sp-conn-text">
+        <span>${dir} ${otherIsBub ? "📦 " : ""}${refLabel(other)}</span>
+        <span class="sp-conn-name">${l.name}</span>
+      </span>
+      <span class="sp-conn-type">${l.type}</span>
+    </div>`;
+  }).join("") || '<div style="font-size:10px;color:#64748B">No bubble-level connections.</div>';
+
+  document.querySelectorAll(".sp-conn-item").forEach(el => {
+    el.addEventListener("click", () => {
+      const id = el.dataset.arrowId;
+      document.querySelectorAll(".sp-conn-item").forEach(e => e.classList.remove("active"));
+      el.classList.add("active");
+      selectedArrowId = id;
+      link.classed("selected-arrow", x => x.arrowId === id);
+    });
+  });
+
+  document.getElementById("sp-link").style.display = "none";
+  document.getElementById("sp-linkedin-btn").onclick = () => {
+    const blurb = `🚀 ${grp.label} — Layer ${grp.layer} bubble\n\n${grp.memberIds.length} tools in this category.\n\n#AILandscape2026`;
+    navigator.clipboard.writeText(blurb);
+  };
+}
+
+node.on("click", (ev, d) => { ev.stopPropagation(); selectNode(d); });
+
+applyFilters();
+
+} // end if(!IS_MOBILE)
+
+// ==== MOBILE RENDERER ====
+function renderMobile() {
+  // Inject mobile DOM
+  const app = document.createElement('div');
+  app.id = 'm-app';
+  app.classList.add('active');
+  app.innerHTML = `
+    <div id="m-header">
+      <div id="m-title-row">
+        <div id="m-title">AI Landscape <span>2026</span></div>
+        <div id="m-sub" data-stat>${NODES.length} tools · 6 layers</div>
+      </div>
+      <input id="m-search" placeholder="Search tools, categories…" autocomplete="off"/>
+      <div id="m-chips">
+        <button class="m-chip active" data-cat="all">All</button>
+        <button class="m-chip" data-cat="Hardware">Hardware</button>
+        <button class="m-chip" data-cat="Infrastructure">Infra</button>
+        <button class="m-chip" data-cat="Models">Models</button>
+        <button class="m-chip" data-cat="Tools">Tools</button>
+        <button class="m-chip" data-cat="Creative AI">Creative</button>
+        <button class="m-chip" data-cat="Emerging">Emerging</button>
+      </div>
+    </div>
+    <div id="m-scroll"></div>
+    <div id="m-sheet"><div id="m-sheet-card"><button id="m-sheet-close">&times;</button><div id="m-sheet-body"></div></div></div>
+  `;
+  document.body.appendChild(app);
+
+  const PERSONAS = new Set(["Developer","Enterprise","Creator","Consumer","Researcher"]);
+  const SIM = NODES.filter(n => !PERSONAS.has(n.id));
+
+  // Connection lookup (skip bubble refs)
+  const connsByNode = {};
+  LINKS_RAW.forEach(row => {
+    const [s, t, type, w, name] = row;
+    if (typeof s !== 'string' || typeof t !== 'string') return;
+    if (s.startsWith('bub:') || t.startsWith('bub:')) return;
+    (connsByNode[s] ||= []).push({ other: t, type, dir: '→', name });
+    (connsByNode[t] ||= []).push({ other: s, type, dir: '←', name });
+  });
+
+  function mInitials(name) {
+    const p = name.split(/[\s\-]+/).filter(Boolean);
+    return p.length === 1 ? p[0].slice(0,2).toUpperCase() : (p[0][0] + p[1][0]).toUpperCase();
+  }
+  function logoHtml(n, sizeClass) {
+    const url = n.imgUrl || (n.domain ? `https://www.google.com/s2/favicons?domain=${n.domain}&sz=128` : null);
+    if (url) return `<div class="${sizeClass}"><img src="${url}" alt="" loading="lazy" onerror="this.parentNode.innerHTML='<span class=\\'m-init\\'>${mInitials(n.name)}</span>'"/></div>`;
+    return `<div class="${sizeClass}"><span class="m-init">${mInitials(n.name)}</span></div>`;
+  }
+
+  let activeCat = 'all';
+  let searchTerm = '';
+
+  const scroll = document.getElementById('m-scroll');
+  const stat = document.querySelector('#m-sub');
+
+  function render() {
+    scroll.innerHTML = '';
+    let total = 0;
+    for (let layer = 0; layer <= 5; layer++) {
+      const layerNodes = SIM.filter(n => n.layer === layer);
+      const filtered = layerNodes.filter(n => {
+        if (activeCat !== 'all' && n.superCat !== activeCat) return false;
+        if (searchTerm) {
+          const t = searchTerm;
+          if (!n.name.toLowerCase().includes(t) &&
+              !n.category.toLowerCase().includes(t) &&
+              !(n.subCat||'').toLowerCase().includes(t)) return false;
+        }
+        return true;
+      }).sort((a,b) => b.pop - a.pop);
+      if (!filtered.length) continue;
+      total += filtered.length;
+
+      const subCats = {};
+      filtered.forEach(n => { (subCats[n.category] ||= []).push(n); });
+
+      const color = LAYER_COLORS[layer];
+      let html = `<section class="m-layer" style="--lc:${color}">
+        <div class="m-layer-head">
+          <div class="m-layer-bar"></div>
+          <div class="m-layer-num">L${layer}</div>
+          <div class="m-layer-name">${LAYER_NAMES[layer]}</div>
+          <div class="m-layer-count">${filtered.length}</div>
+        </div>`;
+      Object.entries(subCats).forEach(([cat, nodes]) => {
+        html += `<div class="m-cat">${cat}</div><div class="m-grid">`;
+        nodes.forEach(n => {
+          html += `<button class="m-card" data-id="${encodeURIComponent(n.id)}">
+            ${logoHtml(n, 'm-logo-wrap')}
+            <div class="m-name">${n.name}</div>
+          </button>`;
+        });
+        html += `</div>`;
+      });
+      html += `</section>`;
+      scroll.insertAdjacentHTML('beforeend', html);
+    }
+
+    if (!total) scroll.innerHTML = `<div class="m-empty">No matches.</div>`;
+    stat.textContent = `${total} tools · 6 layers`;
+
+    scroll.querySelectorAll('.m-card').forEach(el => {
+      el.addEventListener('click', () => openSheet(decodeURIComponent(el.dataset.id)));
+    });
+  }
+
+  function openSheet(id) {
+    const n = NODES.find(x => x.id === id);
+    if (!n) return;
+    const cs = (connsByNode[id] || []).slice(0, 14);
+    const body = document.getElementById('m-sheet-body');
+    body.innerHTML = `
+      <div class="m-sheet-top">
+        ${logoHtml(n, 'm-sheet-logo')}
+        <div>
+          <div class="m-sheet-name">${n.name}</div>
+          <div class="m-sheet-cat">${n.superCat} · ${n.category}${n.subCat ? ' · ' + n.subCat : ''}</div>
+        </div>
+      </div>
+      <div class="m-sheet-pop">
+        <div class="m-sheet-pop-lbl"><span>Popularity</span><b>${n.pop}</b></div>
+        <div class="m-sheet-pop-bar"><span style="width:${n.pop}%"></span></div>
+      </div>
+      <div class="m-sheet-desc">${n.desc}</div>
+      ${cs.length ? `<div class="m-sheet-conn-lbl">Connects to (${(connsByNode[id]||[]).length})</div>
+        <div class="m-sheet-conns">${cs.map(c => {
+          const oN = NODES.find(x => x.id === c.other);
+          return `<span class="m-conn-pill">${c.dir} ${oN ? oN.name : c.other}<em>${c.type}</em></span>`;
+        }).join('')}</div>` : ''}
+      ${n.domain ? `<a class="m-sheet-link" href="https://${n.domain}" target="_blank" rel="noopener">Visit ${n.domain} →</a>` : ''}
+    `;
+    document.getElementById('m-sheet').classList.add('open');
+  }
+
+  document.getElementById('m-sheet-close').addEventListener('click', () => {
+    document.getElementById('m-sheet').classList.remove('open');
+  });
+  document.getElementById('m-sheet').addEventListener('click', (e) => {
+    if (e.target.id === 'm-sheet') document.getElementById('m-sheet').classList.remove('open');
+  });
+  document.querySelectorAll('.m-chip').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.m-chip').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      activeCat = b.dataset.cat;
+      render();
+      scroll.scrollTop = 0;
+    });
+  });
+  document.getElementById('m-search').addEventListener('input', (e) => {
+    searchTerm = e.target.value.toLowerCase().trim();
+    render();
+  });
+
+  render();
+}
+</script>
+</body>
+</html>
