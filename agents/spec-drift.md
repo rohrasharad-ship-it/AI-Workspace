@@ -5,7 +5,7 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
+`agents/shared/issue-cap.md`, `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
 `agents/shared/conventions.md`, and the shared idea-generation guardrails in
 `routines/README.md`
 
@@ -21,7 +21,7 @@ full-breadth reading by design — see the "who reads how much" table in
 **Step 0 — Issue Cap pre-flight.** If `idea-sweep` triggered you, this was
 already checked once for this project before you started — skip straight to
 step 1. If you were triggered standalone (not via `idea-sweep`), do the check
-yourself first: see "Pre-flight: Issue Cap" in `routines/README.md`. If the
+yourself first: see `agents/shared/issue-cap.md`. If the
 project is at or over the cap, stop here — post the skip message to Slack and
 do not proceed to step 1.
 
