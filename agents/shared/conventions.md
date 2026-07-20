@@ -58,7 +58,7 @@ same correct status.
 
 The per-issue cleanup rules in `agents/shared/visual-specs.md` (delete the
 previous iteration's branch, delete on spec-lock) rely on an agent
-remembering what it created. `agents/spec-drift.md` step 9 adds a periodic
+remembering what it created. `agents/spec-drift.md` step 11 adds a periodic
 sweep to the weekly spec-drift routine run: list all remote `preview/*`
 branches, check each one's issue via the branch name
 (`preview/<issue-id>-v<n>`), and delete any branch whose issue is no longer

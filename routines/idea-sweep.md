@@ -28,9 +28,11 @@ Before running any of the three roles for a given project, do the Issue Cap
 check from `agents/shared/issue-cap.md` **once** for that project (use the
 **Linear Project ID** from `projects.md`, not the display name). If it's at or
 over the cap (5 open issues), post the skip message to that project's Slack
-channel and move on to the next named project — do not run spec-drift,
-bug-error, or market-feature for this one this cycle. Projects under the cap
-proceed normally below.
+channel, then **still run spec-drift steps 10–11 only** (stale-issue sweep +
+preview-branch housekeeping — these shrink the backlog and do not file new
+issues). Skip spec-drift steps 1–9 and skip bug-error and market-feature
+entirely for this project this cycle. Projects under the cap proceed normally
+below.
 
 ## Cadence (default, when set up as a recurring trigger)
 
@@ -52,20 +54,22 @@ cron), not something this file needs to enforce.
   Slack message per project** (not per role) to that project's Slack channel:
   ```
   🧭 Idea sweep — [Project Name]
-  Spec-drift: [N] issues filed
+  Spec-drift: [N] issues filed, [M] stale issues flagged
   Bug/error: [N] issues filed
   Market/feature: [N] issues filed
-  [links to each new issue]
+  [links to each new issue and each stale-flagged issue]
   ```
 - If a role found nothing, say so ("Bug/error: clean, nothing filed") rather
   than omitting it — Sharad should be able to tell the sweep actually ran.
 - If any issues were filed, note whether Linear per-issue notifications should
   have appeared in the channel (see `agents/shared/linear-slack.md`). If the
   bell was never smoke-tested, flag that rather than assuming it works.
-- **A project skipped at the pre-flight step (see above) gets only the skip
-  message, never the consolidated summary too** — no roles ran, so there's
-  nothing to summarize. One Slack message per project, either the skip
-  message or the summary, never both.
+- **A project skipped at the pre-flight step (see above) gets the skip message
+  plus a partial spec-drift summary** (`stale issues flagged`, `preview branches
+  deleted`) if steps 10–11 ran — never the full consolidated summary with
+  bug-error/market-feature counts, since those roles did not run. One Slack
+  message per project for the skip; a second message only if the partial
+  spec-drift run found something worth reporting.
 
 ## Example trigger
 

@@ -33,7 +33,9 @@ Always use the **Linear Project ID** (UUID) from `projects.md`.
 4. **Count open:** increment for each issue whose `statusType` is not
    `completed`, `canceled`, or `duplicate`.
 5. If the count is **≥ 5**, the project is at cap — post the skip message below
-   and stop. Do not read the codebase, logs, or OpenSpec for this project.
+   and stop **creating new issues** for this project. Spec-drift still runs its
+   stale-issue sweep and preview-branch housekeeping (steps 10–11 in
+   `agents/spec-drift.md`) even at cap.
 6. **Sanity check:** if the count is **0** but the project should have open
    work, call `list_projects` and confirm the ID in `projects.md` still
    matches. Update `projects.md` if Linear was reorganized, then recount once.
