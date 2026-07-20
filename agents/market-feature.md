@@ -5,7 +5,8 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/linear-slack.md`, `agents/shared/visual-specs.md`,
+`agents/shared/issue-cap.md`, `agents/shared/linear-slack.md`,
+`agents/shared/visual-specs.md`,
 `agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
 shared idea-generation guardrails in `routines/README.md`
 
