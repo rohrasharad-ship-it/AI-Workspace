@@ -48,7 +48,13 @@ link to a visual preview here when the issue has a UI component>
    market-feature file Backlog + `spec-needed` issues — the brief is enough
    for triage. Deeper spec detail belongs in the later spec-conversation
    phase, not at creation time.
-9. **Title and "In short" should align.** The title (with its leading emoji —
+9. **Execution detail goes in the first comment, not the description.** After
+   creating the issue, post a comment with evidence: spec file references,
+   codebase areas checked, Linear dedupe search terms, error log excerpts,
+   screenshot notes, visual-preview links. Sharad triages from the Issue
+   Brief; digs into the comment when he wants proof. See the first-comment
+   step in each idea-generation role file.
+10. **Title and "In short" should align.** The title (with its leading emoji —
    see `agents/shared/conventions.md`) can expand slightly on "In short," but
    they should describe the same thing.
 

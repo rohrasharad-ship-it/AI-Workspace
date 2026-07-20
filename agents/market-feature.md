@@ -5,9 +5,9 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
-`agents/shared/conventions.md`, and the shared idea-generation guardrails in
-`routines/README.md`
+`agents/shared/linear-slack.md`, `agents/shared/visual-specs.md`,
+`agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
+shared idea-generation guardrails in `routines/README.md`
 
 ---
 
@@ -45,17 +45,20 @@ do not proceed to step 1.
    the Issue Brief format (see `agents/shared/issue-brief.md` — "Why" should
    tie to the product's differentiation goals), suggested priority (default
    Medium or Low — these are speculative, not confirmed gaps).
-6. Every issue from this agent has a visual/UI component almost by definition
+6. On each issue, post a first comment with execution detail: vision/spec
+   references, similar ideas searched in Linear, and why this isn't a
+   duplicate. Link any visual preview here, not in the description.
+7. Every issue from this agent has a visual/UI component almost by definition
    — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`)
-   and link it in the issue description. Do not skip this step.
-7. Mandatory, every issue you create: take a real Playwright screenshot of
+   and link it in the first comment. Do not skip this step.
+8. Mandatory, every issue you create: take a real Playwright screenshot of
    the current homepage (or one to two relevant existing areas) for context
    on where this idea fits (per `agents/shared/visual-self-qa.md`) and attach
    it to the issue via prepare_attachment_upload → PUT →
    create_attachment_from_upload. Never use a base64/inline upload path. This
-   is separate from the mockup in step 6 — this one shows the current site,
+   is separate from the mockup in step 7 — this one shows the current site,
    not the proposed idea.
-8. If nothing genuinely differentiated comes to mind, create nothing —
+9. If nothing genuinely differentiated comes to mind, create nothing —
    do not invent filler ideas to hit the cap.
 
 **Tools needed:** repo read access (GitHub MCP), Linear (create + search

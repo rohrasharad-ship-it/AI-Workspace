@@ -101,6 +101,9 @@ checking (and posting to Slack) three separate times for the same project.
 - Title starts with one relevant emoji (see `agents/shared/conventions.md`)
 - Description uses the Issue Brief format — five scannable one-liners, no long
   paragraphs (see `agents/shared/issue-brief.md`)
+- **First comment on each created issue** carries execution detail (spec refs,
+  dedupe search terms, log excerpts, preview links) — see
+  `agents/shared/issue-brief.md` rule 9 and each role file's comment step
 - Search Linear first — skip anything already tracked (open or recently closed)
 - No implementation detail — that belongs to the later spec conversation
 - Suggest a priority; Sharad overrides
@@ -109,6 +112,8 @@ checking (and posting to Slack) three separate times for the same project.
   it in the issue description
 - Take a real screenshot per `agents/shared/visual-self-qa.md` and attach it
   to the issue — mandatory for every issue any of these three roles create
+- **Per-issue Slack notifications** come from Linear's project bell, not from
+  agents — see `agents/shared/linear-slack.md` for setup and verification
 
 ## Idea Feeder Sources
 

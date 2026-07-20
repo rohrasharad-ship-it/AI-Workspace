@@ -58,6 +58,9 @@ cron), not something this file needs to enforce.
   ```
 - If a role found nothing, say so ("Bug/error: clean, nothing filed") rather
   than omitting it — Sharad should be able to tell the sweep actually ran.
+- If any issues were filed, note whether Linear per-issue notifications should
+  have appeared in the channel (see `agents/shared/linear-slack.md`). If the
+  bell was never smoke-tested, flag that rather than assuming it works.
 - **A project skipped at the pre-flight step (see above) gets only the skip
   message, never the consolidated summary too** — no roles ran, so there's
   nothing to summarize. One Slack message per project, either the skip
