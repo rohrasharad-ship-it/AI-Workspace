@@ -1,9 +1,7 @@
 ## Purpose
 
 Two complementary visual verification systems: spec previews (proposed ideas) and self-QA screenshots (live deployed results).
-
 ## Requirements
-
 ### Requirement: Visual specs for proposed UI ideas
 Any agent proposing a feature with a meaningful visual or motion component MUST attach a standalone HTML preview — not just text. Non-visual changes (logic, config, copy-only) MUST skip this.
 
@@ -38,7 +36,7 @@ Agents MUST capture real Playwright screenshots of live deployed URLs, actually 
 - **THEN** visual self-QA is N/A; Status Snapshot shows Preview: N/A
 
 ### Requirement: Spec-preview sandbox hosted on Vercel
-AI-Workspace MUST maintain a static Vercel project (`ai-workspace.vercel.app`) that deploys any pushed branch so `previews/*.html` files are reachable at predictable URLs.
+AI-Workspace MUST maintain a static Vercel project (`ai-workspace-blond.vercel.app`) that deploys any pushed branch so `previews/*.html` files are reachable at predictable URLs.
 
 #### Scenario: Preview file deployed
 - **WHEN** `previews/SHA-44-v1.html` is pushed to a branch
@@ -54,3 +52,4 @@ Before claiming a preview is ready or attaching screenshots, agents MUST check t
 #### Scenario: Deployment protection enabled
 - **WHEN** a preview URL redirects to `vercel.com/sso-api`
 - **THEN** the agent reports access-gated status instead of claiming preview is ready
+

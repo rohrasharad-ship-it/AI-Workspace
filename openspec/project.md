@@ -7,7 +7,7 @@ The central instruction hub for Sharad's AI-first product development loop — a
 - Format: Markdown instruction files (no application runtime)
 - Spec layer: OpenSpec (`@fission-ai/openspec`)
 - Integrations: Linear (issues), Slack (notifications), Vercel (spec-preview sandbox)
-- Hosting: `ai-workspace.vercel.app` — static spec-preview sandbox only, not a product deployment
+- Hosting: `ai-workspace-blond.vercel.app` — static spec-preview sandbox only, not a product deployment
 - Language: N/A (documentation repo)
 
 ## Non-Negotiables

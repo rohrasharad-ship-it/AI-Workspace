@@ -1,9 +1,7 @@
 ## Purpose
 
 External service wiring: project registry and Linear → Slack notifications.
-
 ## Requirements
-
 ### Requirement: Project registry in projects.md
 `projects.md` MUST be the single source of truth for every project an agent or routine operates on, including repo, Linear project name, Linear Project ID (UUID), Slack channel, and Vercel prod URL.
 
@@ -41,8 +39,9 @@ Each Linear project MUST have Slack bell notifications enabled for at least "Iss
 - **THEN** a throwaway test issue confirms a Linear bot card appears in the project's Slack channel within ~1 minute
 
 ### Requirement: PM OS project registered
-AI-Workspace (PM OS) MUST be registered in `projects.md` with Linear project "PM OS", Slack `#pm-ops`, and Vercel sandbox URL `ai-workspace.vercel.app`.
+AI-Workspace (PM OS) MUST be registered in `projects.md` with Linear project "PM OS", Slack `#pm-ops`, and Vercel sandbox URL `ai-workspace-blond.vercel.app`.
 
 #### Scenario: Idea-sweep on PM OS
 - **WHEN** idea-sweep runs against PM OS
 - **THEN** spec-drift can read this repo's `openspec/` and compare against the instruction files in the codebase
+
