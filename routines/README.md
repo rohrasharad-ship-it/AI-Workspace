@@ -52,7 +52,7 @@ again.
 1. Read the named routine file (e.g. `routines/idea-sweep.md`) — it lists
    which roles to run.
 2. Resolve the named project(s) against `projects.md` (repo, Linear project,
-   Slack channel, prod URL). If the trigger says "all projects," loop over
+   Linear project ID, Slack channel, prod URL). If the trigger says "all projects," loop over
    every row in `projects.md`.
 3. For each (role × project) pair, run that role's file
    (`agents/spec-drift.md`, etc.) against that project — either inline in the
@@ -69,25 +69,21 @@ again.
 
 ## Pre-flight: Issue Cap (mandatory, before any idea-generation role creates issues)
 
-Before spec-drift, bug-error, or market-feature does anything else for a
-project, count that project's **open Linear issues** — every issue whose
-status is not `Done` or `Cancelled` (Backlog, spec-needed, agent-ready,
-In Progress, In Review all count toward the total).
+Follow `agents/shared/issue-cap.md` exactly — that module has the full
+counting procedure, skip message, and the known Linear MCP pitfall.
+
+**In short:** count open issues per project (cap: 5). Filter `list_issues` by
+the **Linear Project ID** from `projects.md`, not the display name — name
+filters silently return zero for some projects. Paginate through every page and
+count issues whose `statusType` is not `completed`, `canceled`, or `duplicate`.
 
 **If that count is 5 or more, do not run any of the three idea-generation
-roles for this project this cycle.** Create no issues, do not read the
-codebase or logs — skip straight to notifying Slack:
-
-```
-⛔ Idea-sweep skipped — [Project Name]
-Linear already has [N] open issues (cap: 5 per project). Triage the backlog
-before more get added.
-```
+roles for this project this cycle.**
 
 **This check is per-project, not global** — a full backlog on one project
-never blocks routines on another project. With 5 active projects (see
-`projects.md`), this keeps the steady-state ceiling across all of them around
-25 total, not unbounded.
+never blocks routines on another. With 5 active projects (see `projects.md`),
+this keeps the steady-state ceiling across all of them around 25 total, not
+unbounded.
 
 **Check once per project per routine run, not once per role.** If `idea-sweep`
 is running all three roles for a project, do this check a single time before

@@ -88,7 +88,7 @@ regardless of which session created them.
    section above).
 10. **Every new issue is assigned to Sharad Rohra, never an agent, its title starts with one relevant emoji, and its description uses the Issue Brief format.** See New Issue Conventions above.
 11. **Build must always succeed before any PR opens.** Existing tests (if the repo has any) run only for changes touching shared/critical surface — never required to exist, never run wholesale for every small change.
-12. **Visual Self-QA is mandatory for the builder role and all idea-generation routines** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens.
+12. **Visual Self-QA is mandatory for the builder role and all idea-generation routines** — a real screenshot, actually looked at, attached to the Linear issue via the signed-upload flow (never base64). This is not optional and not skippable to save tokens. If session network policy blocks outbound HTTPS, follow the documented fallback in `agents/shared/visual-self-qa.md` — attempt honestly, comment with the block details, defer visual QA to Sharad; never skip silently.
 13. **Moving an issue to `In Review` happens immediately when a PR opens — never gated on Vercel, screenshots, or anything downstream.** A step failing later must not silently undo or block what already succeeded earlier.
 14. **Never go silent.** If the preview URL can't be obtained after reasonable polling, post what you have (the PR link) rather than posting nothing at all.
 15. **Keep the Status Snapshot block at the top of every issue description
