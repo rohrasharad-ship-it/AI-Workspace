@@ -48,18 +48,26 @@ do not proceed to step 1.
    dedupe, and why this isn't a duplicate. Link any visual preview and note
    any screenshots attached, not in the description.
 9. If nothing meaningful is found, create nothing.
-10. **Housekeeping (runs every time, independent of 1-9):** list all remote
-   `preview/*` branches in the target repo. For each, parse the issue ID from
-   the branch name (`preview/<issue-id>-v<n>`) and look up that issue in
-   Linear. Delete the branch if the issue is no longer labeled `spec-needed`
-   (i.e. it moved to `agent-ready`, `In Review`, `Done`, or was
-   canceled/duplicated), or if it's an older version number than the latest
-   branch for that issue. Report the count deleted at the end of the run.
-   This is the structural backup for preview-branch pileup — see
-   `agents/shared/conventions.md`'s Cursor Rules section for why it exists.
+10. **Housekeeping (runs every time, independent of 1-9):** preview branches
+   live in **AI-Workspace** (`rohrasharad-ship-it/AI-Workspace`), not in the
+   target project repo — run the cleanup script there:
+   ```bash
+   cd AI-Workspace   # clone or use an existing checkout
+   export LINEAR_API_KEY=...   # required for issue label/state lookup
+   bash scripts/cleanup-preview-branches.sh
+   ```
+   Use `--dry-run` to report without deleting. The script parses each
+   `preview/<issue-id>-v<n>` branch, looks up the issue in Linear, and deletes
+   when the issue is no longer `spec-needed` (moved to `agent-ready`, `In
+   Review`, `Done`, or canceled/duplicated) or when it's an older version than
+   the latest branch for that issue. Report the deleted count at the end of the
+   run. A scheduled GitHub Action (`.github/workflows/preview-branch-cleanup.yml`)
+   runs the same script weekly as a structural backup — see
+   `agents/shared/conventions.md`.
 
-**Tools needed:** repo read access (GitHub MCP, including branch delete),
-Linear (create + search issues, attach files, read issue status/labels),
-browser/Playwright against the live site.
+**Tools needed:** shell access to clone/run scripts in AI-Workspace (including
+`git push origin --delete preview/<issue-id>-v<n>` for orphans), Linear (create
++ search issues, attach files, read issue status/labels), browser/Playwright
+against the live site.
 
 **Cadence:** weekly, Monday 9am (default — see `routines/idea-sweep.md`).
