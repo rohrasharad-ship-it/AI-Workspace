@@ -70,7 +70,7 @@ When ready to implement, run /opsx:apply
         - `resolvedOutputPath`: Resolved path or pattern to write the artifact
         - `dependencies`: Completed artifacts to read for context
       - Read any completed dependency files for context
-      - Create the artifact file using `template` as the structure and write it to `resolvedOutputPath`
+      - Create the artifact file(s) using `template` as the structure. Write to `resolvedOutputPath` when it is a concrete file; if it is a glob pattern, do NOT write to `resolvedOutputPath` — create the concrete file paths the schema `instruction` requires under `changeRoot` instead
       - Apply `context` and `rules` as constraints - but do NOT copy them into the file
       - Show brief progress: "Created <artifact-id>"
 
