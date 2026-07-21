@@ -9,7 +9,13 @@ Initialize a new project into the AI-first PM loop. Run this once per new repo.
 3. Initializes OpenSpec properly with per-capability spec files — NOT a flat spec doc
    and NOT empty placeholder stubs if the project already has shipped features
 4. Creates a Linear project for it
-5. Adds the project to the Project Index in AI-Workspace/AGENTS.md
+5. Adds the project to the Project Index in AI-Workspace/projects.md
+
+Because the target repo's AGENTS.md is only a thin pointer into
+AI-Workspace/AGENTS.md (see "Hub model" there), the project gets every role
+(`agents/*.md`) and every routine (`routines/*.md`) for free the moment it's
+added to `projects.md` — no extra setup needed to make idea-generation
+routines like `idea-sweep` work against it.
 
 ## Steps
 
@@ -72,9 +78,9 @@ openspec/specs/<capability-1>/spec.md
 openspec/specs/<capability-2>/spec.md
 ... one per capability from the user's answer above
 ```
-`openspec/project.md` uses the template from AI-Workspace/AGENTS.md's "The Spec
-Layer: OpenSpec" section, including the `## Capabilities` index listing each
-capability name and its file path. Each `openspec/specs/<capability>/spec.md`
+`openspec/project.md` uses the template from
+AI-Workspace/agents/shared/openspec.md, including the `## Capabilities` index
+listing each capability name and its file path. Each `openspec/specs/<capability>/spec.md`
 must describe the capability that already exists in the codebase if that
 feature is already shipped. Inspect the repo first, then convert the live
 product into the baseline spec. If a capability is genuinely new or not yet
@@ -92,9 +98,13 @@ Use the Linear MCP tool to create a new project with:
 - Team: Sharad Rohra
 - Description: $ONE_SENTENCE_DESCRIPTION. Slack: $SLACK_CHANNEL. Repo: $REPO.
 - Priority: Medium
+- After creating the project, configure Linear → Slack bell notifications to
+  $SLACK_CHANNEL (see `agents/shared/linear-slack.md` — enable "Issue created"
+  and run the smoke test).
 
-### Step E — Update AI-Workspace/AGENTS.md Project Index
-Read the current AGENTS.md from the AI-Workspace repo and add a new row to the Project Index table:
+### Step E — Update AI-Workspace/projects.md
+Read the current `projects.md` from the AI-Workspace repo and add a new row to
+the Project Index table:
 | $PROJECT_NAME | $REPO | $PROJECT_NAME | $SLACK_CHANNEL | $VERCEL_URL |
 
 ### Step F — Confirm to the user
