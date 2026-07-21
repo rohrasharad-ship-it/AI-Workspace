@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-171 preview — Draft quality self-critique gate</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#f8f8f8; --panel:#fff; --border:#e2e2e2; --text:#1d1c1d; --muted:#616061;
+    --slack-purple:#4a154b; --green:#2eb67d; --amber:#b5850a; --btn:#f8f8f8;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#1a1d21; --panel:#222529; --border:#3a3d41; --text:#d1d2d3; --muted:#a2a2a2; --btn:#2c2f33; --amber:#e0b23f; }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:32px 16px; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    display:flex; flex-direction:column; align-items:center; gap:20px;
+  }
+  .note{ max-width:640px; font-size:13px; color:var(--muted); text-align:center; line-height:1.5; }
+  .note b{ color:var(--text); }
+  .slack-frame{
+    width:100%; max-width:640px; background:var(--panel); border:1px solid var(--border);
+    border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.08);
+  }
+  .channel-bar{ padding:10px 16px; border-bottom:1px solid var(--border); font-weight:700; font-size:15px; display:flex; align-items:center; gap:6px;}
+  .channel-bar .hash{ color:var(--muted); font-weight:400; }
+  .msg{ padding:14px 16px 16px; border-bottom:1px solid var(--border); }
+  .msg:last-child{ border-bottom:none; }
+  .msg-row{ display:flex; }
+  .avatar{ width:28px; height:28px; border-radius:6px; background:var(--slack-purple); display:inline-flex; align-items:center; justify-content:center; color:#fff; font-size:14px; margin-right:6px; flex-shrink:0;}
+  .msg-head{ display:flex; align-items:baseline; gap:8px; margin-bottom:4px; }
+  .bot-name{ font-weight:700; font-size:14px; }
+  .bot-tag{ background:var(--border); font-size:10px; padding:1px 5px; border-radius:3px; color:var(--muted); }
+  .ts{ font-size:12px; color:var(--muted); }
+  .body-text{ font-size:14px; line-height:1.5; margin:2px 0 10px; }
+  .qc-badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
+    padding:4px 8px; border-radius:6px; margin-bottom:10px;
+  }
+  .qc-pass{ background:rgba(46,182,125,.12); color:var(--green); border:1px solid rgba(46,182,125,.35); }
+  .qc-regen{ background:rgba(181,133,10,.12); color:var(--amber); border:1px solid rgba(181,133,10,.35); }
+  .letter-block{
+    border:1px solid var(--border); border-radius:6px; padding:10px 12px; font-size:13px; line-height:1.5;
+    background:var(--bg); margin-bottom:10px;
+  }
+  .strike{ text-decoration:line-through; color:var(--muted); }
+  .critique-note{ font-size:12px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="note"><b>SHA-171 — Self-critique pass before drafts reach Slack.</b> Static mockup only. Shows a self-critique badge above a cover letter draft — one that passed, and one that was auto-regenerated because it read as generic.</div>
+
+<div class="slack-frame">
+  <div class="channel-bar"><span class="hash">#</span>application-agent</div>
+
+  <div class="msg">
+    <div class="msg-row">
+      <div class="avatar">AA</div>
+      <div style="flex:1;">
+        <div class="msg-head">
+          <span class="bot-name">Application Agent</span><span class="bot-tag">APP</span>
+          <span class="ts">11:22 AM</span>
+        </div>
+        <div class="body-text">Cover letter ready for <b>Ramp — Growth PM</b>.</div>
+
+        <div class="qc-badge qc-pass">✅ Passed quality check — specific, references your Etraveli integration work</div>
+
+        <div class="letter-block">I built the marketplace integration that got Etraveli live inside our platform in six weeks flat, the kind of unglamorous plumbing work that Growth teams live or die by...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg">
+    <div class="msg-row">
+      <div class="avatar">AA</div>
+      <div style="flex:1;">
+        <div class="msg-head">
+          <span class="bot-name">Application Agent</span><span class="bot-tag">APP</span>
+          <span class="ts">11:23 AM</span>
+        </div>
+        <div class="body-text">Cover letter ready for <b>Notion — Product Manager</b>.</div>
+
+        <div class="qc-badge qc-regen">⚠️ Regenerated — first draft read as generic, see v2 below</div>
+
+        <div class="letter-block strike">I am a highly motivated professional with strong communication skills and a passion for innovative products...</div>
+        <div class="letter-block">Notion's block editor is the reason I stopped fighting Confluence for internal docs — I'd want to bring that same "one canvas, no more app-switching" instinct to your PM team...</div>
+        <div class="critique-note">Self-critique flagged the first pass as templated boilerplate with no reference to Notion specifically; v2 regenerated with a concrete product detail.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
