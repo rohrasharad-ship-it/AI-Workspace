@@ -1,0 +1,23 @@
+name: Preview branch cleanup
+
+on:
+  schedule:
+    # Weekly, Monday 09:00 UTC — matches spec-drift cadence in routines/idea-sweep.md
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete orphaned preview branches
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: bash scripts/cleanup-preview-branches.sh

@@ -58,13 +58,15 @@ same correct status.
 
 The per-issue cleanup rules in `agents/shared/visual-specs.md` (delete the
 previous iteration's branch, delete on spec-lock) rely on an agent
-remembering what it created. `agents/spec-drift.md` step 11 adds a periodic
-sweep to the weekly spec-drift routine run: list all remote `preview/*`
-branches, check each one's issue via the branch name
-(`preview/<issue-id>-v<n>`), and delete any branch whose issue is no longer
-`spec-needed` (i.e. it's `agent-ready`, `In Review`, `Done`, or canceled) or
-that isn't the highest version number for that issue. This catches orphans
-regardless of which session created them.
+remembering what it created. Two backups catch orphans regardless of which
+session created them:
+
+1. **Scheduled GitHub Action** — `.github/workflows/preview-branch-cleanup.yml`
+   in AI-Workspace runs `scripts/cleanup-preview-branches.sh` weekly (Monday
+   9am UTC). Requires `LINEAR_API_KEY` as a repo secret.
+2. **Spec-drift housekeeping** — `agents/spec-drift.md` step 11 runs the same
+   script during each idea-sweep (preview branches live in AI-Workspace, not
+   project repos).
 
 ## Rules That Always Apply
 
