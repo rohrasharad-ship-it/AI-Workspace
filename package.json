@@ -1,0 +1,24 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "openspec list --specs && openspec validate --specs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohrasharad-ship-it/AI-Workspace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rohrasharad-ship-it/AI-Workspace/issues"
+  },
+  "homepage": "https://github.com/rohrasharad-ship-it/AI-Workspace#readme",
+  "devDependencies": {
+    "@fission-ai/openspec": "^1.6.0"
+  }
+}

@@ -97,6 +97,14 @@ I'll start the moment I see the agent-ready label.
      off on both current projects as of July 2026, but this check costs
      nothing and catches it immediately if it's ever re-enabled (e.g. by a
      new project defaulting to it again).
+   - **Repo-specific preview expectations** (see `agents/shared/status-snapshot.md`
+     for the full table Sharad sees):
+     - **Product repos** (resume-website, etc.): branch Vercel URL = real app
+       preview. Put it in the status snapshot and PR body.
+     - **AI-Workspace infra/docs** (no UI): set snapshot `Preview: N/A` and
+       tell Sharad to verify on GitHub — Linear's Preview button will still
+       open the sandbox placeholder homepage, which is not the deliverable.
+     - Never use a production domain as the preview URL.
 10. Once the build actually finishes (not just the URL existing), do **Visual
     Self-QA — mandatory** (see `agents/shared/visual-self-qa.md` for the exact
     mechanism): screenshot the changed area on the real preview URL, desktop

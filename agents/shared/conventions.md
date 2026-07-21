@@ -64,7 +64,7 @@ session created them:
 1. **Scheduled GitHub Action** — `.github/workflows/preview-branch-cleanup.yml`
    in AI-Workspace runs `scripts/cleanup-preview-branches.sh` weekly (Monday
    9am UTC). Requires `LINEAR_API_KEY` as a repo secret.
-2. **Spec-drift housekeeping** — `agents/spec-drift.md` step 10 runs the same
+2. **Spec-drift housekeeping** — `agents/spec-drift.md` step 11 runs the same
    script during each idea-sweep (preview branches live in AI-Workspace, not
    project repos).
 

@@ -1,0 +1,17 @@
+schema: spec-driven
+
+context: |
+  PM OS (AI-Workspace) — meta-project for AI agent development loop instructions.
+  Tech: Markdown files, OpenSpec, Linear, Slack, Vercel sandbox.
+  Hub model: this repo is the single source of agent process; product repos have thin AGENTS.md pointers.
+  Every change to process instructions should update the relevant openspec/specs/<capability>/spec.md first.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
