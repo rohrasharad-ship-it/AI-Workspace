@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SHA-176 — Routine template gallery (mockup)</title>
+<meta name="robots" content="noindex" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f5f7;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 2.5rem 1.5rem;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 1.15rem; margin: 0 0 0.35rem; }
+  .note { color: #666; font-size: 0.85rem; margin: 0 0 2rem; }
+  .grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border: 1px solid #e3e4e8; border-radius: 10px;
+    padding: 1.1rem 1.1rem 1.2rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card.active { border-color: #4a5fd6; box-shadow: 0 0 0 1px #4a5fd6 inset; }
+  .icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .card h3 { font-size: 0.92rem; margin: 0 0 0.4rem; }
+  .card p {
+    font-size: 0.78rem; color: #666; line-height: 1.4; margin: 0 0 0.8rem;
+  }
+  .tag {
+    display: inline-block; font-size: 0.65rem; font-weight: 600;
+    padding: 0.15rem 0.5rem; border-radius: 10px; background: #eef1fd; color: #4a5fd6;
+    margin-bottom: 0.6rem;
+  }
+  .tag.live { background: #e9f9ee; color: #27AE60; }
+  .btn {
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    padding: 0.35rem 0.7rem; border-radius: 6px; background: #1a1a1a; color: #fff;
+  }
+  .btn.ghost { background: #fff; border: 1px solid #ccc; color: #444; }
+  footer { margin-top: 2.5rem; font-size: 0.75rem; color: #999; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Routine template gallery — static mockup</h1>
+  <p class="note">SHA-176 · minimal-effort preview, not a working interaction. Shows a browsable starting menu of routine templates instead of one hardcoded routine.</p>
+
+  <div class="grid">
+    <div class="card active">
+      <div class="icon">🔁</div>
+      <span class="tag live">Live today</span>
+      <h3>Idea Sweep</h3>
+      <p>spec-drift + bug-error + market-feature, weekly per project.</p>
+      <span class="btn ghost">View routine</span>
+    </div>
+    <div class="card">
+      <div class="icon">🚦</div>
+      <span class="tag">Template</span>
+      <h3>Release Readiness Check</h3>
+      <p>Confirms build is green, spec is current, and preview branches are clean before a merge day.</p>
+      <span class="btn">Copy this routine</span>
+    </div>
+    <div class="card">
+      <div class="icon">🩺</div>
+      <span class="tag">Template</span>
+      <h3>Dependency Health Sweep</h3>
+      <p>Flags stale or vulnerable dependencies across every registered project repo.</p>
+      <span class="btn">Copy this routine</span>
+    </div>
+  </div>
+
+  <footer>Minimal-effort static frame per agents/shared/visual-specs.md — annotated layout only, not a built feature. Template content here is illustrative, not proposed as final.</footer>
+</div>
+</body>
+</html>
