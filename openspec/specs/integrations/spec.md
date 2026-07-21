@@ -18,7 +18,7 @@ Agents MUST filter Linear `list_issues` by Linear Project ID (UUID), not display
 
 #### Scenario: Issue cap check
 - **WHEN** idea-sweep checks open issue count
-- **THEN** it uses the UUID from `projects.md`, paginates all results, and counts non-terminal statuses
+- **THEN** it uses the UUID from `projects.md`, paginates all results, verifies each issue's `projectId` matches, and counts only issues whose status is Backlog, Todo, In Progress, or In Review
 
 ### Requirement: Dual Slack notification paths
 Idea-generation MUST use two independent Slack paths: (1) routine summary posted by the orchestrating agent at end of run, (2) per-issue Linear bot cards via project bell integration.

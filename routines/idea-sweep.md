@@ -27,7 +27,8 @@ Slack channel, and prod URL before running the roles.
 Before running any of the three roles for a given project, do the Issue Cap
 check from `agents/shared/issue-cap.md` **once** for that project (use the
 **Linear Project ID** from `projects.md`, not the display name). If it's at or
-over the cap (5 open issues), post the skip message to that project's Slack
+over the cap (5 active pipeline issues in Backlog, Todo, In Progress, or In
+Review), post the skip message to that project's Slack
 channel, then **still run spec-drift steps 10–11 only** (stale-issue sweep +
 preview-branch housekeeping — these shrink the backlog and do not file new
 issues). Skip spec-drift steps 1–9 and skip bug-error and market-feature
