@@ -72,10 +72,11 @@ again.
 Follow `agents/shared/issue-cap.md` exactly — that module has the full
 counting procedure, skip message, and the known Linear MCP pitfall.
 
-**In short:** count open issues per project (cap: 5). Filter `list_issues` by
-the **Linear Project ID** from `projects.md`, not the display name — name
-filters silently return zero for some projects. Paginate through every page and
-count issues whose `statusType` is not `completed`, `canceled`, or `duplicate`.
+**In short:** count active pipeline issues per project (cap: 5). Filter
+`list_issues` by the **Linear Project ID** from `projects.md`, not the display
+name — name filters silently return zero for some projects. Paginate through
+every page, verify each issue's `projectId` matches, and count only issues in
+**Backlog**, **Todo** / **To Do**, **In Progress**, or **In Review**.
 
 **If that count is 5 or more, do not file new issues for this project this
 cycle.** Bug-error and market-feature skip entirely. Spec-drift still runs

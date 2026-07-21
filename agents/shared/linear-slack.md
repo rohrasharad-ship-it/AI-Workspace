@@ -57,7 +57,7 @@ If step 2 fails, the bell is not wired correctly — fix before blaming the cron
 | Routine summaries arrive but no per-issue Linear cards | Project bell not configured, or "Issue created" event not enabled. Bell was added after the last cron run that filed issues — still unverified. |
 | Nothing in Slack at all | Slack integration disconnected at workspace level, or Linear bot not invited to the channel. |
 | Only `@Linear` manual creates show up | Channel has the Linear app but project bell notifications are off — manual `@Linear` and project bell are different features. |
-| Idea-sweep says "skipped" every day | Issue cap hit (5+ open issues per project) — no issues created, so no Linear per-issue notifications to test. Triage backlog first. |
+| Idea-sweep says "skipped" every day | Issue cap hit (5+ active pipeline issues per project) — no issues created, so no Linear per-issue notifications to test. Triage backlog first. |
 
 ## Phase 2 cron verification checklist
 
