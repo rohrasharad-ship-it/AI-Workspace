@@ -57,11 +57,14 @@ should_delete_branch() {
   fi
 
   local response node state_type has_spec_needed
-  response=$(linear_issue "$issue_id") || return 1
+  response=$(linear_issue "$issue_id") || {
+    echo "error: Linear lookup failed for $issue_id" >&2
+    return 2
+  }
   node=$(echo "$response" | jq -r '.data.issues.nodes[0] // empty')
   if [[ -z "$node" ]]; then
-    echo "issue not found in Linear — keeping branch" >&2
-    return 1
+    echo "error: issue not found in Linear: $issue_id" >&2
+    return 2
   fi
 
   state_type=$(echo "$node" | jq -r '.state.type')
@@ -122,12 +125,19 @@ for branch in "${branches[@]}"; do
   version="${BASH_REMATCH[2]}"
   max_v="${max_version[$issue_id]}"
 
-  if reason=$(should_delete_branch "$issue_id" "$version" "$max_v"); then
+  reason=""
+  rc=0
+  reason=$(should_delete_branch "$issue_id" "$version" "$max_v") || rc=$?
+
+  if [[ $rc -eq 0 ]]; then
     delete_branch "$branch" "$reason"
     ((deleted++)) || true
-  else
+  elif [[ $rc -eq 1 ]]; then
     echo "keep: $branch (issue $issue_id still spec-needed)"
     ((kept++)) || true
+  else
+    echo "skip: could not evaluate $branch (Linear lookup failed for $issue_id)" >&2
+    ((skipped++)) || true
   fi
 done
 
