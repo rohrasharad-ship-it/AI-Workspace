@@ -1,9 +1,7 @@
 ## Purpose
 
 Three routine-triggered roles that file Backlog issues for Sharad to triage: spec-drift, bug-error, and market-feature.
-
 ## Requirements
-
 ### Requirement: Idea-generation roles are routine-triggered only
 Spec-drift, bug-error, and market-feature agents MUST NOT be woken by Linear assignment. They run only via named routines (default: `idea-sweep`) or equivalent standalone triggers.
 
@@ -57,3 +55,4 @@ Before any idea-generation role runs for a project, the orchestrator MUST count 
 #### Scenario: Wrong project excluded
 - **WHEN** an issue belongs to a different Linear project than the target
 - **THEN** it does not count toward that project's cap
+

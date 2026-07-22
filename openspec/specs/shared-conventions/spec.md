@@ -1,9 +1,7 @@
 ## Purpose
 
 Cross-cutting rules and formats that every agent role must follow regardless of task.
-
 ## Requirements
-
 ### Requirement: Issue Brief format for all created issues
 Every agent that creates a Linear issue MUST use the five-field Issue Brief format: In short, Problem, Solution, Why, What it looks like — each exactly one line, plain language, no implementation detail.
 
@@ -38,3 +36,11 @@ Every repo MUST use OpenSpec with `openspec/project.md` and per-capability `open
 #### Scenario: Agent reads spec for single feature
 - **WHEN** a builder works one capability
 - **THEN** it reads `openspec/project.md` plus only the relevant capability's `spec.md` — not the entire specs tree
+
+### Requirement: PM OS has its own OpenSpec baseline
+AI-Workspace MUST maintain `openspec/project.md` and per-capability specs so idea-generation sweeps can compare planned process against actual instruction files.
+
+#### Scenario: Spec-drift sweeps PM OS
+- **WHEN** idea-sweep runs spec-drift against AI-Workspace
+- **THEN** it reads `openspec/project.md` and all files under `openspec/specs/` as the planned baseline
+
