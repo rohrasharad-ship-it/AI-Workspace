@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHA-202 — Slack-native approval</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --border: #e8e8ec;
+      --text: #18181b;
+      --muted: #71717a;
+      --accent: #2563eb;
+      --accent-soft: #eff6ff;
+      --ok: #16a34a;
+      --radius: 12px;
+      --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--surface); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 560px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+    .eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+    .thread { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .msg { display: flex; gap: 0.6rem; padding: 0.6rem 0; }
+    .avatar { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; color: #fff; }
+    .avatar.bot { background: var(--accent); }
+    .avatar.sharad { background: #71717a; }
+    .who { font-weight: 700; font-size: 0.88rem; }
+    .when { color: var(--muted); font-size: 0.76rem; font-weight: 400; margin-left: 0.4rem; }
+    .body-text { font-size: 0.88rem; margin-top: 0.15rem; }
+    .body-text a { color: var(--accent); }
+    .reply { margin-left: 2.2rem; border-left: 2px solid var(--border); padding-left: 0.9rem; margin-top: 0.4rem; }
+    .synced { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.5rem; font-size: 0.76rem; color: var(--ok); background: #f0fdf4; padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Proposed mockup — Slack-native approval</div>
+    <h1>#resume-website preview thread (proposed)</h1>
+    <div class="thread">
+      <div class="msg">
+        <div class="avatar bot">C</div>
+        <div>
+          <div><span class="who">Cursor</span><span class="when">2:14 PM</span></div>
+          <div class="body-text">SHA-112 ready for review — <a href="#">Vercel preview →</a></div>
+        </div>
+      </div>
+      <div class="reply">
+        <div class="msg" style="padding-top: 0.4rem;">
+          <div class="avatar sharad">SR</div>
+          <div>
+            <div><span class="who">Sharad Rohra</span><span class="when">2:31 PM</span></div>
+            <div class="body-text">approved</div>
+            <div class="synced">✓ synced to SHA-112 on Linear</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
