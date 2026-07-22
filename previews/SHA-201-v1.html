@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHA-201 — Weekly Ship Recap</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --border: #e8e8ec;
+      --text: #18181b;
+      --muted: #71717a;
+      --accent: #16a34a;
+      --accent-soft: #f0fdf4;
+      --radius: 12px;
+      --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--surface); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+    .eyebrow { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+    h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 1.25rem; }
+    .slack-msg { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    .slack-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.85rem; }
+    .avatar { width: 28px; height: 28px; border-radius: 6px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; }
+    .who { font-weight: 700; font-size: 0.9rem; }
+    .when { color: var(--muted); font-size: 0.78rem; }
+    .title-line { font-weight: 600; margin-bottom: 0.75rem; }
+    .proj { border-top: 1px solid var(--border); padding: 0.65rem 0; }
+    .proj:first-of-type { border-top: none; padding-top: 0; }
+    .proj-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.3rem; }
+    .item { font-size: 0.85rem; color: var(--text); padding: 0.15rem 0; }
+    .item a { color: var(--accent); text-decoration: none; }
+    .badge { display: inline-block; background: var(--accent-soft); color: var(--accent); font-size: 0.7rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 999px; margin-right: 0.4rem; }
+    .footer-line { margin-top: 0.9rem; padding-top: 0.75rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="eyebrow">Proposed mockup — Weekly Ship Recap</div>
+    <h1>#pm-ops Friday 5pm digest (proposed)</h1>
+    <div class="slack-msg">
+      <div class="slack-header">
+        <div class="avatar">PM</div>
+        <div>
+          <div class="who">PM OS <span style="color: var(--muted); font-weight: 400;">APP</span></div>
+          <div class="when">Friday 5:00 PM</div>
+        </div>
+      </div>
+      <div class="title-line">🚢 Shipped this week — 3 projects</div>
+      <div class="proj">
+        <div class="proj-name">Resume Website</div>
+        <div class="item"><span class="badge">Done</span>SHA-112 PDF download button — <a href="#">PR #58</a></div>
+        <div class="item"><span class="badge">Done</span>SHA-118 Mobile nav overlap fix — <a href="#">PR #59</a></div>
+      </div>
+      <div class="proj">
+        <div class="proj-name">PM OS</div>
+        <div class="item"><span class="badge">Done</span>SHA-174 Archive stuck OpenSpec changes — <a href="#">PR #43</a></div>
+      </div>
+      <div class="proj">
+        <div class="proj-name">AI Landscape</div>
+        <div class="item" style="color: var(--muted);">Nothing shipped this week</div>
+      </div>
+      <div class="footer-line">3 issues closed · 3 PRs merged · generated automatically from Linear "Done" transitions</div>
+    </div>
+  </div>
+</body>
+</html>
