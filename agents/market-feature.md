@@ -5,7 +5,8 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/issue-cap.md`, `agents/shared/linear-slack.md`,
+`agents/shared/issue-cap.md`, `agents/shared/cross-project-grouping.md`,
+`agents/shared/linear-slack.md`,
 `agents/shared/visual-specs.md`,
 `agents/shared/visual-self-qa.md`, `agents/shared/conventions.md`, and the
 shared idea-generation guardrails in `routines/README.md`
@@ -46,6 +47,10 @@ do not proceed to step 1.
    the Issue Brief format (see `agents/shared/issue-brief.md` — "Why" should
    tie to the product's differentiation goals), suggested priority (default
    Medium or Low — these are speculative, not confirmed gaps).
+   **Multi-project idea-sweep:** if the trigger names two or more projects, do
+   **not** call `save_issue` here — append a grouping candidate to the run
+   ledger per `agents/shared/cross-project-grouping.md`. Single-project runs
+   file immediately.
 6. Every issue from this agent has a visual/UI component almost by definition
    — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`).
    Do not skip this step.

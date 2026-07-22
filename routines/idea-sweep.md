@@ -3,6 +3,10 @@
 **Read `routines/README.md` first** for the general routine/orchestration model
 — this file only defines what *this* routine bundles.
 
+**Multi-project runs:** when the trigger names two or more projects (or "all
+projects"), also read `agents/shared/cross-project-grouping.md` — roles defer
+filing until the orchestrator groups matching gaps at the end of each role.
+
 ## What it runs
 
 All three idea-generation roles, in this order, against each target project:
@@ -48,11 +52,31 @@ triggers per role if independent cadences matter more than a single firing.
 Either is a scheduling choice made where the trigger lives (co-work trigger,
 cron), not something this file needs to enforce.
 
+## Cross-project grouping (multi-project triggers only)
+
+When the trigger names **two or more projects** (or "all projects"):
+
+1. Resolve the full project list from `projects.md` before starting any role.
+2. For each role in order (spec-drift → bug-error → market-feature):
+   - Run that role against every under-cap project, but **do not file issues yet**
+     — each role appends grouping candidates to the run ledger (see
+     `agents/shared/cross-project-grouping.md`).
+   - After the role finishes all projects, run the grouping step: cluster
+     matching candidates, file one issue per cluster (PM OS when 2+ projects
+     share a gap; otherwise the single project's Linear project).
+3. Single-project triggers skip this section entirely — roles file directly.
+
 ## Output
 
-- Each role files its own Linear issues directly, per its own file.
+- **Single-project run:** each role files its own Linear issues directly, per
+  its own file.
+- **Multi-project run:** the orchestrator files after each role's grouping step;
+  roles supply candidates only.
 - After all roles finish for all named projects, post **one consolidated
-  Slack message per project** (not per role) to that project's Slack channel:
+  Slack message per project** (not per role) to that project's Slack channel.
+  When any cross-project grouped issues were filed to PM OS, also note them in
+  the **#pm-ops** summary (`Cross-project: [N] grouped issue(s) filed to PM OS`
+  with links). Per-project channel template:
   ```
   🧭 Idea sweep — [Project Name]
   Spec-drift: [N] issues filed, [M] stale issues flagged

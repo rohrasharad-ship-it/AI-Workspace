@@ -61,6 +61,10 @@ again.
    Vercel logs, Linear, Playwright against the live URL) — no local clone of
    the target repo is required, so fan-out across repos doesn't require
    switching working directories.
+   **Multi-project runs:** when two or more projects are in scope, roles defer
+   Linear filing and append grouping candidates to the run ledger; after each
+   role completes all projects, the orchestrator groups and files per
+   `agents/shared/cross-project-grouping.md`. Single-project runs file directly.
 4. Each role that creates issues does so directly in Linear, following its own
    file and `agents/shared/conventions.md`.
 5. After all pairs finish, post one consolidated Slack summary (not one
@@ -96,6 +100,9 @@ three separate times for the same project.
 
 ## Shared guardrails (every idea-generation role, every routine)
 
+- **Multi-project grouping:** when the trigger names two or more projects,
+  defer `save_issue` and hand candidates to the orchestrator — see
+  `agents/shared/cross-project-grouping.md`. Single-project runs file directly.
 - Create issues only as `Backlog` + `spec-needed` — **never `agent-ready`**
 - Assignee is always Sharad Rohra, never an agent (see `agents/shared/conventions.md`)
 - Title starts with one relevant emoji (see `agents/shared/conventions.md`)
