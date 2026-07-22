@@ -107,11 +107,17 @@ issue).
 
 1. Collect all candidates for this role from the run ledger.
 2. Cluster by match criteria above.
-3. For each cluster:
+3. If any cluster spans 2+ projects, run the issue-cap check from
+   `agents/shared/issue-cap.md` for **PM OS** once (Linear Project ID from
+   `projects.md`) before filing. If PM OS is at or over cap, skip all
+   multi-project clusters for this role and note that in the Slack summary;
+   still file single-project clusters.
+4. For each cluster:
    - If 1 project → file in that project's Linear project (normal Issue Brief).
-   - If 2+ projects → file in PM OS with **Affects:** line and merged first comment.
-4. Record filed issue URLs for the Slack summary.
-5. Add to the PM OS channel summary when any grouped issues were filed:
+   - If 2+ projects → file in PM OS with **Affects:** line and merged first
+     comment (skipped when step 3 put PM OS at cap).
+5. Record filed issue URLs for the Slack summary.
+6. Add to the PM OS channel summary when any grouped issues were filed:
    `Cross-project: [N] grouped issue(s) filed to PM OS` with links.
 
 ## Slack summary note

@@ -27,30 +27,36 @@ do not proceed to step 1.
 2. Keep only real, actionable errors — drop one-off network blips, bot noise,
    and anything that self-resolved.
 3. Search the target Linear project first; skip anything already tracked.
-4. Create up to 5 issues: status Backlog, label spec-needed, assignee Sharad
-   Rohra (never an agent), title starting with one relevant emoji (🐛 is the
-   default for a generic bug, but pick what fits — see
-   `agents/shared/conventions.md`), description in the Issue Brief format (see
-   `agents/shared/issue-brief.md` — "Problem" should state when/how the error
-   fires in plain language). Priority High if it hits a core flow, Medium
-   otherwise.
-   **Multi-project idea-sweep:** if the trigger names two or more projects, do
-   **not** call `save_issue` here — append a grouping candidate to the run
-   ledger per `agents/shared/cross-project-grouping.md`. Single-project runs
-   file immediately.
+4. For each real, actionable error that passes step 3 dedupe — at most 5 per
+   run:
+   **Single-project run:** create the issue in Linear (`save_issue`): status
+   Backlog, label spec-needed, assignee Sharad Rohra (never an agent), title
+   starting with one relevant emoji (🐛 is the default for a generic bug, but
+   pick what fits — see `agents/shared/conventions.md`), description in the
+   Issue Brief format (see `agents/shared/issue-brief.md` — "Problem" should
+   state when/how the error fires in plain language). Priority High if it hits
+   a core flow, Medium otherwise. Then do steps 5–7 for each issue.
+   **Multi-project idea-sweep:** do **not** call `save_issue` — for each gap,
+   append a grouping candidate to the run ledger per
+   `agents/shared/cross-project-grouping.md` (title, brief, priority,
+   `executionDetail`, `attachments`). Then do steps 5–7 below to populate
+   `executionDetail` and `attachments` on the candidate.
 5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem (see
-   `agents/shared/visual-specs.md`).
-6. Mandatory, every issue you create: take a real Playwright screenshot of
-   the live production site showing the actual problem (per
-   `agents/shared/visual-self-qa.md`) and attach it to the issue via
-   prepare_attachment_upload → PUT → create_attachment_from_upload. Never use
-   a base64/inline upload path.
-7. On each issue, post a first comment with execution detail: error message
-   excerpt, log timestamp, Vercel deployment checked, Linear search terms used
-   for dedupe, and why this isn't a duplicate. Link any visual preview and
-   note any screenshots attached.
-8. If the site is clean, create nothing.
+   `agents/shared/visual-specs.md`). **Single-project:** attach to the Linear
+   issue. **Multi-project:** include in the candidate's `attachments`.
+6. Mandatory, every gap you file: take a real Playwright screenshot of the
+   live production site showing the actual problem (per
+   `agents/shared/visual-self-qa.md`). **Single-project:** attach to the issue
+   via prepare_attachment_upload → PUT → create_attachment_from_upload. Never
+   use a base64/inline upload path. **Multi-project:** add to the candidate's
+   `attachments` (do not call Linear attachment APIs).
+7. **Single-project:** on each issue, post a first comment with execution
+   detail: error message excerpt, log timestamp, Vercel deployment checked,
+   Linear search terms used for dedupe, and why this isn't a duplicate. Link any
+   visual preview and note any screenshots attached. **Multi-project:** set
+   `executionDetail` on the candidate with the same payload.
+8. If the site is clean, create nothing / append no candidates.
 
 **Tools needed:** repo read access (GitHub MCP), Linear (create + search
 issues, attach files), Vercel (read deployment logs — needs an API token as a

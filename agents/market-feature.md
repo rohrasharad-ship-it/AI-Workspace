@@ -40,33 +40,40 @@ do not proceed to step 1.
    the stated vision and design philosophy alone.
 4. Search the target Linear project first; skip anything already proposed or
    tracked, including things filed by the spec-drift agent.
-5. Create up to 3 issues: status Backlog, label spec-needed, assignee Sharad
-   Rohra (never an agent), title starting with one relevant emoji for the
-   specific idea (see `agents/shared/conventions.md` — pick what actually
-   fits, not a generic default) followed by the feature name, description in
-   the Issue Brief format (see `agents/shared/issue-brief.md` — "Why" should
-   tie to the product's differentiation goals), suggested priority (default
-   Medium or Low — these are speculative, not confirmed gaps).
-   **Multi-project idea-sweep:** if the trigger names two or more projects, do
-   **not** call `save_issue` here — append a grouping candidate to the run
-   ledger per `agents/shared/cross-project-grouping.md`. Single-project runs
-   file immediately.
+5. For each feature that passes step 4 dedupe — at most 3 per run:
+   **Single-project run:** create the issue in Linear (`save_issue`): status
+   Backlog, label spec-needed, assignee Sharad Rohra (never an agent), title
+   starting with one relevant emoji for the specific idea (see
+   `agents/shared/conventions.md` — pick what actually fits, not a generic
+   default) followed by the feature name, description in the Issue Brief
+   format (see `agents/shared/issue-brief.md` — "Why" should tie to the
+   product's differentiation goals), suggested priority (default Medium or Low
+   — these are speculative, not confirmed gaps). Then do steps 6–8 for each
+   issue.
+   **Multi-project idea-sweep:** do **not** call `save_issue` — for each
+   feature, append a grouping candidate to the run ledger per
+   `agents/shared/cross-project-grouping.md` (title, brief, priority,
+   `executionDetail`, `attachments`). Then do steps 6–8 below to populate
+   `executionDetail` and `attachments` on the candidate.
 6. Every issue from this agent has a visual/UI component almost by definition
    — attach a minimal-effort visual preview (see `agents/shared/visual-specs.md`).
-   Do not skip this step.
-7. Mandatory, every issue you create: take a real Playwright screenshot of
-   the current homepage (or one to two relevant existing areas) for context
-   on where this idea fits (per `agents/shared/visual-self-qa.md`) and attach
-   it to the issue via prepare_attachment_upload → PUT →
+   Do not skip this step. **Single-project:** attach to the Linear issue.
+   **Multi-project:** include in the candidate's `attachments`.
+7. Mandatory, every gap you file: take a real Playwright screenshot of the
+   current homepage (or one to two relevant existing areas) for context on
+   where this idea fits (per `agents/shared/visual-self-qa.md`). **Single-project:**
+   attach to the issue via prepare_attachment_upload → PUT →
    create_attachment_from_upload. Never use a base64/inline upload path. This
    is separate from the mockup in step 6 — this one shows the current site,
-   not the proposed idea.
-8. On each issue, post a first comment with execution detail: vision/spec
-   references, similar ideas searched in Linear, and why this isn't a
-   duplicate. Link any visual preview and note any screenshots attached, not
-   in the description.
-9. If nothing genuinely differentiated comes to mind, create nothing —
-   do not invent filler ideas to hit the cap.
+   not the proposed idea. **Multi-project:** add to the candidate's
+   `attachments` (do not call Linear attachment APIs).
+8. **Single-project:** on each issue, post a first comment with execution
+   detail: vision/spec references, similar ideas searched in Linear, and why
+   this isn't a duplicate. Link any visual preview and note any screenshots
+   attached, not in the description. **Multi-project:** set `executionDetail`
+   on the candidate with the same payload.
+9. If nothing genuinely differentiated comes to mind, create nothing / append
+   no candidates — do not invent filler ideas to hit the cap.
 
 **Tools needed:** repo read access (GitHub MCP), Linear (create + search
 issues, attach files), web search (optional — if unavailable, reason from

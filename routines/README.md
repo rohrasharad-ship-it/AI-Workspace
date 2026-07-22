@@ -65,8 +65,11 @@ again.
    Linear filing and append grouping candidates to the run ledger; after each
    role completes all projects, the orchestrator groups and files per
    `agents/shared/cross-project-grouping.md`. Single-project runs file directly.
-4. Each role that creates issues does so directly in Linear, following its own
-   file and `agents/shared/conventions.md`.
+4. **Single-project runs:** each role that creates issues does so directly in
+   Linear, following its own file and `agents/shared/conventions.md`.
+   **Multi-project runs:** roles append grouping candidates only (step 3); the
+   orchestrator groups and files per `agents/shared/cross-project-grouping.md`
+   after each role completes all projects.
 5. After all pairs finish, post one consolidated Slack summary (not one
    message per sub-agent) to the project's Slack channel: how many issues
    were filed by which role, with links.

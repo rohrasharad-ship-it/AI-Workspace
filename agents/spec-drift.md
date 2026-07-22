@@ -37,26 +37,35 @@ and do not count against the cap.
 3. Find meaningful gaps — planned things missing or only half-built. Ignore
    cosmetic nitpicks.
 4. Search the target Linear project first; skip anything already tracked.
-5. Create up to 5 issues for real gaps: status Backlog, label spec-needed,
-   assignee Sharad Rohra (never an agent), title starting with one relevant
-   emoji (see `agents/shared/conventions.md` — pick what fits, not literally
-   🔧 every time), description in the Issue Brief format (see
-   `agents/shared/issue-brief.md`), suggested priority.
-   **Multi-project idea-sweep:** if the trigger names two or more projects, do
-   **not** call `save_issue` here — append a grouping candidate to the run
-   ledger per `agents/shared/cross-project-grouping.md` (the orchestrator files
-   after grouping). Single-project runs file immediately as below.
+5. For each real gap that passes step 4 dedupe — at most 5 per run:
+   **Single-project run:** create the issue in Linear (`save_issue`): status
+   Backlog, label spec-needed, assignee Sharad Rohra (never an agent), title
+   starting with one relevant emoji (see `agents/shared/conventions.md` — pick
+   what fits, not literally 🔧 every time), description in the Issue Brief
+   format (see `agents/shared/issue-brief.md`), suggested priority. Then do
+   steps 6–8 for each issue.
+   **Multi-project idea-sweep:** do **not** call `save_issue` — for each gap,
+   append a grouping candidate to the run ledger per
+   `agents/shared/cross-project-grouping.md` (title, brief, priority,
+   `executionDetail`, `attachments`). Then do steps 6–8 below to populate
+   `executionDetail` and `attachments` on the candidate.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
-   preview (see `agents/shared/visual-specs.md`).
-7. Mandatory, every issue you create: take a real Playwright screenshot of
-   the live site area related to this gap (per `agents/shared/visual-self-qa.md`)
-   and attach it to the issue via prepare_attachment_upload → PUT →
-   create_attachment_from_upload. Never use a base64/inline upload path.
-8. On each issue, post a first comment with execution detail: openspec
-   file(s) referenced, codebase areas checked, Linear search terms used for
-   dedupe, and why this isn't a duplicate. Link any visual preview and note
-   any screenshots attached, not in the description.
-9. If nothing meaningful is found, create nothing.
+   preview (see `agents/shared/visual-specs.md`). **Single-project:** attach
+   to the Linear issue. **Multi-project:** include in the candidate's
+   `attachments`.
+7. Mandatory, every gap you file: take a real Playwright screenshot of the
+   live site area related to this gap (per `agents/shared/visual-self-qa.md`).
+   **Single-project:** attach to the issue via prepare_attachment_upload → PUT
+   → create_attachment_from_upload. Never use a base64/inline upload path.
+   **Multi-project:** add to the candidate's `attachments` (do not call Linear
+   attachment APIs).
+8. **Single-project:** on each issue, post a first comment with execution
+   detail: openspec file(s) referenced, codebase areas checked, Linear search
+   terms used for dedupe, and why this isn't a duplicate. Link any visual
+   preview and note any screenshots attached, not in the description.
+   **Multi-project:** set `executionDetail` on the candidate with the same
+   payload.
+9. If nothing meaningful is found, create nothing / append no candidates.
 10. **Stale-issue sweep (runs every time, independent of 1–9):** for the
    target Linear project, list open issues (paginate per
    `agents/shared/issue-cap.md` — use the **Linear Project ID** from
