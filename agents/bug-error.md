@@ -5,7 +5,7 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/issue-brief.md`, `agents/shared/issue-cap.md`,
-`agents/shared/linear-slack.md`, `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
+`agents/shared/cross-project-grouping.md`, `agents/shared/linear-slack.md`, `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
 `agents/shared/conventions.md`, and the shared idea-generation guardrails in
 `routines/README.md`
 
@@ -34,6 +34,10 @@ do not proceed to step 1.
    `agents/shared/issue-brief.md` — "Problem" should state when/how the error
    fires in plain language). Priority High if it hits a core flow, Medium
    otherwise.
+   **Multi-project idea-sweep:** if the trigger names two or more projects, do
+   **not** call `save_issue` here — append a grouping candidate to the run
+   ledger per `agents/shared/cross-project-grouping.md`. Single-project runs
+   file immediately.
 5. If the bug is visual (layout, overlap, broken animation), attach a
    minimal-effort visual preview showing the problem (see
    `agents/shared/visual-specs.md`).

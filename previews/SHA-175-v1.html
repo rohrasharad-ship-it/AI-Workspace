@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SHA-175 — Cross-project pattern grouping (mockup)</title>
+<meta name="robots" content="noindex" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f5f7;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 2.5rem 1.5rem;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; }
+  h1 { font-size: 1.15rem; margin: 0 0 0.35rem; }
+  .note {
+    color: #666; font-size: 0.85rem; margin: 0 0 2rem;
+  }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media (max-width: 720px) { .cols { grid-template-columns: 1fr; } }
+  .col h2 {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #888; margin: 0 0 0.75rem;
+  }
+  .card {
+    background: #fff; border: 1px solid #e3e4e8; border-radius: 8px;
+    padding: 0.9rem 1rem; margin-bottom: 0.6rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card .title { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .card .meta { font-size: 0.75rem; color: #888; }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 600;
+    padding: 0.15rem 0.5rem; border-radius: 10px; margin-right: 0.35rem;
+  }
+  .badge.repo { background: #eef1fd; color: #4a5fd6; }
+  .badge.today { background: #fdeeee; color: #c94b4b; }
+  .after-card {
+    background: #fff; border: 2px solid #27AE60; border-radius: 8px;
+    padding: 1rem 1.1rem;
+  }
+  .after-card .title { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .affects {
+    font-size: 0.75rem; font-weight: 600; color: #27AE60; margin-bottom: 0.5rem;
+  }
+  .repo-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: #bbb; grid-column: 1 / -1; margin: 0.25rem 0;
+  }
+  footer { margin-top: 2.5rem; font-size: 0.75rem; color: #999; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Cross-project pattern grouping — static mockup</h1>
+  <p class="note">SHA-175 · minimal-effort preview, not a working interaction. Shows the before/after shape of one idea-sweep run finding the same gap in 3 repos.</p>
+
+  <div class="cols">
+    <div class="col">
+      <h2>Today — 3 separate cards</h2>
+      <div class="card">
+        <span class="badge today">Backlog</span><span class="badge repo">Resume Website</span>
+        <div class="title">No PR template — blocks builder step 7</div>
+        <div class="meta">spec-needed · Sharad Rohra</div>
+      </div>
+      <div class="card">
+        <span class="badge today">Backlog</span><span class="badge repo">AI Landscape</span>
+        <div class="title">No PR template — blocks builder step 7</div>
+        <div class="meta">spec-needed · Sharad Rohra</div>
+      </div>
+      <div class="card">
+        <span class="badge today">Backlog</span><span class="badge repo">Usercon</span>
+        <div class="title">No PR template — blocks builder step 7</div>
+        <div class="meta">spec-needed · Sharad Rohra</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h2>Proposed — 1 grouped card</h2>
+      <div class="after-card">
+        <div class="affects">✓ Affects 3 projects</div>
+        <div class="title">No PR template — blocks builder step 7</div>
+        <div class="repo-list">
+          <span class="badge repo">Resume Website</span>
+          <span class="badge repo">AI Landscape</span>
+          <span class="badge repo">Usercon</span>
+        </div>
+        <div class="meta">spec-needed · Sharad Rohra · PM OS · one triage decision, not three</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Minimal-effort static frame per agents/shared/visual-specs.md — annotated layout only, not a built feature.</footer>
+</div>
+</body>
+</html>
