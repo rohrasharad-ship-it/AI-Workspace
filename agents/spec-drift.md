@@ -5,7 +5,8 @@
 see `routines/README.md`
 
 **Read first:** `agents/shared/openspec.md`, `agents/shared/issue-brief.md`,
-`agents/shared/issue-cap.md`, `agents/shared/linear-slack.md`,
+`agents/shared/issue-cap.md`, `agents/shared/cross-project-grouping.md`,
+`agents/shared/linear-slack.md`,
 `agents/shared/visual-specs.md`, `agents/shared/visual-self-qa.md`,
 `agents/shared/conventions.md`, and the shared idea-generation guardrails in
 `routines/README.md`
@@ -41,6 +42,10 @@ and do not count against the cap.
    emoji (see `agents/shared/conventions.md` — pick what fits, not literally
    🔧 every time), description in the Issue Brief format (see
    `agents/shared/issue-brief.md`), suggested priority.
+   **Multi-project idea-sweep:** if the trigger names two or more projects, do
+   **not** call `save_issue` here — append a grouping candidate to the run
+   ledger per `agents/shared/cross-project-grouping.md` (the orchestrator files
+   after grouping). Single-project runs file immediately as below.
 6. If the gap has a visual/UI component, attach a minimal-effort visual
    preview (see `agents/shared/visual-specs.md`).
 7. Mandatory, every issue you create: take a real Playwright screenshot of
