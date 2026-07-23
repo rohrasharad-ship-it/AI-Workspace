@@ -93,19 +93,22 @@ project that starts with the right shape and the right baseline never needs the
 retrofit resume-website needed.
 
 ### Step D — Create Linear project
-Use the Linear MCP tool to create a new project with:
+Use the Linear MCP tool (`save_project`) to create a new project with:
 - Name: $PROJECT_NAME
 - Team: Sharad Rohra
 - Description: $ONE_SENTENCE_DESCRIPTION. Slack: $SLACK_CHANNEL. Repo: $REPO.
 - Priority: Medium
+- **Capture the returned project `id`** (UUID) as `$LINEAR_PROJECT_ID` — this
+  is required for issue-cap counting (`agents/shared/issue-cap.md`). If the
+  response omits `id`, call `list_projects` and match by name.
 - After creating the project, configure Linear → Slack bell notifications to
   $SLACK_CHANNEL (see `agents/shared/linear-slack.md` — enable "Issue created"
   and run the smoke test).
 
 ### Step E — Update AI-Workspace/projects.md
 Read the current `projects.md` from the AI-Workspace repo and add a new row to
-the Project Index table:
-| $PROJECT_NAME | $REPO | $PROJECT_NAME | $SLACK_CHANNEL | $VERCEL_URL |
+the Project Index table (all six columns — the Linear Project ID is mandatory):
+| $PROJECT_NAME | $REPO | $PROJECT_NAME | $LINEAR_PROJECT_ID | $SLACK_CHANNEL | $VERCEL_URL |
 
 ### Step F — Confirm to the user
 Reply with:

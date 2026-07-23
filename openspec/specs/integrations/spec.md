@@ -11,7 +11,7 @@ External service wiring: project registry and Linear → Slack notifications.
 
 #### Scenario: New project onboarded
 - **WHEN** `/init-project` completes
-- **THEN** a new row is added to `projects.md` with the Linear Project ID from `list_projects`
+- **THEN** a new row is added to `projects.md` with all six columns filled, including the Linear Project ID UUID captured from the `save_project` response in Step D (or confirmed via `list_projects` if needed)
 
 ### Requirement: Linear Project ID used for MCP queries
 Agents MUST filter Linear `list_issues` by Linear Project ID (UUID), not display name — name filters silently return empty for some projects.
