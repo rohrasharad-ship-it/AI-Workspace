@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-239 preview — Journey Chapter Scrubber</title>
+<style>
+  :root{
+    --bg-primary:#F5EDE0; --bg-dark:#111111; --accent:#E8351A;
+    --accent-warm:#FF8C52; --muted:#8A8A8A; --text-inverse:#F5EDE0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"DM Sans",-apple-system,Segoe UI,sans-serif;
+    background:var(--bg-dark); color:var(--text-inverse);
+  }
+  .label{
+    position:fixed; top:16px; left:16px; font-family:monospace; font-size:11px;
+    color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .stage{
+    height:100vh; display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .era-card{
+    width:60vw; max-width:640px; height:64vh; background:#161616;
+    border-radius:20px; padding:48px; display:flex; flex-direction:column;
+    justify-content:flex-end; border:1px solid rgba(255,255,255,0.06);
+  }
+  .era-tag{font-family:monospace; font-size:12px; letter-spacing:0.1em; color:var(--accent-warm); text-transform:uppercase; margin-bottom:12px;}
+  .era-metric{font-size:clamp(40px,6vw,76px); font-weight:700; color:var(--accent); line-height:1;}
+  .era-role{font-family:monospace; font-size:13px; color:var(--muted); margin-top:16px; letter-spacing:0.05em;}
+
+  /* --- the proposed scrubber --- */
+  .scrubber{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:20px;
+    background:rgba(20,20,20,0.85); border:1px solid rgba(255,255,255,0.1);
+    padding:12px 22px; border-radius:999px; backdrop-filter:blur(6px);
+  }
+  .stop{display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer;}
+  .dot{width:9px; height:9px; border-radius:50%; background:rgba(245,237,224,0.25); transition:all .2s;}
+  .stop.active .dot{background:var(--accent); width:11px; height:11px; box-shadow:0 0 0 4px rgba(232,53,26,0.18);}
+  .stop-label{font-family:monospace; font-size:10px; letter-spacing:0.06em; color:var(--muted); text-transform:uppercase;}
+  .stop.active .stop-label{color:var(--text-inverse);}
+  .callout{
+    position:absolute; top:24px; right:24px; max-width:230px; text-align:right;
+    font-family:monospace; font-size:11px; color:var(--accent-warm); line-height:1.5;
+  }
+</style>
+</head>
+<body>
+  <div class="label">Preview — SHA-239 · new element only, rest is current Journey styling</div>
+  <div class="stage">
+    <div class="era-card">
+      <div class="era-tag">Current · Amadeus</div>
+      <div class="era-metric">$2B+</div>
+      <div class="era-role">Platform transition · Developer Portal</div>
+    </div>
+
+    <div class="callout">↓ new: fixed chapter scrubber<br/>click or arrow-key to jump eras</div>
+
+    <div class="scrubber">
+      <div class="stop active"><div class="dot"></div><div class="stop-label">Amadeus</div></div>
+      <div class="stop"><div class="dot"></div><div class="stop-label">ISB</div></div>
+      <div class="stop"><div class="dot"></div><div class="stop-label">Impact</div></div>
+      <div class="stop"><div class="dot"></div><div class="stop-label">DTU</div></div>
+    </div>
+  </div>
+</body>
+</html>
