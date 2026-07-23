@@ -49,3 +49,6 @@ Do not write code in the real project repo. Do not run openspec commands during 
 Do not perform step 7 on your own inferred judgment that "agreement was
 reached" without a real signal per (6) — a false-positive here starts an
 unasked build, which is worse than checking in one extra time.
+
+**If blocked by missing tools** (e.g. cannot post to Linear): follow the
+**Blocked-agent handover** section in `agents/shared/conventions.md`.

@@ -130,6 +130,11 @@ Checks: ✅ build passing, tests passing
 Approve: comment "@<agent> approved" on [Linear issue URL]
 ```
 
+**If blocked by missing tools** (no Linear MCP, no push access to the target
+repo, etc.): follow the **Blocked-agent handover** section in
+`agents/shared/conventions.md` — write the handover file, comment on the issue
+with the link, refresh the Status Snapshot. Do not improvise a new note pattern.
+
 **Never:**
 - Write any code on an issue labeled `spec-needed` — check the label every time, regardless of status
 - Add or remove the `agent-ready` label yourself — only Sharad does that

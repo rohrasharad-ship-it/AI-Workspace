@@ -100,6 +100,81 @@ session created them:
 16. **For visual or motion UI work, start at `design/README.md`** — copy-paste
     from the resource catalog or local snippets (`design/snippets/`) rather
     than inventing animations from scratch. See `design/workflow.md`.
+17. **Blocked by missing tool access → write a standard handover** (see
+    Blocked-agent handover below). Do not invent a new note location or filename
+    shape.
+
+## Blocked-agent handover
+
+When an agent hits a **hard tool-access wall** — it cannot finish assigned
+work because a required integration is definitively unavailable (no Linear MCP,
+no push access to the target repo, no Vercel API token, etc.) — it must **not**
+improvise a new "leave a note for the next agent" pattern. Use this convention
+instead.
+
+### When to use
+
+Use a handover when you have done everything your session *can* do and the
+remaining work requires tools you lack — not when you are merely uncertain or
+waiting on Sharad's input.
+
+### Location and naming
+
+All handovers live in **AI-Workspace** under `handovers/`, even when the work
+targets another project repo.
+
+| Kind | Path | Use when |
+|---|---|---|
+| **Action handover** | `handovers/<ISSUE-ID>-<short-slug>.md` | Blocked agent needs another agent (with different tool access) to *do* something: create or cancel a Linear issue, post a comment, enable infra, etc. |
+| **Artifact bundle** | `handovers/<ISSUE-ID>/README.md` (+ files alongside) | Blocked agent finished implementation locally but cannot push to the target repo — leave apply instructions and any patch/source files. |
+
+`<ISSUE-ID>` is the Linear issue driving the session (e.g. `SHA-53`).
+`<short-slug>` is 2–4 kebab-case words describing the handover (e.g.
+`linear-mcp`, `repo-push-blocked`).
+
+**Do not** create `delivery/` directories or ad hoc `handovers/` filenames —
+those predate this convention. Existing `handovers/linear-*` and
+`delivery/<issue-id>/` paths are historical examples only; new handovers MUST
+follow the table above.
+
+### Required header (both kinds)
+
+Every handover MUST start with this block:
+
+```markdown
+# Handover: <one-line summary>
+
+**For:** <who should pick this up — e.g. "Any agent with Linear MCP access">
+**From:** <agent role + issue ID + approximate date>
+**Blocked by:** <specific missing access — e.g. "No Linear MCP in cloud session">
+**Action:** <imperative one-liner — what the receiver must accomplish>
+**Issue:** [<ISSUE-ID>](<Linear issue URL>)
+```
+
+### Required body sections
+
+1. **Payload** — everything the receiver needs without re-reading the session
+   (issue fields to create, code locations, apply steps, links).
+2. **Instructions for receiving agent** — numbered checklist of exact steps;
+   end with what *not* to do when applicable.
+
+### Session steps (blocked agent)
+
+1. Write the handover file at the path above on your working branch.
+2. **Comment on the Linear issue** with: blocker summary, link to the handover
+   file on GitHub (branch or PR URL), and what you completed vs what remains.
+3. **Refresh the Status Snapshot** — Phase stays at the current stage; `Last
+   update` must mention the blocker and handover link.
+4. **Do not go silent** — if you cannot open a PR, still commit and push your
+   branch when possible; Sharad or the next agent needs the handover in git.
+
+### Receiving agent
+
+1. Read the handover file from the linked path.
+2. Execute **Instructions for receiving agent**.
+3. Comment on the original issue when done.
+4. Delete the handover file only once the blocked work is fully complete and
+   tracked elsewhere — until then, it is the source of truth.
 
 ## What Sharad Does vs What Agents Do
 

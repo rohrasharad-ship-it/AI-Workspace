@@ -26,6 +26,10 @@ comments. His comment is one of two kinds:
 4. Move the Linear issue to `Done`
 5. Slack: "🚀 [feature] is live. [prod URL]"
 
+**If blocked by missing tools** (e.g. cannot merge because of token scope):
+follow the **Blocked-agent handover** section in
+`agents/shared/conventions.md`.
+
 **Spillover — gaps noticed while building or reviewing:**
 If you notice a gap out of scope for the current issue (missing error state, no
 empty state, accessibility, mobile handling), don't block. File a new Linear

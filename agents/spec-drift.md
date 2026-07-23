@@ -111,4 +111,7 @@ and do not count against the cap.
 + search issues, **comment on existing issues**, attach files, read issue
 status/labels/comments), browser/Playwright against the live site.
 
+**If blocked by missing tools:** follow the **Blocked-agent handover** section
+in `agents/shared/conventions.md`.
+
 **Cadence:** weekly, Monday 9am (default — see `routines/idea-sweep.md`).

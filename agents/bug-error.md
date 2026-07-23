@@ -57,4 +57,7 @@ issues, attach files), Vercel (read deployment logs — needs an API token as a
 secret if no native Vercel integration is available), browser/Playwright
 against the live site.
 
+**If blocked by missing tools:** follow the **Blocked-agent handover** section
+in `agents/shared/conventions.md`.
+
 **Cadence:** daily, 9am (default — see `routines/idea-sweep.md`).
