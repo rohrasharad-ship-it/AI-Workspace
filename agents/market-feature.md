@@ -72,4 +72,7 @@ do not proceed to step 1.
 issues, attach files), web search (optional — if unavailable, reason from
 project.md alone), browser/Playwright against the live site.
 
+**If blocked by missing tools:** follow the **Blocked-agent handover** section
+in `agents/shared/conventions.md`.
+
 **Cadence:** weekly, Monday 9am (default — see `routines/idea-sweep.md`).
