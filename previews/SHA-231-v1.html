@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-231 preview — Restore archived context items</title>
+<style>
+  body { margin: 0; padding: 40px; background: #0f1115; color: #e6e8eb; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .note { color: #9199a6; font-size: 13px; margin-bottom: 24px; }
+  .panel { max-width: 480px; background: #161920; border: 1px solid #262b35; border-radius: 12px; padding: 20px 22px; }
+  .panel h2 { margin: 0 0 6px; font-size: 16px; }
+  .panel p.desc { margin: 0 0 18px; color: #9199a6; font-size: 13px; line-height: 1.5; }
+  .item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border: 1px solid #262b35; border-radius: 10px; margin-bottom: 10px; background: #10131a; }
+  .item-title { font-size: 14px; }
+  .item-meta { color: #6f7684; font-size: 12px; margin-top: 2px; }
+  .actions { display: flex; gap: 8px; }
+  button { font-size: 12px; padding: 7px 12px; border-radius: 8px; border: 1px solid #2c3140; cursor: default; font-weight: 600; }
+  .restore { background: #1c2b22; color: #6fd68f; border-color: #2b4a35; }
+  .delete { background: #2b1a1a; color: #e08b8b; border-color: #4a2b2b; }
+  .highlight { outline: 2px solid #6fd68f; outline-offset: 3px; border-radius: 10px; }
+</style>
+</head>
+<body>
+  <div class="note">Minimal-effort mockup for SHA-231 — annotated placement only, not a build.</div>
+  <div class="panel">
+    <h2>Archived context cleanup</h2>
+    <p class="desc">Archive keeps items recoverable in storage. Permanent deletion is manual, browser-only, and not available to agents through MCP.</p>
+
+    <div class="item">
+      <div>
+        <div class="item-title">Old apartment lease notes</div>
+        <div class="item-meta">Archived 41 days ago</div>
+      </div>
+      <div class="actions highlight">
+        <button class="restore">Restore</button>
+        <button class="delete">Permanently delete</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <div>
+        <div class="item-title">2023 marathon training plan</div>
+        <div class="item-meta">Archived 12 days ago</div>
+      </div>
+      <div class="actions">
+        <button class="restore">Restore</button>
+        <button class="delete">Permanently delete</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
