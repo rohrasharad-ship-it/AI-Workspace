@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-240 preview — Share This Chapter</title>
+<style>
+  :root{
+    --bg-dark:#111111; --accent:#E8351A; --accent-warm:#FF8C52;
+    --muted:#8A8A8A; --text-inverse:#F5EDE0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:"DM Sans",-apple-system,Segoe UI,sans-serif;
+    background:var(--bg-dark); color:var(--text-inverse);
+  }
+  .label{
+    position:fixed; top:16px; left:16px; font-family:monospace; font-size:11px;
+    color:var(--muted); letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .stage{ height:100vh; display:flex; align-items:center; justify-content:center; }
+  .era-card{
+    position:relative; width:56vw; max-width:600px; height:60vh;
+    background:#161616; border-radius:20px; padding:44px;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .era-tag{font-family:monospace; font-size:12px; letter-spacing:0.1em; color:var(--accent-warm); text-transform:uppercase; margin-bottom:12px;}
+  .era-metric{font-size:clamp(36px,5.5vw,64px); font-weight:700; color:var(--accent); line-height:1;}
+  .era-role{font-family:monospace; font-size:13px; color:var(--muted); margin-top:16px;}
+
+  /* --- proposed share control --- */
+  .share-btn{
+    position:absolute; top:24px; right:24px; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .share-btn svg{width:17px; height:17px; stroke:var(--text-inverse);}
+  .toast{
+    position:absolute; top:72px; right:24px; background:var(--accent);
+    color:#fff; font-size:12px; padding:8px 14px; border-radius:10px;
+    font-family:monospace; letter-spacing:0.02em; box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  }
+  .blurb{
+    position:absolute; bottom:-58px; left:0; right:0; text-align:center;
+    font-family:monospace; font-size:11px; color:var(--muted); line-height:1.6;
+  }
+  .callout{
+    position:absolute; top:24px; left:24px; max-width:200px;
+    font-family:monospace; font-size:11px; color:var(--accent-warm); line-height:1.5;
+  }
+</style>
+</head>
+<body>
+  <div class="label">Preview — SHA-240 · new element only, rest is current Journey card styling</div>
+  <div class="stage">
+    <div class="era-card">
+      <div class="callout">new: share icon copies blurb + anchor link →</div>
+      <div class="share-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/>
+        </svg>
+      </div>
+      <div class="toast">Copied to clipboard ✓</div>
+      <div class="era-tag">6 years · Impact Analytics</div>
+      <div class="era-metric">$4M ARR</div>
+      <div class="era-role">Inventory Restocking SaaS · Harvard Business Case</div>
+      <div class="blurb">"Check out Sharad's Impact Analytics chapter — $4M ARR SaaS built 0→1: meet-sharad.vercel.app/#era-impact-analytics"</div>
+    </div>
+  </div>
+</body>
+</html>
