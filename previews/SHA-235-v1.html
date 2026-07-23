@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-235 — Ownership &amp; Investment relationships (mockup)</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; padding:40px; }
+  h1 { font-size:15px; color:#94A3B8; font-weight:500; margin-bottom:24px; }
+  .frame { max-width:640px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:20px; }
+  .legend-row { display:flex; align-items:center; gap:10px; padding:7px 0; font-size:12px; color:#CBD5E1; }
+  .legend-row.new { background:rgba(56,189,248,0.08); border-radius:6px; padding-left:8px; margin-left:-8px; }
+  .swatch { width:26px; height:2px; border-radius:2px; }
+  .swatch.solid { background:#94A3B8; }
+  .swatch.dashed { background:repeating-linear-gradient(90deg,#38BDF8 0 6px, transparent 6px 10px); height:2px; }
+  .tag { font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:#38BDF8; border:1px solid #38BDF8; border-radius:4px; padding:1px 5px; margin-left:auto; }
+  .canvas { margin-top:20px; height:150px; position:relative; border-top:1px solid rgba(255,255,255,0.06); padding-top:20px; }
+  .node { position:absolute; width:64px; text-align:center; font-size:10px; color:#F8FAFC; }
+  .dot { width:34px; height:34px; border-radius:50%; background:#1E293B; border:1px solid rgba(255,255,255,0.15); margin:0 auto 4px; }
+  .n1 { left:20px; top:10px; }
+  .n2 { left:220px; top:70px; }
+  svg.link { position:absolute; left:0; top:0; overflow:visible; }
+  .label { position:absolute; left:70px; top:32px; font-size:9px; color:#38BDF8; background:#0A0F1E; padding:0 4px; }
+</style>
+</head>
+<body>
+<h1>Mockup — legend addition for SHA-235, roughly where it would sit (static frame only)</h1>
+<div class="frame">
+  <div class="legend-row"><span class="swatch solid"></span> integrates</div>
+  <div class="legend-row"><span class="swatch solid"></span> powers</div>
+  <div class="legend-row"><span class="swatch solid"></span> hosts</div>
+  <div class="legend-row new"><span class="swatch dashed"></span> ownership / investment <span class="tag">new</span></div>
+
+  <div class="canvas">
+    <div class="node n1"><div class="dot"></div>Microsoft</div>
+    <div class="node n2"><div class="dot"></div>OpenAI</div>
+    <svg class="link" width="260" height="110">
+      <line x1="52" y1="27" x2="248" y2="87" stroke="#38BDF8" stroke-width="2" stroke-dasharray="6 4"/>
+    </svg>
+    <div class="label">owns stake in</div>
+  </div>
+</div>
+</body>
+</html>
