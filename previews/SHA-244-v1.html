@@ -1,0 +1,70 @@
+<title>SHA-244 — Pinned Life-Area Instructions for Agents (mockup)</title>
+<style>
+  :root{color-scheme:dark;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#111214;color:#e9e9ec;padding:32px;}
+  .wrap{max-width:640px;margin:0 auto;}
+  .tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8b8f98;margin-bottom:6px;}
+  h1{font-size:20px;margin:0 0 4px;}
+  .sub{color:#9a9ea7;font-size:13px;margin-bottom:24px;}
+  .area-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:#f2b155;}
+  .area-title{font-weight:600;font-size:17px;}
+  .pin{border:1px dashed #6b5a2e;background:#211c12;border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+  .pin-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .pin-label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#f2c877;}
+  .edit-link{font-size:11.5px;color:#8b8f98;cursor:pointer;}
+  .pin-text{font-size:13.5px;line-height:1.5;color:#f4ead4;}
+  .pin-foot{margin-top:10px;font-size:11px;color:#9a8a5e;}
+  .card{background:#1a1b1e;border:1px solid #2a2b2f;border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+  .card-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+  .card-body{font-size:12.5px;color:#a7abb4;}
+  .card-meta{margin-top:8px;font-size:11px;color:#6f737d;}
+  .toolcall{margin-top:20px;background:#0d0e10;border:1px solid #26272b;border-radius:10px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;color:#9fe6b0;line-height:1.6;}
+  .comment{color:#6f737d;}
+  .footnote{margin-top:22px;font-size:11.5px;color:#65697a;border-top:1px solid #26272b;padding-top:14px;}
+</style>
+<div class="wrap">
+  <div class="tag">Usercon — concept mockup — SHA-244</div>
+  <h1>📌 Pinned Life-Area Instructions for Agents</h1>
+  <div class="sub">Career life area — a standing instruction shown to the user and auto-included on agent reads</div>
+
+  <div class="area-header">
+    <div class="dot"></div>
+    <div class="area-title">Career</div>
+  </div>
+
+  <div class="pin">
+    <div class="pin-head">
+      <div class="pin-label">📌 Standing instruction for agents</div>
+      <div class="edit-link">Edit</div>
+    </div>
+    <div class="pin-text">"Only surface remote roles. I'm not interested in relocating. Always check my resume goals before suggesting new applications."</div>
+    <div class="pin-foot">Included automatically whenever an agent reads Career context</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Staff PM, Anthropic (remote)</div>
+    <div class="card-body">Project · application in progress</div>
+    <div class="card-meta">Source: Claude · Updated today</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">5 years in B2B SaaS PM</div>
+    <div class="card-body">Personal Info · background</div>
+    <div class="card-meta">Source: Manual · Updated 2 months ago</div>
+  </div>
+
+  <div class="toolcall">
+<span class="comment">// what get_profile_context("career") now returns</span>
+{
+  "lifeArea": "career",
+  "standingInstruction": "Only surface remote roles...",
+  "items": [ ... ]
+}
+  </div>
+
+  <div class="footnote">
+    Concept only: a short user-authored note pinned per life area (not a new life area, not a permission dashboard) that Usercon includes in the payload whenever an agent calls list_context / get_profile_context for that area — similar to ChatGPT Projects' custom instructions, adapted to Usercon's fixed life-area model.
+  </div>
+</div>
