@@ -68,6 +68,23 @@ session created them:
    script during each idea-sweep (preview branches live in AI-Workspace, not
    project repos).
 
+### Structural backup for OpenSpec archive step
+
+The reviewer's post-merge `npx openspec archive` step (`agents/reviewer.md`
+step B.3) relies on an agent remembering one CLI call at the right moment.
+Two backups catch completed change folders that would otherwise pile up in
+`openspec/changes/`:
+
+1. **GitHub Action on push to main** — `.github/workflows/openspec-archive.yml`
+   runs `scripts/archive-merged-openspec-changes.sh --from-push` on every merge
+   to `main`, archiving any completed change folder touched by that push.
+   Also runs weekly (Monday 09:05 UTC) in `--sweep` mode for orphans.
+2. **Spec-drift housekeeping** — `agents/spec-drift.md` step 12 runs the same
+   script in sweep mode during each idea-sweep.
+
+Keep the reviewer instruction as well; whichever path runs first wins and both
+land on the same correct archive location.
+
 ## Rules That Always Apply
 
 1. **Assignment wakes an agent; the `agent-ready` label decides whether it builds.** Status is never the gate — Linear auto-flips it to In Progress on assignment.
