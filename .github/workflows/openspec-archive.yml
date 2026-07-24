@@ -1,0 +1,68 @@
+name: OpenSpec archive
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Weekly, Monday 09:05 UTC — after preview-branch cleanup (09:00)
+    - cron: "5 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        required: true
+        default: sweep
+        type: choice
+        options:
+          - sweep
+          - from-push
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Archive from push diff
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bash scripts/archive-merged-openspec-changes.sh \
+            --from-push \
+            --base "${{ github.event.before }}" \
+            --head "${{ github.sha }}"
+
+      - name: Archive sweep (scheduled / manual)
+        if: github.event_name != 'push'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MODE="${{ github.event.inputs.mode || 'sweep' }}"
+          bash scripts/archive-merged-openspec-changes.sh "--${MODE}"
+
+      - name: Commit and push archive moves
+        run: |
+          if git diff --quiet; then
+            echo "No archive changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add openspec/changes/
+          git commit -m "chore(openspec): auto-archive completed changes [skip ci]"
+          git push

@@ -32,7 +32,7 @@ After opening a PR, the builder MUST move the Linear issue to `In Review` as the
 - **AND** the Status Snapshot block in the issue description is refreshed
 
 ### Requirement: Reviewer merges only on explicit approval
-The reviewer role MUST NOT merge until Sharad comments an explicit approval (`@agent approved`, `lgtm`, etc.). On approval it MUST merge, run `openspec archive`, move to Done, and notify Slack.
+The reviewer role MUST NOT merge until Sharad comments an explicit approval (`@agent approved`, `lgtm`, etc.). On approval it MUST merge, run `openspec archive`, move to Done, and notify Slack. A GitHub Action on push to `main` (`.github/workflows/openspec-archive.yml`) MUST also archive any completed OpenSpec change folders touched by the merge as a structural backup — the same way preview-branch cleanup backs up agent-forgotten branch deletes.
 
 #### Scenario: Sharad approves
 - **WHEN** Sharad comments "@agent approved" on an issue with a green PR
@@ -41,6 +41,10 @@ The reviewer role MUST NOT merge until Sharad comments an explicit approval (`@a
 #### Scenario: Sharad gives feedback
 - **WHEN** Sharad comments feedback on an open PR issue
 - **THEN** the reviewer updates the spec first, then code, pushes to the same branch, and comments on Linear (not PR)
+
+#### Scenario: Reviewer forgets archive step
+- **WHEN** a PR with a completed OpenSpec change merges to `main`
+- **THEN** the openspec-archive GitHub Action archives the change folder even if the reviewer agent skipped `npx openspec archive`
 
 ### Requirement: Preview branch cleanup on build start
 When a builder starts on `agent-ready`, it MUST delete any leftover `preview/<issue-id>-*` branches from the spec phase.

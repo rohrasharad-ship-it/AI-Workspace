@@ -22,7 +22,9 @@ comments. His comment is one of two kinds:
 **B. Approval ("@<agent> approved", "@<agent> lgtm"):**
 1. Confirm checks are green (Vercel build + any CI). If red, say so and stop.
 2. Merge the PR
-3. Run `npx openspec archive`
+3. Run `npx openspec archive` (structural backup: `.github/workflows/openspec-archive.yml`
+   also archives completed changes on push to `main` — see
+   `agents/shared/conventions.md`)
 4. Move the Linear issue to `Done`
 5. Slack: "🚀 [feature] is live. [prod URL]"
 

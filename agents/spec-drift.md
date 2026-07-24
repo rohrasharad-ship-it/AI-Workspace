@@ -102,9 +102,22 @@ and do not count against the cap.
    when the issue is no longer `spec-needed` (moved to `agent-ready`, `In
    Review`, `Done`, or canceled/duplicated) or when it's an older version than
    the latest branch for that issue. Report the deleted count at the end of the
-   run. A scheduled GitHub Action (`.github/workflows/preview-branch-cleanup.yml`)
+   run.    A scheduled GitHub Action (`.github/workflows/preview-branch-cleanup.yml`)
    runs the same script weekly as a structural backup — see
    `agents/shared/conventions.md`.
+12. **OpenSpec archive housekeeping (runs every time, independent of 1–9):**
+   completed change folders live in **AI-Workspace** — run the archive sweep
+   there:
+   ```bash
+   cd AI-Workspace   # clone or use an existing checkout
+   bash scripts/archive-merged-openspec-changes.sh --sweep
+   ```
+   Use `--dry-run` to report without archiving. The script archives completed
+   active changes with no open PR and older than 24 hours. A GitHub Action
+   (`.github/workflows/openspec-archive.yml`) archives on every push to `main`
+   and runs the same sweep weekly as a structural backup — see
+   `agents/shared/conventions.md`. Report the archived count at the end of the
+   run.
 
 **Tools needed:** shell access to clone/run scripts in AI-Workspace (including
 `git push origin --delete preview/<issue-id>-v<n>` for orphans), Linear (create
