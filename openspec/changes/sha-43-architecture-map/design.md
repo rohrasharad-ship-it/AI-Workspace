@@ -4,11 +4,10 @@ The AI-Workspace Vercel project deploys the repo root as static files. `index.ht
 
 ## Goals
 
-- One self-contained HTML page (no build step, no framework) matching existing preview style
-- Three-column layout: **Roles → Shared modules → Routines**
-- Interactive highlight on click: selecting a node dims unrelated nodes and emphasizes its edges
-- Detail panel with trigger text and file paths from the real repo structure
-- Responsive: horizontal on desktop, stacked columns on mobile
+- Miro-style board layout with positioned cards, zone labels, and dot-grid background
+- Icons, short descriptions on every card, and a rich side panel with step-by-step "What happens"
+- Animated walkthroughs: **Build loop** and **Idea sweep** with flowing arrows and traveling dots (Anime.js)
+- Click-to-highlight still works; responsive mobile falls back to grouped card grids
 
 ## Non-Goals
 

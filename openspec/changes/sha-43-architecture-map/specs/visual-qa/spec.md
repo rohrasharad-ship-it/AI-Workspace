@@ -13,4 +13,8 @@ AI-Workspace MUST maintain a static Vercel project (`ai-workspace-blond.vercel.a
 
 #### Scenario: Architecture map interactivity
 - **WHEN** a user clicks a role, shared module, or routine node on the homepage map
-- **THEN** connected nodes and edges highlight and a detail panel shows the node's trigger or file path
+- **THEN** connected nodes and edges highlight and a detail panel shows the node's trigger, file path, and step-by-step flow
+
+#### Scenario: Animated flow walkthrough
+- **WHEN** a user clicks "Build loop" or "Idea sweep" on the architecture board
+- **THEN** nodes and arrows animate in sequence to demonstrate how that flow works
