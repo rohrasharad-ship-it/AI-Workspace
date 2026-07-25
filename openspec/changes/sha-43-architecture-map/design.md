@@ -4,10 +4,11 @@ The AI-Workspace Vercel project deploys the repo root as static files. `index.ht
 
 ## Goals
 
-- Miro-style board layout with positioned cards, zone labels, and dot-grid background
+- Miro-style board layout with positioned cards, zone labels, dot-grid background, and shaded zone regions
 - Icons, short descriptions on every card, and a rich side panel with step-by-step "What happens"
-- Animated walkthroughs: **Build loop** and **Idea sweep** with flowing arrows and traveling dots (Anime.js)
-- Click-to-highlight still works; responsive mobile falls back to grouped card grids
+- Animated walkthroughs: **Build loop** and **Idea sweep** with step captions, flowing arrows, and traveling dots (Anime.js)
+- Edge routing from card ports (not centers) to reduce visual clutter; clickable chips in side panel
+- Single render path per viewport (no duplicate DOM nodes); mobile uses grouped card grids
 
 ## Non-Goals
 

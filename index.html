@@ -9,7 +9,7 @@
     :root {
       --bg: #0c0c12;
       --board: #111118;
-      --grid: rgba(255,255,255,0.04);
+      --grid: rgba(255,255,255,0.045);
       --surface: #18181f;
       --border: rgba(255,255,255,0.1);
       --text: #f4f4f5;
@@ -19,8 +19,7 @@
       --module: #a78bfa;
       --routine: #34d399;
       --router: #fbbf24;
-      --accent: #8b5cf6;
-      --panel-w: 340px;
+      --panel-w: 360px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +29,6 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
     }
 
     .app {
@@ -46,9 +44,9 @@
     .main { min-width: 0; }
 
     header {
-      padding: 1.25rem 1.5rem 0.75rem;
+      padding: 1.1rem 1.25rem 0.7rem;
       border-bottom: 1px solid var(--border);
-      background: rgba(12,12,18,0.92);
+      background: rgba(12,12,18,0.95);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
@@ -57,46 +55,34 @@
 
     .badge {
       display: inline-block;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--muted);
       border: 1px solid var(--border);
       border-radius: 999px;
-      padding: 0.2rem 0.65rem;
-      margin-bottom: 0.5rem;
+      padding: 0.18rem 0.6rem;
+      margin-bottom: 0.45rem;
     }
 
-    h1 {
-      font-size: 1.45rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.35rem;
-    }
+    h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
 
     .header-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
+      margin-top: 0.25rem;
     }
 
-    .subtitle {
-      color: var(--muted);
-      font-size: 0.85rem;
-      max-width: 50ch;
-    }
+    .subtitle { color: var(--muted); font-size: 0.82rem; max-width: 48ch; margin-top: 0.25rem; }
 
-    .demo-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+    .demo-btns { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 
     .btn {
       font: inherit;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 600;
-      padding: 0.45rem 0.85rem;
+      padding: 0.42rem 0.8rem;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -104,64 +90,56 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      transition: transform 0.15s, border-color 0.15s, background 0.15s;
+      gap: 0.3rem;
     }
 
-    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.2); }
+    .btn:hover { border-color: rgba(255,255,255,0.22); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .btn.primary { background: linear-gradient(135deg, #7c3aed, #4f46e5); border-color: transparent; }
-    .btn.playing { animation: pulse-btn 1.2s ease infinite; }
+    .btn.playing { box-shadow: 0 0 0 2px rgba(139,92,246,0.45); }
 
-    @keyframes pulse-btn {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,0.4); }
-      50% { box-shadow: 0 0 0 6px rgba(139,92,246,0); }
+    .flow-banner {
+      display: none;
+      margin: 0.6rem 1.25rem 0;
+      padding: 0.55rem 0.85rem;
+      border-radius: 8px;
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.3);
+      font-size: 0.8rem;
+      color: #ddd6fe;
     }
+
+    .flow-banner.visible { display: block; }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .legend span { display: flex; align-items: center; gap: 0.3rem; }
+    .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
 
     .board-wrap {
       overflow: auto;
-      padding: 1rem;
+      padding: 0.85rem 1rem 1.25rem;
       -webkit-overflow-scrolling: touch;
     }
 
     .board {
       position: relative;
-      width: 1080px;
-      height: 700px;
+      width: 1060px;
+      height: 760px;
       margin: 0 auto;
       background-color: var(--board);
       background-image: radial-gradient(circle, var(--grid) 1px, transparent 1px);
-      background-size: 24px 24px;
+      background-size: 22px 22px;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
-    }
-
-    @media (max-width: 1099px) {
-      .board {
-        width: 100%;
-        height: auto;
-        min-height: 900px;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-        background-image: none;
-      }
-      .board-svg, .zone-label { display: none !important; }
-      .mobile-zones { display: flex !important; flex-direction: column; gap: 1rem; }
-    }
-
-    .mobile-zones { display: none; }
-
-    .zone-label {
-      position: absolute;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      opacity: 0.7;
-      pointer-events: none;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
 
     .board-svg {
@@ -170,130 +148,139 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
+    }
+
+    .zone-bg {
+      fill: rgba(255,255,255,0.02);
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 1;
+    }
+
+    .zone-title {
+      fill: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
     }
 
     .edge {
       fill: none;
-      stroke-width: 2;
-      opacity: 0.18;
-      transition: opacity 0.25s, stroke-width 0.25s;
+      stroke-width: 1.75;
+      opacity: 0.14;
+      transition: opacity 0.2s;
     }
 
-    .edge.active {
-      opacity: 0.85;
-      stroke-width: 2.5;
-    }
+    .edge.active { opacity: 0.9; stroke-width: 2.25; }
+    .edge.flowing { stroke-dasharray: 7 5; animation: march 0.7s linear infinite; }
 
-    .edge.flowing {
-      stroke-dasharray: 8 6;
-      animation: march 0.8s linear infinite;
-    }
+    @keyframes march { to { stroke-dashoffset: -12; } }
 
-    @keyframes march { to { stroke-dashoffset: -14; } }
+    @media (prefers-reduced-motion: reduce) {
+      .edge.flowing { animation: none; }
+      .card.flow-active { animation: none; }
+    }
 
     .flow-dot {
       fill: #fff;
-      filter: drop-shadow(0 0 4px rgba(255,255,255,0.8));
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.9));
       opacity: 0;
+      pointer-events: none;
     }
 
     .flow-dot.visible { opacity: 1; }
 
+    #cards { position: relative; z-index: 2; width: 100%; height: 100%; }
+
     .card {
       position: absolute;
-      width: 148px;
-      padding: 0.65rem 0.7rem 0.7rem;
-      border-radius: 12px;
+      width: 142px;
+      padding: 0.55rem 0.6rem 0.6rem;
+      border-radius: 10px;
       border: 1.5px solid var(--border);
-      background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      backdrop-filter: blur(8px);
+      background: linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
       cursor: pointer;
-      z-index: 2;
-      transition: transform 0.2s, opacity 0.25s, border-color 0.2s, box-shadow 0.2s;
       text-align: left;
       color: inherit;
       font: inherit;
+      transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
     }
 
-    .card:hover { transform: translateY(-2px) scale(1.02); z-index: 5; }
+    .card:hover { transform: translateY(-1px); z-index: 5; }
+    .card:focus-visible { outline: 2px solid #8b5cf6; outline-offset: 2px; z-index: 5; }
     .card.selected {
-      border-color: rgba(255,255,255,0.35);
-      box-shadow: 0 0 0 2px rgba(139,92,246,0.35), 0 12px 32px rgba(0,0,0,0.35);
+      border-color: rgba(255,255,255,0.38);
+      box-shadow: 0 0 0 2px rgba(139,92,246,0.4), 0 10px 28px rgba(0,0,0,0.35);
       z-index: 6;
     }
-    .card.dimmed { opacity: 0.2; pointer-events: none; }
+    .card.dimmed { opacity: 0.18; }
     .card.flow-active {
-      border-color: rgba(255,255,255,0.5);
-      box-shadow: 0 0 20px rgba(139,92,246,0.35);
-      animation: card-glow 1s ease infinite alternate;
+      border-color: rgba(255,255,255,0.45);
+      box-shadow: 0 0 18px rgba(139,92,246,0.4);
+      animation: glow 0.9s ease-in-out infinite alternate;
     }
 
-    @keyframes card-glow {
-      from { box-shadow: 0 0 12px rgba(139,92,246,0.25); }
-      to { box-shadow: 0 0 24px rgba(139,92,246,0.5); }
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(139,92,246,0.25); }
+      to { box-shadow: 0 0 22px rgba(139,92,246,0.55); }
     }
 
     .card-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      margin-bottom: 0.45rem;
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; margin-bottom: 0.35rem;
     }
 
-    .card-title {
-      font-size: 0.78rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 0.2rem;
-    }
-
-    .card-desc {
-      font-size: 0.62rem;
-      color: var(--muted);
-      line-height: 1.35;
-    }
-
-    .card[data-kind="trigger"] .card-icon { background: rgba(56,189,248,0.15); }
-    .card[data-kind="router"] .card-icon { background: rgba(251,191,36,0.15); }
-    .card[data-kind="role"] .card-icon { background: rgba(245,158,11,0.15); }
-    .card[data-kind="module"] .card-icon { background: rgba(167,139,250,0.15); }
-    .card[data-kind="routine"] .card-icon { background: rgba(52,211,153,0.15); }
+    .card-title { font-size: 0.74rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.15rem; }
+    .card-desc { font-size: 0.6rem; color: var(--muted); line-height: 1.3; }
 
     .card[data-kind="trigger"] { border-left: 3px solid var(--trigger); }
-    .card[data-kind="router"] { width: 168px; border-left: 3px solid var(--router); }
+    .card[data-kind="trigger"] .card-icon { background: rgba(56,189,248,0.14); }
+    .card[data-kind="router"] { width: 156px; border-left: 3px solid var(--router); }
+    .card[data-kind="router"] .card-icon { background: rgba(251,191,36,0.14); }
     .card[data-kind="role"] { border-left: 3px solid var(--role); }
-    .card[data-kind="module"] { width: 132px; border-left: 3px solid var(--module); }
-    .card[data-kind="routine"] { width: 160px; border-left: 3px solid var(--routine); }
+    .card[data-kind="role"] .card-icon { background: rgba(245,158,11,0.14); }
+    .card[data-kind="module"] { width: 128px; border-left: 3px solid var(--module); }
+    .card[data-kind="module"] .card-icon { background: rgba(167,139,250,0.14); }
+    .card[data-kind="routine"] { width: 150px; border-left: 3px solid var(--routine); }
+    .card[data-kind="routine"] .card-icon { background: rgba(52,211,153,0.14); }
+
+    /* Mobile list layout */
+    .mobile-board {
+      display: none;
+      flex-direction: column;
+      gap: 1.1rem;
+      padding: 0.25rem;
+    }
+
+    @media (max-width: 1099px) {
+      .board.desktop { display: none; }
+      .mobile-board { display: flex; }
+      .demo-btns .flow-btn { display: none; }
+    }
 
     .mobile-zone h3 {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
       color: var(--muted);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.45rem;
     }
 
     .mobile-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 0.45rem;
     }
 
-    .mobile-grid .card {
-      position: static;
-      width: 100%;
-    }
+    .mobile-grid .card { position: static; width: 100%; }
 
-  /* Panel */
     .panel {
       border-left: 1px solid var(--border);
       background: var(--surface);
-      padding: 1.25rem;
+      padding: 1.15rem;
       overflow-y: auto;
       max-height: 100vh;
       position: sticky;
@@ -301,141 +288,35 @@
     }
 
     @media (max-width: 1099px) {
-      .panel {
-        border-left: none;
-        border-top: 1px solid var(--border);
-        max-height: none;
-        position: static;
-      }
+      .panel { border-left: none; border-top: 1px solid var(--border); max-height: none; position: static; }
     }
 
-    .panel-empty {
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
-
-    .panel-kind {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.35rem;
-    }
-
-    .panel h2 {
-      font-size: 1.15rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .panel-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      flex-shrink: 0;
-    }
-
-    .panel-path {
-      font-family: ui-monospace, monospace;
-      font-size: 0.72rem;
-      color: #67e8f9;
-      background: rgba(0,0,0,0.3);
-      padding: 0.35rem 0.5rem;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-      word-break: break-all;
-    }
-
-    .panel-section {
-      margin-bottom: 1rem;
-    }
-
-    .panel-section h3 {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .panel-section p, .panel-section li {
-      font-size: 0.82rem;
-      color: #d4d4d8;
-      line-height: 1.55;
-    }
-
-    .steps {
-      list-style: none;
-      counter-reset: step;
-    }
-
-    .steps li {
-      counter-increment: step;
-      padding-left: 1.75rem;
-      position: relative;
-      margin-bottom: 0.5rem;
-    }
-
+    .panel-empty { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+    .panel-kind { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .panel h2 { font-size: 1.1rem; margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.45rem; }
+    .panel-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; background: rgba(255,255,255,0.06); }
+    .panel-path { font-family: ui-monospace, monospace; font-size: 0.7rem; color: #67e8f9; background: rgba(0,0,0,0.28); padding: 0.32rem 0.48rem; border-radius: 6px; margin-bottom: 0.85rem; word-break: break-all; }
+    .panel-section { margin-bottom: 0.85rem; }
+    .panel-section h3 { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.35rem; }
+    .panel-section p, .panel-section li { font-size: 0.8rem; color: #d4d4d8; line-height: 1.5; }
+    .steps { list-style: none; counter-reset: step; }
+    .steps li { counter-increment: step; padding-left: 1.65rem; position: relative; margin-bottom: 0.45rem; }
     .steps li::before {
-      content: counter(step);
-      position: absolute;
-      left: 0;
-      top: 0.1rem;
-      width: 1.25rem;
-      height: 1.25rem;
-      border-radius: 50%;
-      background: rgba(139,92,246,0.25);
-      border: 1px solid rgba(139,92,246,0.5);
-      font-size: 0.65rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #c4b5fd;
+      content: counter(step); position: absolute; left: 0; top: 0.05rem;
+      width: 1.15rem; height: 1.15rem; border-radius: 50%;
+      background: rgba(139,92,246,0.22); border: 1px solid rgba(139,92,246,0.45);
+      font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; color: #c4b5fd;
     }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
+    .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
     .chip {
-      font-size: 0.68rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
+      font: inherit; font-size: 0.66rem; padding: 0.18rem 0.48rem; border-radius: 999px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); cursor: pointer;
     }
+    .chip:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
 
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      padding: 0.75rem 1.5rem 1rem;
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .legend span { display: flex; align-items: center; gap: 0.35rem; }
-    .legend i {
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      display: inline-block;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    footer a { color: #67e8f9; }
+    footer { text-align: center; padding: 0.85rem; font-size: 0.7rem; color: var(--muted); }
+    footer a { color: #67e8f9; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -446,54 +327,42 @@
         <div class="header-row">
           <div>
             <h1>How the hub connects</h1>
-            <p class="subtitle">Miro-style map of triggers → roles → shared modules → routines. Click any card, or play an animated walkthrough.</p>
+            <p class="subtitle">Triggers wake roles · roles read shared modules · routines bundle idea-generation. Click a card or play a walkthrough.</p>
           </div>
           <div class="demo-btns">
-            <button type="button" class="btn primary" id="play-build">▶ Build loop</button>
-            <button type="button" class="btn" id="play-sweep">▶ Idea sweep</button>
+            <button type="button" class="btn primary flow-btn" id="play-build">▶ Build loop</button>
+            <button type="button" class="btn flow-btn" id="play-sweep">▶ Idea sweep</button>
             <button type="button" class="btn" id="reset">Reset</button>
           </div>
         </div>
       </header>
 
+      <div class="flow-banner" id="flow-banner" aria-live="polite"></div>
+
       <div class="legend">
         <span><i style="background:var(--trigger)"></i> Triggers</span>
         <span><i style="background:var(--router)"></i> Router</span>
         <span><i style="background:var(--role)"></i> Roles</span>
-        <span><i style="background:var(--module)"></i> Shared modules</span>
+        <span><i style="background:var(--module)"></i> Modules</span>
         <span><i style="background:var(--routine)"></i> Routines</span>
       </div>
 
       <div class="board-wrap">
-        <div class="board" id="board">
+        <div class="board desktop" id="board">
           <svg class="board-svg" id="svg" aria-hidden="true">
             <defs>
-              <marker id="arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(167,139,250,0.8)" />
-              </marker>
-              <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(52,211,153,0.8)" />
-              </marker>
-              <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(245,158,11,0.8)" />
-              </marker>
-              <marker id="arrow-cyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(56,189,248,0.8)" />
-              </marker>
+              <marker id="arrow-purple" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(167,139,250,0.85)" /></marker>
+              <marker id="arrow-green" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(52,211,153,0.85)" /></marker>
+              <marker id="arrow-amber" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(245,158,11,0.85)" /></marker>
+              <marker id="arrow-cyan" markerWidth="7" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="rgba(56,189,248,0.85)" /></marker>
             </defs>
+            <g id="zones"></g>
             <g id="edges"></g>
-            <circle class="flow-dot" id="flow-dot" r="5" />
+            <circle class="flow-dot" id="flow-dot" r="4.5" />
           </svg>
-
-          <span class="zone-label" style="left:24px;top:18px;color:var(--trigger)">Triggers</span>
-          <span class="zone-label" style="left:24px;top:148px;color:var(--role)">Agent roles</span>
-          <span class="zone-label" style="left:340px;top:148px;color:var(--module)">Shared modules</span>
-          <span class="zone-label" style="left:860px;top:148px;color:var(--routine)">Routines</span>
-
           <div id="cards"></div>
-
-          <div class="mobile-zones" id="mobile-zones"></div>
         </div>
+        <div class="mobile-board" id="mobile-board"></div>
       </div>
 
       <footer>
@@ -504,8 +373,8 @@
 
     <aside class="panel" id="panel" aria-live="polite">
       <div class="panel-empty">
-        <p><strong>👆 Click a card</strong> on the board to see what it does, which files it reads, and how it connects.</p>
-        <p style="margin-top:0.75rem">Or hit <strong>▶ Build loop</strong> / <strong>▶ Idea sweep</strong> to watch an animated walkthrough of the two main flows.</p>
+        <p><strong>Click a card</strong> to see what wakes it, which files it reads, and what happens step by step.</p>
+        <p style="margin-top:0.65rem">On desktop, try <strong>▶ Build loop</strong> or <strong>▶ Idea sweep</strong> for an animated walkthrough.</p>
       </div>
     </aside>
   </div>
@@ -513,83 +382,82 @@
   <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
   <script>
     const NODES = {
-      "trigger-linear": { id:"trigger-linear", kind:"trigger", icon:"📋", label:"Linear event", desc:"Assignment or @mention wakes an agent", x:24, y:48,
+      "trigger-linear": { id:"trigger-linear", kind:"trigger", icon:"📋", label:"Linear event", desc:"Assignment or @mention", x:36, y:52,
         trigger:"Issue assigned to agent, or @mentioned in a comment",
         path:"Linear",
-        steps:["Sharad assigns an issue or @mentions an agent","Linear starts a fresh agent session","Agent reads AGENTS.md first, then its role file"],
-        connects:["router"] },
-      "trigger-cron": { id:"trigger-cron", kind:"trigger", icon:"⏰", label:"External cron", desc:"Co-work / schedule fires a routine by name", x:200, y:48,
+        steps:["Sharad assigns an issue or @mentions an agent","Linear starts a fresh agent session","Agent reads AGENTS.md, then its role file"],
+        links:["router"] },
+      "trigger-cron": { id:"trigger-cron", kind:"trigger", icon:"⏰", label:"External cron", desc:"Schedule fires a routine", x:210, y:52,
         trigger:'"Run the idea-sweep routine for …"',
         path:"routines/README.md",
-        steps:["Outside tool names a routine + project(s)","Orchestrator reads routines/<name>.md","Roles run in sequence; Slack summary at end"],
-        connects:["idea-sweep"] },
-      "router": { id:"router", kind:"router", icon:"🧭", label:"AGENTS.md", desc:"Thin router — every session starts here", x:430, y:42,
+        steps:["Outside tool names a routine + project(s)","Orchestrator reads routines/<name>.md","Roles run in sequence; one Slack summary per project"],
+        links:["idea-sweep"] },
+      "router": { id:"router", kind:"router", icon:"🧭", label:"AGENTS.md", desc:"Thin router — every session starts here", x:420, y:46,
         trigger:"Mandatory first read on every agent session",
         path:"AGENTS.md",
-        steps:["Agent fetches this file from AI-Workspace","Reads dispatch table to find its role","Reads agents/shared/conventions.md (always)"],
-        connects:["builder","reviewer","spec-conversation","spec-drift","bug-error","market-feature"] },
-      "builder": { id:"builder", kind:"role", icon:"🔨", label:"Builder", desc:"Implements agent-ready issues", x:24, y:168,
-        trigger:"Assigned + agent-ready label",
+        steps:["Agent fetches AI-Workspace/AGENTS.md","Reads dispatch table → finds role file","Always reads agents/shared/conventions.md too"],
+        links:["builder","reviewer","spec-conversation","spec-drift","bug-error","market-feature"] },
+      "builder": { id:"builder", kind:"role", icon:"🔨", label:"Builder", desc:"Implements agent-ready issues", x:36, y:158,
+        trigger:"Assigned to Linear issue + agent-ready label",
         path:"agents/builder.md",
-        steps:["Check label (not status) — refuse if spec-needed","Delete preview/* branch, run OpenSpec apply","Build, PR, move to In Review, visual self-QA, stop"],
-        connects:["loop","openspec","visual-self-qa","status-snapshot","conventions"] },
-      "reviewer": { id:"reviewer", kind:"role", icon:"✅", label:"Reviewer", desc:"Merge or iterate on feedback", x:24, y:268,
-        trigger:'Sharad comments "approved" or feedback',
+        steps:["Gate: refuse if spec-needed, proceed if agent-ready","Delete preview/* branch; OpenSpec apply + implement","Build, PR, In Review, visual self-QA — then stop"],
+        links:["loop","openspec","visual-self-qa","status-snapshot","conventions"] },
+      "reviewer": { id:"reviewer", kind:"role", icon:"✅", label:"Reviewer", desc:"Merge or iterate on feedback", x:36, y:248,
+        trigger:'Sharad comments feedback or "@agent approved"',
         path:"agents/reviewer.md",
-        steps:["Re-woken by @mention on Linear issue","Feedback → spec update then code","Approved → merge, archive OpenSpec, Done, Slack"],
-        connects:["openspec","conventions","issue-brief"] },
-      "spec-conversation": { id:"spec-conversation", kind:"role", icon:"💬", label:"Spec Conversation", desc:"Refines spec-needed issues", x:24, y:368,
-        trigger:"@mentioned on spec-needed issue",
+        steps:["Re-woken by @mention on the Linear issue","Feedback → spec update, then code on same branch","Approved → merge, archive OpenSpec, Done, Slack"],
+        links:["openspec","conventions","issue-brief"] },
+      "spec-conversation": { id:"spec-conversation", kind:"role", icon:"💬", label:"Spec Conversation", desc:"Refines spec-needed issues", x:36, y:338,
+        trigger:"@mentioned on a spec-needed issue",
         path:"agents/spec-conversation.md",
-        steps:["Discuss in comments only — no code","Attach visual previews for UI ideas","On Sharad approval → agent-ready + assign builder"],
-        connects:["openspec","visual-specs","status-snapshot","conventions"] },
-      "spec-drift": { id:"spec-drift", kind:"role", icon:"🔍", label:"Spec-Drift", desc:"Spec vs code gaps + stale sweep", x:24, y:448,
-        trigger:"idea-sweep routine",
+        steps:["Discuss in comments — no code, no branches","Attach visual previews for UI-heavy ideas","On Sharad approval → agent-ready label + assign builder"],
+        links:["openspec","visual-specs","status-snapshot","conventions"] },
+      "spec-drift": { id:"spec-drift", kind:"role", icon:"🔍", label:"Spec-Drift", desc:"Spec vs code + stale sweep", x:36, y:428,
+        trigger:"idea-sweep routine (or spec-drift-only trigger)",
         path:"agents/spec-drift.md",
-        steps:["Compare openspec/specs/ to actual code","File spec-needed issues for gaps","Steps 10–11: stale-issue sweep + preview cleanup"],
-        connects:["idea-sweep","openspec","issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions"] },
-      "bug-error": { id:"bug-error", kind:"role", icon:"🐛", label:"Bug / Error", desc:"Prod errors → Backlog issues", x:24, y:528,
+        steps:["Compare openspec/specs/ to shipped code","File spec-needed issues for gaps","Steps 10–11: stale-issue sweep + preview-branch cleanup"],
+        links:["openspec","issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions","idea-sweep"] },
+      "bug-error": { id:"bug-error", kind:"role", icon:"🐛", label:"Bug / Error", desc:"Prod errors → Backlog", x:36, y:518,
         trigger:"idea-sweep routine",
         path:"agents/bug-error.md",
-        steps:["Read Vercel runtime errors + logs","Search Linear for duplicates first","File spec-needed bug with screenshot evidence"],
-        connects:["idea-sweep","issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions"] },
-      "market-feature": { id:"market-feature", kind:"role", icon:"💡", label:"Market / Feature", desc:"New ideas from vision", x:24, y:608,
+        steps:["Read Vercel runtime errors and logs","Dedupe against open/recent Linear issues","File spec-needed bug with live screenshot evidence"],
+        links:["issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions","idea-sweep"] },
+      "market-feature": { id:"market-feature", kind:"role", icon:"💡", label:"Market / Feature", desc:"New ideas from vision", x:36, y:608,
         trigger:"idea-sweep routine",
         path:"agents/market-feature.md",
-        steps:["Read project vision + openspec gaps","Propose features not yet tracked","Always attach minimal visual preview"],
-        connects:["idea-sweep","openspec","issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions"] },
-      "conventions": { id:"conventions", kind:"module", icon:"📜", label:"Conventions", desc:"Rules every agent reads", x:340, y:168, path:"agents/shared/conventions.md",
-        description:"Issue Brief format, label gates, status snapshot, blocked handover, always-apply rules." },
-      "loop": { id:"loop", kind:"module", icon:"🔄", label:"The Loop", desc:"Trigger vs gate, full cycle", x:490, y:168, path:"agents/shared/loop.md",
-        description:"Why agent-ready label beats status. Spec → build → PR → review → approval → merge." },
-      "openspec": { id:"openspec", kind:"module", icon:"📐", label:"OpenSpec", desc:"Per-capability specs", x:640, y:168, path:"agents/shared/openspec.md",
-        description:"Split specs by capability. propose → apply → archive. Agents read only what they need." },
-      "status-snapshot": { id:"status-snapshot", kind:"module", icon:"📌", label:"Status Snapshot", desc:"Pinned issue dashboard", x:340, y:268, path:"agents/shared/status-snapshot.md",
+        steps:["Read project vision and openspec for gaps","Propose features not yet in Linear","Always attach a minimal visual preview"],
+        links:["openspec","issue-brief","issue-cap","cross-project-grouping","linear-slack","visual-specs","visual-self-qa","conventions","idea-sweep"] },
+      "conventions": { id:"conventions", kind:"module", icon:"📜", label:"Conventions", desc:"Rules every agent reads", x:310, y:158, path:"agents/shared/conventions.md",
+        description:"Issue Brief format, label gates, status snapshot, blocked handover — always apply." },
+      "loop": { id:"loop", kind:"module", icon:"🔄", label:"The Loop", desc:"Trigger vs gate", x:455, y:158, path:"agents/shared/loop.md",
+        description:"Why agent-ready beats status. Full spec → build → PR → review → approval → merge cycle." },
+      "openspec": { id:"openspec", kind:"module", icon:"📐", label:"OpenSpec", desc:"Per-capability specs", x:600, y:158, path:"agents/shared/openspec.md",
+        description:"Split specs by capability. propose → apply → archive. Agents read only the file they need." },
+      "status-snapshot": { id:"status-snapshot", kind:"module", icon:"📌", label:"Status Snapshot", desc:"Pinned issue dashboard", x:310, y:248, path:"agents/shared/status-snapshot.md",
         description:"Phase, PR link, preview URL — refreshed on every meaningful turn." },
-      "visual-specs": { id:"visual-specs", kind:"module", icon:"🎨", label:"Visual Specs", desc:"HTML mockups in spec phase", x:490, y:268, path:"agents/shared/visual-specs.md",
-        description:"previews/<issue>-v<n>.html on preview/* branches. Full vs minimal effort tiers." },
-      "visual-self-qa": { id:"visual-self-qa", kind:"module", icon:"📸", label:"Visual Self-QA", desc:"Live screenshot evidence", x:640, y:268, path:"agents/shared/visual-self-qa.md",
+      "visual-specs": { id:"visual-specs", kind:"module", icon:"🎨", label:"Visual Specs", desc:"HTML mockups", x:455, y:248, path:"agents/shared/visual-specs.md",
+        description:"previews/<issue>-v<n>.html on preview/* branches during spec phase." },
+      "visual-self-qa": { id:"visual-self-qa", kind:"module", icon:"📸", label:"Visual Self-QA", desc:"Live screenshots", x:600, y:248, path:"agents/shared/visual-self-qa.md",
         description:"Mandatory Playwright screenshots on real preview/prod URLs before PR or filing." },
-      "issue-brief": { id:"issue-brief", kind:"module", icon:"📝", label:"Issue Brief", desc:"5-line issue format", x:340, y:368, path:"agents/shared/issue-brief.md",
-        description:"In short, Problem, Solution, Why, What it looks like — scannable one-liners." },
-      "issue-cap": { id:"issue-cap", kind:"module", icon:"🚧", label:"Issue Cap", desc:"Max 5 active per project", x:490, y:368, path:"agents/shared/issue-cap.md",
-        description:"Counts Backlog + Todo + In Progress + In Review. Pre-flight before idea-generation." },
-      "cross-project-grouping": { id:"cross-project-grouping", kind:"module", icon:"🔗", label:"Cross-Project", desc:"Cluster matching gaps", x:640, y:368, path:"agents/shared/cross-project-grouping.md",
-        description:"Multi-project sweeps defer filing; orchestrator groups same gap across repos." },
-      "linear-slack": { id:"linear-slack", kind:"module", icon:"💬", label:"Linear → Slack", desc:"Per-issue notifications", x:490, y:468, path:"agents/shared/linear-slack.md",
-        description:"Project bell in Linear — not agent-posted summaries for individual issues." },
-      "idea-sweep": { id:"idea-sweep", kind:"routine", icon:"🧹", label:"idea-sweep", desc:"Daily/weekly idea feeders", x:860, y:400,
+      "issue-brief": { id:"issue-brief", kind:"module", icon:"📝", label:"Issue Brief", desc:"5-line issue format", x:310, y:338, path:"agents/shared/issue-brief.md",
+        description:"In short, Problem, Solution, Why, What it looks like." },
+      "issue-cap": { id:"issue-cap", kind:"module", icon:"🚧", label:"Issue Cap", desc:"Max 5 active / project", x:455, y:338, path:"agents/shared/issue-cap.md",
+        description:"Counts Backlog + Todo + In Progress + In Review before idea-generation runs." },
+      "cross-project-grouping": { id:"cross-project-grouping", kind:"module", icon:"🔗", label:"Cross-Project", desc:"Cluster shared gaps", x:600, y:338, path:"agents/shared/cross-project-grouping.md",
+        description:"Multi-project sweeps defer filing; orchestrator groups matching gaps into one PM OS issue." },
+      "linear-slack": { id:"linear-slack", kind:"module", icon:"🔔", label:"Linear → Slack", desc:"Per-issue bell", x:455, y:428, path:"agents/shared/linear-slack.md",
+        description:"Linear project notifications — separate from routine summary messages." },
+      "idea-sweep": { id:"idea-sweep", kind:"routine", icon:"🧹", label:"idea-sweep", desc:"Bundles idea feeders", x:820, y:380,
         trigger:"External: Run idea-sweep for project(s)",
         path:"routines/idea-sweep.md",
-        steps:["Pre-flight issue cap per project","Run spec-drift → bug-error → market-feature","One consolidated Slack summary per project"],
-        connects:["spec-drift","bug-error","market-feature"] }
+        steps:["Issue-cap pre-flight per project","Run spec-drift → bug-error → market-feature in order","One consolidated Slack summary per project"],
+        links:["spec-drift","bug-error","market-feature"] }
     };
 
     const EDGES = [
-      ["trigger-linear","router","cyan"], ["router","builder","amber"], ["router","reviewer","amber"],
-      ["router","spec-conversation","amber"], ["router","spec-drift","amber"], ["router","bug-error","amber"],
-      ["router","market-feature","amber"],
-      ["trigger-cron","idea-sweep","green"],
+      ["trigger-linear","router","cyan"], ["trigger-cron","idea-sweep","green"],
+      ["router","builder","amber"], ["router","reviewer","amber"], ["router","spec-conversation","amber"],
+      ["router","spec-drift","amber"], ["router","bug-error","amber"], ["router","market-feature","amber"],
       ["idea-sweep","spec-drift","green"], ["idea-sweep","bug-error","green"], ["idea-sweep","market-feature","green"],
       ["builder","loop","purple"], ["builder","openspec","purple"], ["builder","visual-self-qa","purple"],
       ["builder","status-snapshot","purple"], ["builder","conventions","purple"],
@@ -607,33 +475,51 @@
       ["market-feature","visual-specs","purple"], ["market-feature","visual-self-qa","purple"], ["market-feature","conventions","purple"]
     ];
 
+    const ZONES = [
+      { x:16, y:24, w:380, h:88, label:"Triggers", color:"rgba(56,189,248,0.06)" },
+      { x:16, y:130, w:200, h:560, label:"Agent roles", color:"rgba(245,158,11,0.05)" },
+      { x:290, y:130, w:360, h:340, label:"Shared modules", color:"rgba(167,139,250,0.05)" },
+      { x:790, y:130, w:250, h:560, label:"Routines", color:"rgba(52,211,153,0.05)" }
+    ];
+
     const FLOWS = {
-      build: [
-        { nodes: ["spec-conversation"], edges: [["trigger-linear","router"],["router","spec-conversation"]], delay: 1200 },
-        { nodes: ["spec-conversation","visual-specs","status-snapshot"], edges: [["spec-conversation","visual-specs"],["spec-conversation","status-snapshot"]], delay: 1400 },
-        { nodes: ["builder"], edges: [["router","builder"]], delay: 1000 },
-        { nodes: ["builder","loop","openspec","visual-self-qa"], edges: [["builder","loop"],["builder","openspec"],["builder","visual-self-qa"]], delay: 1600 },
-        { nodes: ["reviewer"], edges: [["trigger-linear","router"],["router","reviewer"]], delay: 1200 },
-        { nodes: ["reviewer","openspec"], edges: [["reviewer","openspec"]], delay: 1000 }
-      ],
-      sweep: [
-        { nodes: ["trigger-cron"], edges: [["trigger-cron","idea-sweep"]], delay: 1000 },
-        { nodes: ["idea-sweep"], edges: [], delay: 800 },
-        { nodes: ["spec-drift"], edges: [["idea-sweep","spec-drift"]], delay: 1200 },
-        { nodes: ["spec-drift","issue-cap","openspec"], edges: [["spec-drift","issue-cap"],["spec-drift","openspec"]], delay: 1400 },
-        { nodes: ["bug-error"], edges: [["idea-sweep","bug-error"]], delay: 1200 },
-        { nodes: ["bug-error","visual-self-qa"], edges: [["bug-error","visual-self-qa"]], delay: 1000 },
-        { nodes: ["market-feature"], edges: [["idea-sweep","market-feature"]], delay: 1200 },
-        { nodes: ["market-feature","visual-specs","linear-slack"], edges: [["market-feature","visual-specs"],["market-feature","linear-slack"]], delay: 1400 }
-      ]
+      build: {
+        title: "Build loop",
+        steps: [
+          { caption: "1/6 — Sharad @mentions agent on a spec-needed issue", nodes: ["trigger-linear","router","spec-conversation"], edges: [["trigger-linear","router"],["router","spec-conversation"]] },
+          { caption: "2/6 — Spec conversation reads visual + status modules", nodes: ["spec-conversation","visual-specs","status-snapshot","openspec"], edges: [["spec-conversation","visual-specs"],["spec-conversation","status-snapshot"],["spec-conversation","openspec"]] },
+          { caption: "3/6 — Sharad approves → agent-ready → builder assigned", nodes: ["trigger-linear","router","builder"], edges: [["trigger-linear","router"],["router","builder"]] },
+          { caption: "4/6 — Builder runs OpenSpec apply and reads loop module", nodes: ["builder","loop","openspec","conventions"], edges: [["builder","loop"],["builder","openspec"],["builder","conventions"]] },
+          { caption: "5/6 — PR opened; visual self-QA on preview URL", nodes: ["builder","visual-self-qa","status-snapshot"], edges: [["builder","visual-self-qa"],["builder","status-snapshot"]] },
+          { caption: "6/6 — Sharad approves → reviewer merges", nodes: ["trigger-linear","router","reviewer","openspec"], edges: [["trigger-linear","router"],["router","reviewer"],["reviewer","openspec"]] }
+        ]
+      },
+      sweep: {
+        title: "Idea sweep",
+        steps: [
+          { caption: "1/5 — External cron fires idea-sweep routine", nodes: ["trigger-cron","idea-sweep"], edges: [["trigger-cron","idea-sweep"]] },
+          { caption: "2/5 — Spec-drift checks caps and compares specs to code", nodes: ["idea-sweep","spec-drift","issue-cap","openspec"], edges: [["idea-sweep","spec-drift"],["spec-drift","issue-cap"],["spec-drift","openspec"]] },
+          { caption: "3/5 — Bug/error scans Vercel logs for prod failures", nodes: ["idea-sweep","bug-error","visual-self-qa"], edges: [["idea-sweep","bug-error"],["bug-error","visual-self-qa"]] },
+          { caption: "4/5 — Market/feature proposes new ideas with visuals", nodes: ["idea-sweep","market-feature","visual-specs"], edges: [["idea-sweep","market-feature"],["market-feature","visual-specs"]] },
+          { caption: "5/5 — Cross-project grouping + Slack summary", nodes: ["cross-project-grouping","linear-slack","idea-sweep"], edges: [["market-feature","cross-project-grouping"],["market-feature","linear-slack"]] }
+        ]
+      }
     };
 
     const KIND_COLORS = { trigger:"var(--trigger)", router:"var(--router)", role:"var(--role)", module:"var(--module)", routine:"var(--routine)" };
+    const EMPTY_PANEL = document.getElementById("panel").innerHTML;
     let selected = null;
     let playing = false;
-    let playAbort = false;
+    let playToken = 0;
+    let renderMode = null;
 
-    function cardEl(node) {
+    function isDesktop() { return window.innerWidth >= 1100; }
+
+    function cardHTML(node) {
+      return `<div class="card-icon">${node.icon}</div><div class="card-title">${node.label}</div><div class="card-desc">${node.desc || ""}</div>`;
+    }
+
+    function makeCard(node) {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "card";
@@ -641,195 +527,293 @@
       btn.dataset.kind = node.kind;
       btn.style.left = node.x + "px";
       btn.style.top = node.y + "px";
-      btn.innerHTML = `<div class="card-icon">${node.icon}</div><div class="card-title">${node.label}</div><div class="card-desc">${node.desc || ""}</div>`;
+      btn.innerHTML = cardHTML(node);
       btn.addEventListener("click", () => { if (!playing) selectNode(node.id); });
       return btn;
     }
 
-    function render() {
+    function renderDesktop() {
       const cards = document.getElementById("cards");
-      const mobile = document.getElementById("mobile-zones");
-      const zones = { trigger:[], router:[], role:[], module:[], routine:[] };
-      Object.values(NODES).forEach((n) => { if (zones[n.kind]) zones[n.kind].push(n); });
+      cards.innerHTML = "";
+      Object.values(NODES).forEach((n) => cards.appendChild(makeCard(n)));
+      drawZones();
+      drawEdges();
+    }
 
-      Object.values(NODES).forEach((n) => cards.appendChild(cardEl(n)));
-
-      const zoneNames = { trigger:"Triggers", router:"Router", role:"Agent roles", module:"Shared modules", routine:"Routines" };
-      Object.entries(zones).forEach(([kind, items]) => {
+    function renderMobile() {
+      const root = document.getElementById("mobile-board");
+      root.innerHTML = "";
+      const groups = [
+        { kind:"trigger", title:"Triggers" },
+        { kind:"router", title:"Router" },
+        { kind:"role", title:"Agent roles" },
+        { kind:"module", title:"Shared modules" },
+        { kind:"routine", title:"Routines" }
+      ];
+      groups.forEach(({ kind, title }) => {
+        const items = Object.values(NODES).filter((n) => n.kind === kind);
         if (!items.length) return;
-        const sec = document.createElement("div");
+        const sec = document.createElement("section");
         sec.className = "mobile-zone";
-        sec.innerHTML = `<h3>${zoneNames[kind]}</h3><div class="mobile-grid"></div>`;
+        sec.innerHTML = `<h3>${title}</h3><div class="mobile-grid"></div>`;
         const grid = sec.querySelector(".mobile-grid");
         items.forEach((n) => {
-          const c = cardEl(n);
+          const c = makeCard(n);
+          c.style.left = c.style.top = "";
           grid.appendChild(c);
         });
-        mobile.appendChild(sec);
+        root.appendChild(sec);
       });
+    }
 
-      drawAllEdges();
+    function ensureRender() {
+      const mode = isDesktop() ? "desktop" : "mobile";
+      if (mode === renderMode) return;
+      renderMode = mode;
+      clearSelection(false);
+      document.getElementById("cards").innerHTML = "";
+      document.getElementById("mobile-board").innerHTML = "";
+      if (mode === "desktop") renderDesktop();
+      else renderMobile();
+    }
+
+    function drawZones() {
+      const g = document.getElementById("zones");
+      g.innerHTML = ZONES.map((z) => `
+        <rect class="zone-bg" x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="10" fill="${z.color}" />
+        <text class="zone-title" x="${z.x + 12}" y="${z.y + 18}">${z.label}</text>
+      `).join("");
+    }
+
+    function cardEl(id) {
+      return document.querySelector(`#cards .card[data-id="${id}"]`);
     }
 
     function nodeCenter(id) {
-      const el = document.querySelector(`.card[data-id="${id}"]`);
+      const el = cardEl(id);
       const board = document.getElementById("board");
-      if (!el || !board || window.innerWidth < 1100) return null;
-      const desktopCard = document.getElementById("cards").querySelector(`.card[data-id="${id}"]`);
-      if (!desktopCard) return null;
-      const er = desktopCard.getBoundingClientRect();
+      if (!el || !board) return null;
+      const er = el.getBoundingClientRect();
       const br = board.getBoundingClientRect();
-      return { x: er.left + er.width / 2 - br.left, y: er.top + er.height / 2 - br.top };
+      return { x: er.left + er.width / 2 - br.left, y: er.top + er.height / 2 - br.top, w: er.width, h: er.height };
     }
 
-    function bezier(a, b) {
-      const dx = (b.x - a.x) * 0.4;
+    function nodePort(fromId, toId) {
+      const a = nodeCenter(fromId);
+      const b = nodeCenter(toId);
+      if (!a || !b) return a;
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const hw = a.w / 2;
+      const hh = a.h / 2;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        return { x: a.x + (dx > 0 ? hw - 2 : -hw + 2), y: a.y };
+      }
+      return { x: a.x, y: a.y + (dy > 0 ? hh - 2 : -hh + 2) };
+    }
+
+    function bezierPath(a, b) {
+      const dx = (b.x - a.x) * 0.42;
       return `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`;
     }
 
-    function drawAllEdges(highlight = new Set(), flowing = new Set()) {
+    function strokeFor(color) {
+      return color === "green" ? "rgba(52,211,153,0.75)" : color === "amber" ? "rgba(245,158,11,0.65)" : color === "cyan" ? "rgba(56,189,248,0.65)" : "rgba(167,139,250,0.6)";
+    }
+
+    function markerFor(color) {
+      return color === "green" ? "arrow-green" : color === "amber" ? "arrow-amber" : color === "cyan" ? "arrow-cyan" : "arrow-purple";
+    }
+
+    function drawEdges(highlight = new Set()) {
+      if (!isDesktop()) return;
       const g = document.getElementById("edges");
-      g.innerHTML = "";
+      g.querySelectorAll("path.edge").forEach((p) => p.remove());
       EDGES.forEach(([from, to, color]) => {
-        const a = nodeCenter(from), b = nodeCenter(to);
+        const a = nodePort(from, to);
+        const b = nodePort(to, from);
         if (!a || !b) return;
         const key = `${from}->${to}`;
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", bezier(a, b));
+        path.setAttribute("d", bezierPath(a, b));
         path.setAttribute("class", "edge" + (highlight.has(key) ? " active flowing" : ""));
-        path.setAttribute("stroke", color === "green" ? "rgba(52,211,153,0.7)" : color === "amber" ? "rgba(245,158,11,0.6)" : color === "cyan" ? "rgba(56,189,248,0.6)" : "rgba(167,139,250,0.55)");
-        path.setAttribute("marker-end", `url(#arrow-${color === "green" ? "green" : color === "amber" ? "amber" : color === "cyan" ? "cyan" : "purple"})`);
-        path.dataset.edge = key;
+        path.setAttribute("stroke", strokeFor(color));
+        path.setAttribute("marker-end", `url(#${markerFor(color)})`);
         g.appendChild(path);
       });
     }
 
-    function getRelated(id) {
-      const related = new Set([id]);
-      EDGES.forEach(([f, t]) => { if (f === id) related.add(t); if (t === id) related.add(f); });
-      const n = NODES[id];
-      if (n.connects) n.connects.forEach((c) => related.add(c));
-      if (n.connect) n.connect.forEach((c) => related.add(c));
-      return related;
+    function neighbors(id) {
+      const set = new Set([id]);
+      EDGES.forEach(([f, t]) => { if (f === id) set.add(t); if (t === id) set.add(f); });
+      (NODES[id].links || []).forEach((x) => set.add(x));
+      return set;
     }
 
     function selectNode(id) {
       selected = id;
-      const related = getRelated(id);
+      const related = neighbors(id);
       document.querySelectorAll(".card").forEach((el) => {
-        const on = related.has(el.dataset.id);
         el.classList.toggle("selected", el.dataset.id === id);
-        el.classList.toggle("dimmed", !on);
+        el.classList.toggle("dimmed", !related.has(el.dataset.id));
       });
       const edgeSet = new Set();
       EDGES.forEach(([f, t]) => { if (related.has(f) && related.has(t)) edgeSet.add(`${f}->${t}`); });
-      drawAllEdges(edgeSet, edgeSet);
+      drawEdges(edgeSet);
       renderPanel(NODES[id]);
+      if (!isDesktop()) document.getElementById("panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     function renderPanel(node) {
       const panel = document.getElementById("panel");
       const kindLabel = { trigger:"Trigger", router:"Router", role:"Agent role", module:"Shared module", routine:"Routine" }[node.kind];
-      const related = getRelated(node.id);
-      const chips = [...related].filter((id) => id !== node.id).map((id) => {
+      const related = [...neighbors(node.id)].filter((id) => id !== node.id);
+      const chips = related.map((id) => {
         const n = NODES[id];
-        return n ? `<span class="chip">${n.icon} ${n.label}</span>` : "";
+        return `<button type="button" class="chip" data-jump="${id}">${n.icon} ${n.label}</button>`;
       }).join("");
 
       panel.innerHTML = `
         <div class="panel-kind" style="color:${KIND_COLORS[node.kind]}">${kindLabel}</div>
-        <h2><span class="panel-icon" style="background:rgba(255,255,255,0.06)">${node.icon}</span>${node.label}</h2>
+        <h2><span class="panel-icon">${node.icon}</span>${node.label}</h2>
         <div class="panel-path">${node.path}</div>
         ${node.trigger ? `<div class="panel-section"><h3>What wakes it</h3><p>${node.trigger}</p></div>` : ""}
         ${node.description ? `<div class="panel-section"><h3>What it covers</h3><p>${node.description}</p></div>` : ""}
         ${node.desc && !node.description ? `<div class="panel-section"><h3>Summary</h3><p>${node.desc}</p></div>` : ""}
         ${node.steps ? `<div class="panel-section"><h3>What happens</h3><ol class="steps">${node.steps.map((s) => `<li>${s}</li>`).join("")}</ol></div>` : ""}
         ${chips ? `<div class="panel-section"><h3>Connected to</h3><div class="chips">${chips}</div></div>` : ""}`;
+
+      panel.querySelectorAll("[data-jump]").forEach((btn) => {
+        btn.addEventListener("click", () => selectNode(btn.dataset.jump));
+      });
     }
 
-    function resetBoard() {
-      playAbort = true;
-      playing = false;
+    function clearSelection(resetPanel = true) {
       selected = null;
       document.querySelectorAll(".card").forEach((el) => el.classList.remove("selected", "dimmed", "flow-active"));
-      document.querySelectorAll(".btn").forEach((b) => b.classList.remove("playing"));
+      drawEdges();
       document.getElementById("flow-dot").classList.remove("visible");
-      drawAllEdges();
-      document.getElementById("panel").innerHTML = `<div class="panel-empty"><p><strong>👆 Click a card</strong> on the board to see what it does, which files it reads, and how it connects.</p><p style="margin-top:0.75rem">Or hit <strong>▶ Build loop</strong> / <strong>▶ Idea sweep</strong> to watch an animated walkthrough.</p></div>`;
+      document.getElementById("flow-banner").classList.remove("visible");
+      if (resetPanel) document.getElementById("panel").innerHTML = EMPTY_PANEL;
     }
 
-    async function animateAlongPath(from, to) {
-      const a = nodeCenter(from), b = nodeCenter(to);
-      if (!a || !b || typeof anime === "undefined") return;
+    function setFlowBanner(text) {
+      const el = document.getElementById("flow-banner");
+      el.textContent = text;
+      el.classList.toggle("visible", !!text);
+    }
+
+    function bezierPoint(a, b, t) {
+      const dx = (b.x - a.x) * 0.42;
+      const cx1 = a.x + dx, cy1 = a.y, cx2 = b.x - dx, cy2 = b.y;
+      const mt = 1 - t;
+      return {
+        x: mt*mt*mt*a.x + 3*mt*mt*t*cx1 + 3*mt*t*t*cx2 + t*t*t*b.x,
+        y: mt*mt*mt*a.y + 3*mt*mt*t*cy1 + 3*mt*t*t*cy2 + t*t*t*b.y
+      };
+    }
+
+    function animateDot(from, to) {
+      const a = nodePort(from, to);
+      const b = nodePort(to, from);
+      if (!a || !b) return Promise.resolve();
       const dot = document.getElementById("flow-dot");
       dot.classList.add("visible");
-      const path = bezier(a, b);
-      const len = 200;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced || typeof anime === "undefined") {
+        const p = bezierPoint(a, b, 1);
+        dot.setAttribute("cx", p.x);
+        dot.setAttribute("cy", p.y);
+        return Promise.resolve();
+      }
       return new Promise((resolve) => {
         anime({
-          targets: dot,
-          duration: 900,
+          targets: { t: 0 },
+          t: 1,
+          duration: 850,
           easing: "easeInOutQuad",
           update: (anim) => {
-            const t = anim.progress / 100;
-            const dx = (b.x - a.x) * 0.4;
-            const cx1 = a.x + dx, cy1 = a.y, cx2 = b.x - dx, cy2 = b.y;
-            const mt = 1 - t;
-            dot.setAttribute("cx", mt*mt*mt*a.x + 3*mt*mt*t*cx1 + 3*mt*t*t*cx2 + t*t*t*b.x);
-            dot.setAttribute("cy", mt*mt*mt*a.y + 3*mt*mt*t*cy1 + 3*mt*t*t*cy2 + t*t*t*b.y);
+            const p = bezierPoint(a, b, anim.animations[0].currentValue);
+            dot.setAttribute("cx", p.x);
+            dot.setAttribute("cy", p.y);
           },
           complete: resolve
         });
       });
     }
 
-    async function playFlow(name, btn) {
-      if (playing) { playAbort = true; await new Promise((r) => setTimeout(r, 100)); }
-      playAbort = false;
-      playing = true;
-      btn.classList.add("playing");
-      resetBoard();
-      playing = true;
-      btn.classList.add("playing");
+    function highlightStep(step) {
+      document.querySelectorAll(".card").forEach((el) => el.classList.remove("flow-active", "dimmed", "selected"));
+      step.nodes.forEach((id) => document.querySelectorAll(`.card[data-id="${id}"]`).forEach((el) => el.classList.add("flow-active")));
+      const edgeSet = new Set(step.edges.map(([f, t]) => `${f}->${t}`));
+      drawEdges(edgeSet);
+      if (step.nodes[0]) renderPanel(NODES[step.nodes[0]]);
+    }
 
-      for (const step of FLOWS[name]) {
-        if (playAbort) break;
-        document.querySelectorAll(".card").forEach((el) => el.classList.remove("flow-active", "dimmed", "selected"));
-        step.nodes.forEach((id) => document.querySelectorAll(`.card[data-id="${id}"]`).forEach((el) => el.classList.add("flow-active")));
-        const edgeSet = new Set(step.edges.map(([f,t]) => `${f}->${t}`));
-        drawAllEdges(edgeSet, edgeSet);
-        if (step.edges.length) {
-          for (const [f, t] of step.edges) {
-            if (playAbort) break;
-            await animateAlongPath(f, t);
-          }
+    async function playFlow(name, btn) {
+      if (!isDesktop()) return;
+      const flow = FLOWS[name];
+      const token = ++playToken;
+      playing = true;
+      document.querySelectorAll(".flow-btn").forEach((b) => { b.disabled = true; b.classList.remove("playing"); });
+      btn.classList.add("playing");
+      clearSelection(false);
+
+      for (const step of flow.steps) {
+        if (token !== playToken) break;
+        setFlowBanner(`${flow.title}: ${step.caption}`);
+        highlightStep(step);
+        for (const [f, t] of step.edges) {
+          if (token !== playToken) break;
+          await animateDot(f, t);
         }
-        if (step.nodes[0]) renderPanel(NODES[step.nodes[0]]);
-        await new Promise((r) => setTimeout(r, step.delay));
+        await new Promise((r) => setTimeout(r, 700));
       }
 
-      document.getElementById("flow-dot").classList.remove("visible");
-      btn.classList.remove("playing");
+      if (token === playToken) {
+        document.getElementById("flow-dot").classList.remove("visible");
+        setFlowBanner("");
+      }
       playing = false;
+      document.querySelectorAll(".flow-btn").forEach((b) => { b.disabled = false; b.classList.remove("playing"); });
+    }
+
+    function resetAll() {
+      playToken++;
+      playing = false;
+      document.querySelectorAll(".flow-btn").forEach((b) => { b.disabled = false; b.classList.remove("playing"); });
+      clearSelection(true);
     }
 
     document.getElementById("play-build").addEventListener("click", (e) => playFlow("build", e.currentTarget));
     document.getElementById("play-sweep").addEventListener("click", (e) => playFlow("sweep", e.currentTarget));
-    document.getElementById("reset").addEventListener("click", resetBoard);
-    window.addEventListener("resize", () => {
-      const edgeSet = selected ? new Set(EDGES.filter(([f,t]) => getRelated(selected).has(f) && getRelated(selected).has(t)).map(([f,t]) => `${f}->${t}`)) : new Set();
-      drawAllEdges(edgeSet, edgeSet);
-    });
+    document.getElementById("reset").addEventListener("click", resetAll);
 
-    render();
-    // Entrance stagger
-    if (typeof anime !== "undefined") {
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(onLayoutChange, 120);
+    });
+    window.matchMedia("(min-width: 1100px)").addEventListener("change", onLayoutChange);
+
+    function onLayoutChange() {
+      ensureRender();
+      if (selected && isDesktop()) {
+        const related = neighbors(selected);
+        const edgeSet = new Set();
+        EDGES.forEach(([f, t]) => { if (related.has(f) && related.has(t)) edgeSet.add(`${f}->${t}`); });
+        drawEdges(edgeSet);
+      }
+    }
+
+    ensureRender();
+    if (isDesktop() && typeof anime !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       anime({
         targets: "#cards .card",
-        translateY: [16, 0],
+        translateY: [12, 0],
         opacity: [0, 1],
-        delay: anime.stagger(40, { start: 200 }),
-        duration: 500,
+        delay: anime.stagger(35, { start: 150 }),
+        duration: 450,
         easing: "easeOutCubic"
       });
     }
