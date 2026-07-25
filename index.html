@@ -2,12 +2,631 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PM OS — Spec Preview Sandbox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PM OS — Architecture Map</title>
   <meta name="robots" content="noindex" />
+  <meta name="description" content="Interactive map of agent roles, shared modules, and routines in the PM OS hub." />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-hover: #1a1a26;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f4f4f5;
+      --muted: #a1a1aa;
+      --accent: #8b5cf6;
+      --accent2: #06b6d4;
+      --role: #f59e0b;
+      --module: #8b5cf6;
+      --routine: #10b981;
+      --dim: 0.22;
+      --glow: rgba(139, 92, 246, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      z-index: 100;
+    }
+
+    .page {
+      position: relative;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .hero-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 45% at 50% -10%, var(--glow), transparent),
+        radial-gradient(ellipse 50% 35% at 90% 70%, rgba(6, 182, 212, 0.12), transparent);
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.75rem, 5vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 42ch;
+      margin: 0 auto 1.25rem;
+    }
+
+    .router-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.08);
+      font-size: 0.82rem;
+      color: #fcd34d;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .router-pill:hover,
+    .router-pill.active {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: rgba(245, 158, 11, 0.55);
+    }
+
+    .map-wrap {
+      position: relative;
+      z-index: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      overflow: hidden;
+    }
+
+    #edges {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .columns {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      min-height: 520px;
+    }
+
+    @media (max-width: 900px) {
+      .columns {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      #edges { display: none; }
+    }
+
+    .col-header {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .col-header.roles { color: var(--role); }
+    .col-header.modules { color: var(--module); }
+    .col-header.routines { color: var(--routine); }
+
+    .node-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .node {
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, border-color 0.15s, background 0.15s;
+      text-align: left;
+      width: 100%;
+      color: inherit;
+      font: inherit;
+    }
+
+    .node:hover {
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+    }
+
+    .node.active {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--surface-hover);
+    }
+
+    .node.dimmed {
+      opacity: var(--dim);
+    }
+
+    .node .label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: block;
+    }
+
+    .node .hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+      display: block;
+    }
+
+    .node[data-kind="role"] { border-left: 3px solid var(--role); }
+    .node[data-kind="module"] { border-left: 3px solid var(--module); }
+    .node[data-kind="routine"] { border-left: 3px solid var(--routine); }
+
+    .detail {
+      position: relative;
+      z-index: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      min-height: 120px;
+    }
+
+    .detail h2 {
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .detail .path {
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: 0.78rem;
+      color: var(--accent2);
+      margin-bottom: 0.75rem;
+      word-break: break-all;
+    }
+
+    .detail p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .detail .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .chip {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .chip.role { border-color: rgba(245, 158, 11, 0.4); color: #fcd34d; }
+    .chip.module { border-color: rgba(139, 92, 246, 0.4); color: #c4b5fd; }
+    .chip.routine { border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .toolbar span {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .clear-btn {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+  </style>
 </head>
-<body style="font-family: system-ui; padding: 2rem; color: #333;">
-  <h1>PM OS — Spec Preview Sandbox</h1>
-  <p>This is a throwaway static host for spec-preview snippets used during the Backlog spec phase.</p>
-  <p>Nothing here is a real deployment. See <code>AGENTS.md</code> for the process this supports.</p>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <div class="page">
+    <header>
+      <div class="badge">PM OS · AI-Workspace sandbox</div>
+      <h1>Architecture map</h1>
+      <p class="subtitle">Roles, shared modules, and routines — click any node to trace how the hub connects.</p>
+      <button type="button" class="router-pill" id="router" data-id="router">
+        <span>📍</span>
+        <span><strong>AGENTS.md</strong> — thin router every agent reads first</span>
+      </button>
+    </header>
+
+    <div class="map-wrap" id="map-wrap">
+      <svg id="edges" aria-hidden="true"></svg>
+      <div class="columns">
+        <section aria-label="Agent roles">
+          <div class="col-header roles">Roles</div>
+          <div class="node-list" id="roles-col"></div>
+        </section>
+        <section aria-label="Shared modules">
+          <div class="col-header modules">Shared modules</div>
+          <div class="node-list" id="modules-col"></div>
+        </section>
+        <section aria-label="Routines">
+          <div class="col-header routines">Routines</div>
+          <div class="node-list" id="routines-col"></div>
+        </section>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span>Click a node to highlight connections · edges show role → module and routine → role</span>
+      <button type="button" class="clear-btn" id="clear">Clear selection</button>
+    </div>
+
+    <aside class="detail" id="detail" aria-live="polite">
+      <h2>Select a node</h2>
+      <p>Click a role, shared module, or routine above to see its trigger, file path, and connections.</p>
+    </aside>
+
+    <footer>
+      Spec previews live at <code>/previews/&lt;issue-id&gt;-v&lt;n&gt;.html</code> on branch deploys.
+      Source: <a href="https://github.com/rohrasharad-ship-it/AI-Workspace">rohrasharad-ship-it/AI-Workspace</a>
+    </footer>
+  </div>
+
+  <script>
+    const ARCHITECTURE = {
+      router: {
+        id: "router",
+        kind: "router",
+        label: "AGENTS.md",
+        path: "AGENTS.md",
+        trigger: "Every agent session — mandatory first read",
+        description: "Thin router only. Dispatches to role files in agents/ and points to shared modules. Full process lives in this repo; product repos get pointer AGENTS.md files.",
+        connectsTo: { roles: ["builder", "reviewer", "spec-conversation", "spec-drift", "bug-error", "market-feature"] }
+      },
+      roles: [
+        {
+          id: "builder",
+          label: "Builder",
+          path: "agents/builder.md",
+          trigger: "Assigned to a Linear issue (agent-ready gate)",
+          description: "Implements approved specs: OpenSpec apply, build, PR, visual self-QA.",
+          modules: ["loop", "openspec", "visual-self-qa", "status-snapshot", "conventions"]
+        },
+        {
+          id: "reviewer",
+          label: "Reviewer",
+          path: "agents/reviewer.md",
+          trigger: "Sharad comments feedback or \"approved\" on an open PR",
+          description: "Handles feedback loops or merges after explicit approval.",
+          modules: ["openspec", "conventions", "issue-brief"]
+        },
+        {
+          id: "spec-conversation",
+          label: "Spec Conversation",
+          path: "agents/spec-conversation.md",
+          trigger: "@mentioned on a spec-needed issue",
+          description: "Refines specs in comments; swaps to agent-ready when Sharad approves.",
+          modules: ["openspec", "visual-specs", "status-snapshot", "conventions"]
+        },
+        {
+          id: "spec-drift",
+          label: "Spec-Drift",
+          path: "agents/spec-drift.md",
+          trigger: "idea-sweep routine (or spec-drift-only trigger)",
+          description: "Compares openspec/specs/ to code; files spec-needed gaps; stale-issue sweep.",
+          modules: ["openspec", "issue-brief", "issue-cap", "cross-project-grouping", "linear-slack", "visual-specs", "visual-self-qa", "conventions"],
+          routines: ["idea-sweep"]
+        },
+        {
+          id: "bug-error",
+          label: "Bug / Error",
+          path: "agents/bug-error.md",
+          trigger: "idea-sweep routine (or bug-error-only trigger)",
+          description: "Reads Vercel runtime errors; files spec-needed bug issues.",
+          modules: ["issue-brief", "issue-cap", "cross-project-grouping", "linear-slack", "visual-specs", "visual-self-qa", "conventions"],
+          routines: ["idea-sweep"]
+        },
+        {
+          id: "market-feature",
+          label: "Market / Feature",
+          path: "agents/market-feature.md",
+          trigger: "idea-sweep routine (or market-feature-only trigger)",
+          description: "Proposes new features from project vision; always with a visual preview.",
+          modules: ["openspec", "issue-brief", "issue-cap", "cross-project-grouping", "linear-slack", "visual-specs", "visual-self-qa", "conventions"],
+          routines: ["idea-sweep"]
+        }
+      ],
+      modules: [
+        { id: "conventions", label: "Conventions", path: "agents/shared/conventions.md", description: "Always-apply rules: labels, Issue Brief, status snapshot, blocked handover." },
+        { id: "loop", label: "The Loop", path: "agents/shared/loop.md", description: "Trigger vs gate, full build → review → approval flow." },
+        { id: "openspec", label: "OpenSpec", path: "agents/shared/openspec.md", description: "Per-capability specs, propose/apply/archive workflow." },
+        { id: "status-snapshot", label: "Status Snapshot", path: "agents/shared/status-snapshot.md", description: "Pinned phase block at top of every issue description." },
+        { id: "visual-specs", label: "Visual Specs", path: "agents/shared/visual-specs.md", description: "HTML preview mockups during spec phase (previews/*.html)." },
+        { id: "visual-self-qa", label: "Visual Self-QA", path: "agents/shared/visual-self-qa.md", description: "Mandatory live screenshots before filing or PR." },
+        { id: "issue-brief", label: "Issue Brief", path: "agents/shared/issue-brief.md", description: "Five-line issue description format." },
+        { id: "issue-cap", label: "Issue Cap", path: "agents/shared/issue-cap.md", description: "Max 5 active pipeline issues per project." },
+        { id: "cross-project-grouping", label: "Cross-Project Grouping", path: "agents/shared/cross-project-grouping.md", description: "Clusters matching gaps across repos into one PM OS issue." },
+        { id: "linear-slack", label: "Linear → Slack", path: "agents/shared/linear-slack.md", description: "Per-issue Slack notifications via Linear project bell." }
+      ],
+      routines: [
+        {
+          id: "idea-sweep",
+          label: "idea-sweep",
+          path: "routines/idea-sweep.md",
+          trigger: "External schedule or manual: \"Run the idea-sweep routine for …\"",
+          description: "Bundles spec-drift → bug-error → market-feature per project; one Slack summary.",
+          roles: ["spec-drift", "bug-error", "market-feature"]
+        }
+      ]
+    };
+
+    const rolesById = Object.fromEntries(ARCHITECTURE.roles.map((r) => [r.id, r]));
+    const modulesById = Object.fromEntries(ARCHITECTURE.modules.map((m) => [m.id, m]));
+    const routinesById = Object.fromEntries(ARCHITECTURE.routines.map((r) => [r.id, r]));
+
+    let selected = null;
+
+    function renderNodes() {
+      const rolesCol = document.getElementById("roles-col");
+      const modulesCol = document.getElementById("modules-col");
+      const routinesCol = document.getElementById("routines-col");
+
+      ARCHITECTURE.roles.forEach((role) => {
+        rolesCol.appendChild(makeNode(role, "role", role.trigger));
+      });
+      ARCHITECTURE.modules.forEach((mod) => {
+        modulesCol.appendChild(makeNode(mod, "module", mod.path.replace("agents/shared/", "")));
+      });
+      ARCHITECTURE.routines.forEach((routine) => {
+        routinesCol.appendChild(makeNode(routine, "routine", routine.roles.map((id) => rolesById[id].label).join(" → ")));
+      });
+    }
+
+    function makeNode(item, kind, hint) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "node";
+      btn.dataset.kind = kind;
+      btn.dataset.id = item.id;
+      btn.innerHTML = `<span class="label">${item.label}</span><span class="hint">${hint}</span>`;
+      btn.addEventListener("click", () => selectNode(kind, item.id));
+      return btn;
+    }
+
+    function getConnections(kind, id) {
+      const roles = new Set();
+      const modules = new Set();
+      const routines = new Set();
+      const edges = [];
+
+      if (kind === "router") {
+        ARCHITECTURE.router.connectsTo.roles.forEach((r) => roles.add(r));
+        return { roles, modules, routines, edges };
+      }
+
+      if (kind === "role") {
+        const role = rolesById[id];
+        roles.add(id);
+        (role.modules || []).forEach((m) => {
+          modules.add(m);
+          edges.push({ from: `role:${id}`, to: `module:${m}` });
+        });
+        (role.routines || []).forEach((r) => {
+          routines.add(r);
+          edges.push({ from: `routine:${r}`, to: `role:${id}` });
+        });
+      }
+
+      if (kind === "module") {
+        modules.add(id);
+        ARCHITECTURE.roles.forEach((role) => {
+          if ((role.modules || []).includes(id)) {
+            roles.add(role.id);
+            edges.push({ from: `role:${role.id}`, to: `module:${id}` });
+          }
+        });
+      }
+
+      if (kind === "routine") {
+        const routine = routinesById[id];
+        routines.add(id);
+        (routine.roles || []).forEach((r) => {
+          roles.add(r);
+          edges.push({ from: `routine:${id}`, to: `role:${r}` });
+        });
+      }
+
+      return { roles, modules, routines, edges };
+    }
+
+    function selectNode(kind, id) {
+      selected = { kind, id };
+      const conn = getConnections(kind, id);
+
+      document.querySelectorAll(".node").forEach((el) => {
+        const k = el.dataset.kind;
+        const i = el.dataset.id;
+        const inSet =
+          (k === "role" && conn.roles.has(i)) ||
+          (k === "module" && conn.modules.has(i)) ||
+          (k === "routine" && conn.routines.has(i));
+        el.classList.toggle("active", inSet);
+        el.classList.toggle("dimmed", !inSet);
+      });
+
+      document.getElementById("router").classList.toggle("active", kind === "router");
+      renderDetail(kind, id, conn);
+      drawEdges(conn.edges);
+    }
+
+    function clearSelection() {
+      selected = null;
+      document.querySelectorAll(".node").forEach((el) => {
+        el.classList.remove("active", "dimmed");
+      });
+      document.getElementById("router").classList.remove("active");
+      document.getElementById("detail").innerHTML = `
+        <h2>Select a node</h2>
+        <p>Click a role, shared module, or routine above to see its trigger, file path, and connections.</p>`;
+      drawEdges([]);
+    }
+
+    function renderDetail(kind, id, conn) {
+      const detail = document.getElementById("detail");
+      let item;
+
+      if (kind === "router") item = ARCHITECTURE.router;
+      else if (kind === "role") item = rolesById[id];
+      else if (kind === "module") item = modulesById[id];
+      else item = routinesById[id];
+
+      const chips = [];
+
+      conn.roles.forEach((r) => chips.push(`<span class="chip role">${rolesById[r].label}</span>`));
+      conn.modules.forEach((m) => chips.push(`<span class="chip module">${modulesById[m].label}</span>`));
+      conn.routines.forEach((r) => chips.push(`<span class="chip routine">${routinesById[r].label}</span>`));
+
+      detail.innerHTML = `
+        <h2>${item.label}</h2>
+        <div class="path">${item.path}</div>
+        ${item.trigger ? `<p><strong>Trigger:</strong> ${item.trigger}</p>` : ""}
+        <p>${item.description}</p>
+        ${chips.length ? `<div class="links">${chips.join("")}</div>` : ""}`;
+    }
+
+    function nodeCenter(kind, id) {
+      const el = document.querySelector(`.node[data-kind="${kind}"][data-id="${id}"]`);
+      const wrap = document.getElementById("map-wrap");
+      if (!el || !wrap) return null;
+      const er = el.getBoundingClientRect();
+      const wr = wrap.getBoundingClientRect();
+      return {
+        x: er.left + er.width / 2 - wr.left,
+        y: er.top + er.height / 2 - wr.top
+      };
+    }
+
+    function drawEdges(edgeList) {
+      const svg = document.getElementById("edges");
+      const wrap = document.getElementById("map-wrap");
+      svg.setAttribute("width", wrap.clientWidth);
+      svg.setAttribute("height", wrap.clientHeight);
+      svg.innerHTML = "";
+
+      if (window.innerWidth <= 900) return;
+
+      edgeList.forEach(({ from, to }) => {
+        const [fromKind, fromId] = from.split(":");
+        const [toKind, toId] = to.split(":");
+        const a = nodeCenter(fromKind, fromId);
+        const b = nodeCenter(toKind, toId);
+        if (!a || !b) return;
+
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        const dx = (b.x - a.x) * 0.45;
+        const d = `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`;
+        path.setAttribute("d", d);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", fromKind === "routine" ? "rgba(16,185,129,0.55)" : "rgba(139,92,246,0.45)");
+        path.setAttribute("stroke-width", "1.5");
+        svg.appendChild(path);
+      });
+    }
+
+    document.getElementById("router").addEventListener("click", () => selectNode("router", "router"));
+    document.getElementById("clear").addEventListener("click", clearSelection);
+
+    renderNodes();
+    window.addEventListener("resize", () => {
+      if (selected) {
+        const conn = getConnections(selected.kind, selected.id);
+        drawEdges(conn.edges);
+      }
+    });
+  </script>
 </body>
 </html>

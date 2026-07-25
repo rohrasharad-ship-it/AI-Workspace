@@ -44,7 +44,11 @@ AI-Workspace MUST maintain a static Vercel project (`ai-workspace-blond.vercel.a
 
 #### Scenario: Bare deployment URL
 - **WHEN** someone opens the bare `*.vercel.app` root
-- **THEN** they see the placeholder `index.html` ("Spec Preview Sandbox") — not a product app
+- **THEN** they see the PM OS architecture map (`index.html`) showing roles, shared modules, and routines — not a product app
+
+#### Scenario: Architecture map interactivity
+- **WHEN** a user clicks a role, shared module, or routine node on the homepage map
+- **THEN** connected nodes and edges highlight and a detail panel shows the node's trigger or file path
 
 ### Requirement: SSO/login redirect detection
 Before claiming a preview is ready or attaching screenshots, agents MUST check that the URL does not redirect to Vercel SSO/login pages.
