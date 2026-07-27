@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routine run log — PM OS</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg:#f4f4f6; --card:#fff; --border:#e4e4e7; --text:#18181b;
+      --muted:#71717a; --faint:#a1a1aa; --bug:#e11d48; --feat:#6366f1;
+      --bug-bg:#fff1f2; --feat-bg:#eef2ff;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:system-ui,-apple-system,sans-serif;
+      background:var(--bg); color:var(--text); line-height:1.45;
+      -webkit-font-smoothing:antialiased;
+    }
+    .page { max-width:920px; margin:0 auto; padding:1.5rem 1rem 2.5rem; }
+  .top-nav { margin-bottom:1rem; font-size:.8rem; }
+  .top-nav a { color:var(--feat); text-decoration:none; }
+  .top-nav a:hover { text-decoration:underline; }
+    .eyebrow {
+      font-size:.68rem; font-weight:600; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--muted);
+    }
+    h1 {
+      font-size:1.35rem; font-weight:650; letter-spacing:-.02em;
+      margin:.25rem 0 .35rem;
+    }
+    .lede { color:var(--muted); font-size:.85rem; max-width:52ch; }
+    .meta { font-size:.7rem; color:var(--faint); margin-top:.35rem; }
+
+    .summary {
+      margin:1.25rem 0 1rem;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:1rem 1.1rem;
+    }
+    .kpi-row {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem;
+      margin-bottom:.85rem;
+    }
+    .kpi {
+      text-align:center; padding:.45rem .35rem;
+      border-radius:10px; background:#fafafa;
+    }
+    .kpi .val {
+      display:block; font-size:1.35rem; font-weight:700;
+      font-variant-numeric:tabular-nums; letter-spacing:-.02em;
+      line-height:1.2;
+    }
+    .kpi .lbl {
+      font-size:.62rem; color:var(--muted); text-transform:uppercase;
+      letter-spacing:.04em; margin-top:.15rem;
+    }
+    .kpi.bug .val { color:var(--bug); }
+    .kpi.feat .val { color:var(--feat); }
+    .kpi.today .val { color:#0d9488; }
+    .mix-label {
+      font-size:.65rem; color:var(--muted); margin-bottom:.35rem;
+      display:flex; justify-content:space-between;
+    }
+    .mix-label span.b { color:var(--bug); font-weight:600; }
+    .mix-label span.f { color:var(--feat); font-weight:600; }
+    .donut {
+      height:10px; background:#ececee; border-radius:5px;
+      overflow:hidden; display:flex;
+    }
+    .donut .b { background:var(--bug); }
+    .donut .f { background:var(--feat); }
+
+    @media(max-width:480px) {
+      .kpi-row { grid-template-columns:repeat(2,1fr); }
+      .kpi .val { font-size:1.2rem; }
+    }
+
+    .section-hd {
+      font-size:.68rem; font-weight:600; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--muted);
+      margin-bottom:.55rem; padding-left:.15rem;
+    }
+
+    .projects { display:grid; gap:.65rem; }
+    @media(min-width:600px) { .projects { grid-template-columns:1fr 1fr; } }
+    @media(min-width:880px) { .projects { grid-template-columns:repeat(3,1fr); } }
+
+    .proj {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:.85rem .95rem;
+      display:flex; flex-direction:column; gap:.65rem;
+    }
+    .proj.quiet { background:#fafafa; }
+    .proj-hd {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:.5rem;
+    }
+    .proj h3 { font-size:.92rem; font-weight:600; line-height:1.25; }
+    .total-pill {
+      font-size:.68rem; font-weight:600; font-variant-numeric:tabular-nums;
+      padding:.2rem .5rem; border-radius:999px; background:#f4f4f5;
+      color:var(--muted); white-space:nowrap;
+    }
+    .proj.quiet .total-pill { background:#ececee; }
+
+    .counts { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; }
+    .count-box { border-radius:10px; padding:.5rem .55rem; }
+    .count-box.feat { background:var(--feat-bg); }
+    .count-box.bug { background:var(--bug-bg); }
+    .count-box .lbl {
+      font-size:.6rem; text-transform:uppercase; letter-spacing:.04em;
+      color:var(--muted); margin-bottom:.1rem;
+    }
+    .count-box.feat .lbl { color:#6366f1; opacity:.85; }
+    .count-box.bug .lbl { color:var(--bug); opacity:.85; }
+    .count-box .n {
+      font-size:1.35rem; font-weight:700; font-variant-numeric:tabular-nums;
+      letter-spacing:-.02em; line-height:1.1;
+    }
+    .count-box.feat .n { color:var(--feat); }
+    .count-box.bug .n { color:var(--bug); }
+
+    .sweeps { border-top:1px solid var(--border); padding-top:.55rem; }
+    .sweeps-hd {
+      font-size:.62rem; text-transform:uppercase; letter-spacing:.04em;
+      color:var(--faint); margin-bottom:.4rem;
+    }
+    .sweep {
+      padding:.4rem 0;
+      border-bottom:1px solid #f0f0f2;
+    }
+    .sweep:last-child { border-bottom:none; padding-bottom:0; }
+    .sweep-top {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:.72rem; margin-bottom:.3rem;
+    }
+    .sweep .date { color:var(--faint); }
+    .sweep .result {
+      font-variant-numeric:tabular-nums; color:var(--muted);
+      font-size:.7rem;
+    }
+    .sweep .result strong { color:var(--text); font-weight:600; }
+    .sweep .result.clean { color:var(--faint); font-style:italic; }
+
+    .bars { display:flex; flex-direction:column; gap:3px; }
+    .bar {
+      height:5px; border-radius:3px; display:flex; overflow:hidden;
+      background:#ececee;
+    }
+    .bar .seg { height:100%; }
+    .bar .seg.feat { background:var(--feat); }
+    .bar .seg.bug { background:var(--bug); }
+    .bar.open .seg { opacity:.35; }
+    .bar.empty { background:#e8e8ec; }
+
+    .error {
+      margin-top:1rem; padding:.75rem 1rem; border-radius:10px;
+      background:#fff1f2; color:var(--bug); font-size:.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="top-nav"><a href="/">← Architecture board</a></nav>
+    <p class="eyebrow">PM OS · idea-sweep health</p>
+    <h1>Routine run log</h1>
+    <p class="lede">Pipeline totals up top, then one card per project. Features = spec-drift + market.</p>
+    <p class="meta" id="generated-at" hidden></p>
+
+    <div id="app">
+      <p class="lede">Loading…</p>
+    </div>
+  </div>
+
+  <script>
+    function barWidth(bugs, features) {
+      const total = bugs + features;
+      if (!total) return { bug: 0, feat: 0 };
+      return { bug: (bugs / total) * 100, feat: (features / total) * 100 };
+    }
+
+    function renderSweep(s) {
+      if (s.clean) {
+        return `
+          <div class="sweep">
+            <div class="sweep-top"><span class="date">${s.date}</span><span class="result clean">Clean sweep</span></div>
+            <div class="bars"><div class="bar empty"></div><div class="bar open empty"></div></div>
+          </div>`;
+      }
+      const filed = s.filed ?? (s.filedBugs + s.filedFeatures);
+      const open = s.open ?? (s.openBugs + s.openFeatures);
+      const filedW = barWidth(s.filedBugs, s.filedFeatures);
+      const openW = barWidth(s.openBugs, s.openFeatures);
+      const openRatio = filed ? open / filed : 0;
+      return `
+        <div class="sweep">
+          <div class="sweep-top">
+            <span class="date">${s.date}</span>
+            <span class="result"><strong>${filed}</strong> filed · <strong>${open}</strong> open</span>
+          </div>
+          <div class="bars">
+            <div class="bar">
+              ${s.filedBugs ? `<span class="seg bug" style="width:${filedW.bug}%"></span>` : ""}
+              ${s.filedFeatures ? `<span class="seg feat" style="width:${filedW.feat}%"></span>` : ""}
+            </div>
+            <div class="bar open">
+              ${open ? `<span class="seg bug" style="width:${openW.bug * openRatio}%"></span><span class="seg feat" style="width:${openW.feat * openRatio}%"></span>` : ""}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderProject(p) {
+      const pill = p.quiet
+        ? '<span class="total-pill">All clear</span>'
+        : `<span class="total-pill">${p.pendingTotal} open</span>`;
+      const sweeps = (p.sweeps || []).map(renderSweep).join("");
+      return `
+        <article class="proj${p.quiet ? " quiet" : ""}">
+          <div class="proj-hd">
+            <h3>${p.name}</h3>
+            ${pill}
+          </div>
+          <div class="counts">
+            <div class="count-box feat"><div class="lbl">Features</div><div class="n">${p.pendingFeatures}</div></div>
+            <div class="count-box bug"><div class="lbl">Bugs</div><div class="n">${p.pendingBugs}</div></div>
+          </div>
+          <div class="sweeps">
+            <div class="sweeps-hd">Recent sweeps</div>
+            ${sweeps || '<div class="sweep"><span class="result clean">No sweep data yet</span></div>'}
+          </div>
+        </article>`;
+    }
+
+    function render(data) {
+      const g = data.global;
+      const gen = document.getElementById("generated-at");
+      if (data.generatedAt) {
+        const d = new Date(data.generatedAt);
+        gen.textContent = `Data as of ${d.toLocaleString()}`;
+        gen.hidden = false;
+      }
+
+      document.getElementById("app").innerHTML = `
+        <section class="summary" aria-label="Global pipeline">
+          <div class="kpi-row">
+            <div class="kpi"><span class="val">${g.pending}</span><span class="lbl">Pending</span></div>
+            <div class="kpi today"><span class="val">${g.createdToday}</span><span class="lbl">Today</span></div>
+            <div class="kpi bug"><span class="val">${g.bugs}</span><span class="lbl">Bugs</span></div>
+            <div class="kpi feat"><span class="val">${g.features}</span><span class="lbl">Features</span></div>
+          </div>
+          <div class="mix-label">
+            <span>Pending mix</span>
+            <span><span class="b">${g.bugs} bugs</span> · <span class="f">${g.features} features</span></span>
+          </div>
+          <div class="donut" role="img" aria-label="${g.bugPercent}% bugs, ${g.featurePercent}% features">
+            <span class="b" style="width:${g.bugPercent}%"></span>
+            <span class="f" style="width:${g.featurePercent}%"></span>
+          </div>
+        </section>
+        <p class="section-hd">Projects · ${g.projectCount} registered</p>
+        <div class="projects">${data.projects.map(renderProject).join("")}</div>`;
+    }
+
+    fetch("/data/routine-log.json")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(render)
+      .catch((err) => {
+        document.getElementById("app").innerHTML =
+          `<div class="error">Could not load routine log data (${err.message}). Run <code>node scripts/generate-routine-log.mjs</code> with LINEAR_API_KEY set.</div>`;
+      });
+  </script>
+</body>
+</html>
