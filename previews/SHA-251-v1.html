@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHA-251 — Rejected-Idea Fingerprint Preview</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #17171f;
+    --border: rgba(255,255,255,0.08);
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #8b5cf6;
+    --accent2: #06b6d4;
+    --warn: #f2994a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2.5rem 1.25rem 5rem;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid rgba(6,182,212,0.35);
+    background: rgba(6,182,212,0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2.25rem; }
+  .note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+  .card h2 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 120px;
+    gap: 0.75rem;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+  .ledger-row:last-child { border-bottom: none; }
+  .ledger-id { color: var(--accent2); font-family: ui-monospace, monospace; }
+  .ledger-pattern { color: var(--text); }
+  .ledger-date { color: var(--muted); text-align: right; font-size: 0.8rem; }
+
+  .comment {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+  }
+  .comment .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: inline-block; vertical-align: middle; margin-right: 0.6rem;
+  }
+  .comment .who { font-weight: 600; font-size: 0.9rem; }
+  .comment .when { color: var(--muted); font-size: 0.78rem; margin-left: 0.5rem; }
+  .comment .body { margin-top: 0.9rem; font-size: 0.92rem; color: var(--text); }
+  .comment .body p { margin-bottom: 0.6rem; }
+  .highlight {
+    display: inline-block;
+    background: rgba(139,92,246,0.14);
+    border: 1px solid rgba(139,92,246,0.4);
+    color: #c4b5fd;
+    border-radius: 6px;
+    padding: 0.1rem 0.4rem;
+    font-family: ui-monospace, monospace;
+    font-size: 0.85rem;
+  }
+  .skip {
+    margin-top: 1rem;
+    border-left: 3px solid var(--warn);
+    background: rgba(242,153,74,0.08);
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    color: #fbd8b0;
+  }
+  .callout {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Minimal-effort mockup · SHA-251</span>
+  <h1>Rejected-idea fingerprint check</h1>
+  <p class="sub">Two static frames — not a new page. A small ledger idea-generation roles read before proposing, and how it shows up in the dedupe comment agents already post.</p>
+
+  <div class="note">This does not add a new UI surface. It's a git-tracked ledger file (<code>agents/shared/rejected-ideas.md</code>) plus one extra line in the first-comment dedupe check every idea-generation issue already gets.</div>
+
+  <div class="card">
+    <h2>Frame 1 — the ledger (excerpt)</h2>
+    <div class="ledger-row">
+      <span class="ledger-id">SHA-238</span>
+      <span class="ledger-pattern">Cross-project fleet-status dashboard row</span>
+      <span class="ledger-date">2026-07-24</span>
+    </div>
+    <div class="ledger-row">
+      <span class="ledger-id">SHA-236</span>
+      <span class="ledger-pattern">Spec freshness confidence dashboard</span>
+      <span class="ledger-date">2026-07-24</span>
+    </div>
+    <div class="ledger-row">
+      <span class="ledger-id">SHA-202</span>
+      <span class="ledger-pattern">Move PR approval into Slack thread</span>
+      <span class="ledger-date">2026-07-23</span>
+    </div>
+    <div class="ledger-row">
+      <span class="ledger-id">SHA-68</span>
+      <span class="ledger-pattern">Slack thumbs-up/down pre-triage</span>
+      <span class="ledger-date">2026-07-20</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Frame 2 — dedupe comment, with the new line added</h2>
+    <div class="comment">
+      <span class="avatar"></span><span class="who">Market/Feature agent</span><span class="when">just now</span>
+      <div class="body">
+        <p>Searched PM OS for existing coverage of "fleet visibility across projects" — no open match.</p>
+        <p>Checked against rejected-idea ledger: closest match is <span class="highlight">SHA-238</span> (canceled 2026-07-24, pattern: "cross-project fleet-status dashboard row"). This pitch is the same shape — skipping.</p>
+        <div class="skip">⏭️ Not filed this run — matches a previously rejected pattern. See <span class="highlight">agents/shared/rejected-ideas.md</span> for the full list before proposing fleet-visibility ideas again.</div>
+      </div>
+    </div>
+    <p class="callout">Today this check only happens if the agent manually re-reads Canceled history (as this session had to, by hand). The ledger makes it a five-second lookup instead.</p>
+  </div>
+</div>
+</body>
+</html>
