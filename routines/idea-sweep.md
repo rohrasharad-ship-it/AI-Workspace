@@ -86,6 +86,18 @@ When the trigger names **two or more projects** (or "all projects"):
   ```
 - If a role found nothing, say so ("Bug/error: clean, nothing filed") rather
   than omitting it — Sharad should be able to tell the sweep actually ran.
+- **Sweep ledger (routine run log):** after the consolidated Slack message for
+  each project, append one JSON line to `data/sweep-runs.jsonl` in
+  AI-Workspace (commit on the same branch if you have repo access, or note it
+  for the next infra touch):
+  ```json
+  {"at":"<ISO8601>","project":"<projects.md name>","filed":{"bugs":N,"features":M},"clean":false}
+  ```
+  Set `"clean": true` and zero counts when all three roles filed nothing.
+  Bugs = issues whose titles start with 🐛; features = spec-drift + market
+  combined. Then run `node scripts/generate-routine-log.mjs` (needs
+  `LINEAR_API_KEY`) to refresh `data/routine-log.json` for the sandbox
+  dashboard at `/routine-log.html`.
 - If any issues were filed, note whether Linear per-issue notifications should
   have appeared in the channel (see `agents/shared/linear-slack.md`). If the
   bell was never smoke-tested, flag that rather than assuming it works.

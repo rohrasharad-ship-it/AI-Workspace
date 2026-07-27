@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routine run log — PM OS</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root {
+      --bg:#f4f4f6; --card:#fff; --border:#e4e4e7; --text:#18181b;
+      --muted:#71717a; --faint:#a1a1aa;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body {
+      font-family:system-ui,-apple-system,sans-serif;
+      background:var(--bg); color:var(--text); line-height:1.45;
+      -webkit-font-smoothing:antialiased;
+    }
+    .page { max-width:920px; margin:0 auto; padding:1.5rem 1rem 2.5rem; }
+    .top-nav { margin-bottom:1rem; font-size:.8rem; }
+    .top-nav a { color:#4f46e5; text-decoration:none; }
+    .top-nav a:hover { text-decoration:underline; }
+    .eyebrow {
+      font-size:.68rem; font-weight:600; letter-spacing:.07em;
+      text-transform:uppercase; color:var(--muted);
+    }
+    h1 {
+      font-size:1.35rem; font-weight:650; letter-spacing:-.02em;
+      margin:.25rem 0 .35rem;
+    }
+    .lede { color:var(--muted); font-size:.85rem; max-width:52ch; }
+    .meta { font-size:.7rem; color:var(--faint); margin-top:.35rem; }
+
+    .summary {
+      margin:1.25rem 0 1rem;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:1rem 1.1rem;
+    }
+    .kpi-row {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem;
+      margin-bottom:1rem;
+    }
+    .kpi {
+      text-align:center; padding:.45rem .35rem;
+      border-radius:10px; background:#fafafa;
+    }
+    .kpi .val {
+      display:block; font-size:1.35rem; font-weight:700;
+      font-variant-numeric:tabular-nums; letter-spacing:-.02em;
+      line-height:1.2;
+    }
+    .kpi .lbl {
+      font-size:.62rem; color:var(--muted); text-transform:uppercase;
+      letter-spacing:.04em; margin-top:.15rem;
+    }
+
+    @media(max-width:480px) {
+      .kpi-row { grid-template-columns:repeat(2,1fr); }
+      .kpi .val { font-size:1.2rem; }
+    }
+
+    .stacked-section { margin-top:.25rem; }
+    .stacked-section + .stacked-section { margin-top:1rem; }
+    .stacked-hd {
+      display:flex; justify-content:space-between; align-items:baseline;
+      margin-bottom:.45rem; gap:.5rem;
+    }
+    .stacked-hd .title {
+      font-size:.72rem; font-weight:600; text-transform:uppercase;
+      letter-spacing:.05em; color:var(--muted);
+    }
+    .stacked-hd .total {
+      font-size:.85rem; font-weight:700; font-variant-numeric:tabular-nums;
+      color:var(--text);
+    }
+    .stacked-bar {
+      display:flex; width:100%; min-height:48px;
+      border-radius:10px; overflow:hidden;
+      background:#ececee;
+    }
+    .stacked-bar.empty {
+      min-height:48px; align-items:center; justify-content:center;
+      color:var(--faint); font-size:.78rem; font-style:italic;
+    }
+    .stack-seg {
+      display:flex; align-items:center; justify-content:center;
+      padding:0 .55rem; min-width:0;
+      color:#fff; font-size:.72rem; font-weight:600;
+      line-height:1.15; text-align:center;
+      overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+    }
+    .stack-seg .seg-count {
+      margin-left:.3rem; opacity:.9; font-variant-numeric:tabular-nums;
+    }
+    .legend {
+      display:flex; flex-wrap:wrap; gap:.35rem .65rem;
+      margin-top:.5rem;
+    }
+    .legend-item {
+      display:flex; align-items:center; gap:.35rem;
+      font-size:.68rem; color:var(--muted);
+    }
+    .legend-swatch {
+      width:.65rem; height:.65rem; border-radius:3px; flex-shrink:0;
+    }
+    .legend-item .n {
+      font-variant-numeric:tabular-nums; font-weight:600; color:var(--text);
+    }
+
+    .section-hd {
+      font-size:.68rem; font-weight:600; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--muted);
+      margin-bottom:.55rem; padding-left:.15rem;
+    }
+
+    .projects { display:grid; gap:.65rem; }
+    @media(min-width:600px) { .projects { grid-template-columns:1fr 1fr; } }
+    @media(min-width:880px) { .projects { grid-template-columns:repeat(3,1fr); } }
+
+    .proj {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:14px; padding:.85rem .95rem;
+      display:flex; flex-direction:column; gap:.65rem;
+    }
+    .proj.quiet { background:#fafafa; }
+    .proj-hd {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:.5rem;
+    }
+    .proj h3 { font-size:.92rem; font-weight:600; line-height:1.25; }
+    .total-pill {
+      font-size:.68rem; font-weight:600; font-variant-numeric:tabular-nums;
+      padding:.2rem .5rem; border-radius:999px; background:#f4f4f5;
+      color:var(--muted); white-space:nowrap;
+    }
+    .proj.quiet .total-pill { background:#ececee; }
+
+    .counts {
+      display:flex; gap:1.25rem;
+      font-variant-numeric:tabular-nums;
+    }
+    .count-line { font-size:.82rem; color:var(--muted); }
+    .count-line strong {
+      font-size:1.1rem; font-weight:700; color:var(--text);
+      margin-right:.2rem;
+    }
+
+    .sweeps { border-top:1px solid var(--border); padding-top:.55rem; }
+    .sweeps-hd {
+      font-size:.62rem; text-transform:uppercase; letter-spacing:.04em;
+      color:var(--faint); margin-bottom:.4rem;
+    }
+    .sweep {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.35rem 0; font-size:.75rem;
+      border-bottom:1px solid #f0f0f2;
+    }
+    .sweep:last-child { border-bottom:none; padding-bottom:0; }
+    .sweep .date { color:var(--faint); }
+    .sweep .result {
+      font-variant-numeric:tabular-nums; color:var(--muted);
+    }
+    .sweep .result strong { color:var(--text); font-weight:600; }
+    .sweep .result.clean { color:var(--faint); font-style:italic; }
+
+    .error {
+      margin-top:1rem; padding:.75rem 1rem; border-radius:10px;
+      background:#fff1f2; color:#e11d48; font-size:.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="top-nav"><a href="/">← Architecture board</a></nav>
+    <p class="eyebrow">PM OS · idea-sweep health</p>
+    <h1>Routine run log</h1>
+    <p class="lede">Pipeline totals up top, then one card per project. Features = spec-drift + market.</p>
+    <p class="meta" id="generated-at" hidden></p>
+
+    <div id="app">
+      <p class="lede">Loading…</p>
+    </div>
+  </div>
+
+  <script>
+    const PROJECT_COLORS = [
+      "#6366f1", "#0d9488", "#d97706", "#db2777", "#2563eb",
+      "#7c3aed", "#059669", "#dc2626", "#0891b2", "#ca8a04",
+    ];
+
+    function projectColor(index) {
+      return PROJECT_COLORS[index % PROJECT_COLORS.length];
+    }
+
+    function shortName(name) {
+      const trimmed = name.replace(/\s+20\d{2}$/, "");
+      if (trimmed.length <= 16) return trimmed;
+      const words = trimmed.split(/\s+/);
+      if (words.length >= 2) {
+        const abbreviated = words
+          .map((w, i) => (i === 0 && w.length > 4 ? `${w.slice(0, 3)}` : w))
+          .join(" ");
+        if (abbreviated.length <= 16) return abbreviated;
+      }
+      return trimmed.slice(0, 16);
+    }
+
+    function renderStackedBar(projects, field, label) {
+      const items = projects
+        .map((p, i) => ({
+          name: p.name,
+          short: shortName(p.name),
+          value: p[field],
+          color: projectColor(i),
+        }))
+        .filter((x) => x.value > 0);
+      const total = items.reduce((s, x) => s + x.value, 0);
+
+      if (!total) {
+        return `
+          <div class="stacked-section">
+            <div class="stacked-hd">
+              <span class="title">${label}</span>
+              <span class="total">0</span>
+            </div>
+            <div class="stacked-bar empty" aria-label="No pending ${label.toLowerCase()}">None pending</div>
+          </div>`;
+      }
+
+      const segments = items
+        .map((item) => {
+          const pct = (item.value / total) * 100;
+          const showName = pct >= 14;
+          const inner = showName
+            ? `${item.short}<span class="seg-count">${item.value}</span>`
+            : String(item.value);
+          return `<div class="stack-seg" style="width:${pct}%;background:${item.color}" title="${item.name}: ${item.value}">${inner}</div>`;
+        })
+        .join("");
+
+      const legend = items
+        .map(
+          (item) => `
+          <span class="legend-item">
+            <span class="legend-swatch" style="background:${item.color}"></span>
+            ${item.name} <span class="n">${item.value}</span>
+          </span>`
+        )
+        .join("");
+
+      return `
+        <div class="stacked-section">
+          <div class="stacked-hd">
+            <span class="title">${label}</span>
+            <span class="total">${total}</span>
+          </div>
+          <div class="stacked-bar" role="img" aria-label="${label}: ${total} pending across ${items.length} projects">
+            ${segments}
+          </div>
+          <div class="legend">${legend}</div>
+        </div>`;
+    }
+
+    function renderSweep(s) {
+      if (s.clean) {
+        return `
+          <div class="sweep">
+            <span class="date">${s.date}</span>
+            <span class="result clean">Clean sweep</span>
+          </div>`;
+      }
+      const filed = s.filed ?? (s.filedBugs + s.filedFeatures);
+      const open = s.open ?? (s.openBugs + s.openFeatures);
+      return `
+        <div class="sweep">
+          <span class="date">${s.date}</span>
+          <span class="result"><strong>${filed}</strong> filed · <strong>${open}</strong> open</span>
+        </div>`;
+    }
+
+    function renderProject(p, colorIndex) {
+      const pill = p.quiet
+        ? '<span class="total-pill">All clear</span>'
+        : `<span class="total-pill">${p.pendingTotal} open</span>`;
+      const sweeps = (p.sweeps || []).map(renderSweep).join("");
+      const swatch = `<span class="legend-swatch" style="background:${projectColor(colorIndex)};display:inline-block;vertical-align:middle;margin-right:.35rem"></span>`;
+      return `
+        <article class="proj${p.quiet ? " quiet" : ""}">
+          <div class="proj-hd">
+            <h3>${swatch}${p.name}</h3>
+            ${pill}
+          </div>
+          <div class="counts">
+            <div class="count-line"><strong>${p.pendingFeatures}</strong> features</div>
+            <div class="count-line"><strong>${p.pendingBugs}</strong> bugs</div>
+          </div>
+          <div class="sweeps">
+            <div class="sweeps-hd">Recent sweeps</div>
+            ${sweeps || '<div class="sweep"><span class="result clean">No sweep data yet</span></div>'}
+          </div>
+        </article>`;
+    }
+
+    function render(data) {
+      const g = data.global;
+      const gen = document.getElementById("generated-at");
+      if (data.generatedAt) {
+        const d = new Date(data.generatedAt);
+        gen.textContent = `Data as of ${d.toLocaleString()}`;
+        gen.hidden = false;
+      }
+
+      document.getElementById("app").innerHTML = `
+        <section class="summary" aria-label="Global pipeline">
+          <div class="kpi-row">
+            <div class="kpi"><span class="val">${g.pending}</span><span class="lbl">Pending</span></div>
+            <div class="kpi"><span class="val">${g.createdToday}</span><span class="lbl">Today</span></div>
+            <div class="kpi"><span class="val">${g.bugs}</span><span class="lbl">Bugs</span></div>
+            <div class="kpi"><span class="val">${g.features}</span><span class="lbl">Features</span></div>
+          </div>
+          ${renderStackedBar(data.projects, "pendingFeatures", "Features")}
+          ${renderStackedBar(data.projects, "pendingBugs", "Bugs")}
+        </section>
+        <p class="section-hd">Projects · ${g.projectCount} registered</p>
+        <div class="projects">${data.projects.map((p, i) => renderProject(p, i)).join("")}</div>`;
+    }
+
+    fetch("/data/routine-log.json")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(render)
+      .catch((err) => {
+        document.getElementById("app").innerHTML =
+          `<div class="error">Could not load routine log data (${err.message}). Run <code>node scripts/generate-routine-log.mjs</code> with LINEAR_API_KEY set.</div>`;
+      });
+  </script>
+</body>
+</html>

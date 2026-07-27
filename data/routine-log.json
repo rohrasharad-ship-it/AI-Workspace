@@ -1,0 +1,310 @@
+{
+  "generatedAt": "2026-07-27T12:17:42.043Z",
+  "global": {
+    "pending": 12,
+    "createdToday": 0,
+    "bugs": 0,
+    "features": 12,
+    "bugPercent": 0,
+    "featurePercent": 100,
+    "sweeps30d": 3,
+    "projectCount": 5
+  },
+  "projects": [
+    {
+      "name": "PM OS",
+      "pendingBugs": 0,
+      "pendingFeatures": 2,
+      "pendingTotal": 2,
+      "quiet": false,
+      "sweeps": [
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 5,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 5,
+          "open": 0
+        },
+        {
+          "date": "Jul 22",
+          "filedBugs": 0,
+          "filedFeatures": 5,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 5,
+          "open": 0
+        },
+        {
+          "date": "Jul 21",
+          "filedBugs": 0,
+          "filedFeatures": 4,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 4,
+          "open": 0
+        },
+        {
+          "date": "Jul 20",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        },
+        {
+          "date": "Jul 18",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        }
+      ]
+    },
+    {
+      "name": "Resume Website",
+      "pendingBugs": 0,
+      "pendingFeatures": 3,
+      "pendingTotal": 3,
+      "quiet": false,
+      "sweeps": [
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 3,
+          "open": 0
+        },
+        {
+          "date": "Jul 21",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        },
+        {
+          "date": "Jul 4",
+          "filedBugs": 0,
+          "filedFeatures": 5,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "clean": false,
+          "filed": 5,
+          "open": 1
+        },
+        {
+          "date": "Jul 3",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 3,
+          "open": 0
+        },
+        {
+          "date": "Jul 2",
+          "filedBugs": 0,
+          "filedFeatures": 6,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "clean": false,
+          "filed": 6,
+          "open": 1
+        }
+      ]
+    },
+    {
+      "name": "AI Landscape 2026",
+      "pendingBugs": 0,
+      "pendingFeatures": 0,
+      "pendingTotal": 0,
+      "quiet": true,
+      "sweeps": [
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        },
+        {
+          "date": "Jul 22",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 3,
+          "open": 0
+        },
+        {
+          "date": "Jul 21",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        },
+        {
+          "date": "Jul 17",
+          "filedBugs": 1,
+          "filedFeatures": 5,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 6,
+          "open": 0
+        },
+        {
+          "date": "Jul 15",
+          "filedBugs": 1,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 2,
+          "open": 0
+        }
+      ]
+    },
+    {
+      "name": "Application Agent",
+      "pendingBugs": 0,
+      "pendingFeatures": 4,
+      "pendingTotal": 4,
+      "quiet": false,
+      "sweeps": [
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 8,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "clean": false,
+          "filed": 8,
+          "open": 3
+        },
+        {
+          "date": "Jul 22",
+          "filedBugs": 0,
+          "filedFeatures": 4,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 4,
+          "open": 0
+        },
+        {
+          "date": "Jul 21",
+          "filedBugs": 0,
+          "filedFeatures": 4,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 4,
+          "open": 0
+        },
+        {
+          "date": "Jul 18",
+          "filedBugs": 0,
+          "filedFeatures": 9,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "clean": false,
+          "filed": 9,
+          "open": 1
+        },
+        {
+          "date": "Jul 13",
+          "filedBugs": 0,
+          "filedFeatures": 10,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 10,
+          "open": 0
+        }
+      ]
+    },
+    {
+      "name": "Usercon",
+      "pendingBugs": 0,
+      "pendingFeatures": 3,
+      "pendingTotal": 3,
+      "quiet": false,
+      "sweeps": [
+        {
+          "date": "Jul 24",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 3,
+          "open": 0
+        },
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 22,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "clean": false,
+          "filed": 22,
+          "open": 3
+        },
+        {
+          "date": "Jul 22",
+          "filedBugs": 0,
+          "filedFeatures": 13,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 13,
+          "open": 0
+        },
+        {
+          "date": "Jul 20",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 1,
+          "open": 0
+        },
+        {
+          "date": "Jul 19",
+          "filedBugs": 0,
+          "filedFeatures": 4,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "clean": false,
+          "filed": 4,
+          "open": 0
+        }
+      ]
+    }
+  ]
+}
