@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>SHA-253 preview — toolbar buttons hidden behind Path Finder bar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; }
+
+/* ---- exact markup/CSS lifted from the live production index.html controls bar ---- */
+#controls { position:relative; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(10,15,30,0.96); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.08); height:56px; flex-wrap:wrap; width:1440px; max-width:100%; }
+#title { font-size:14px; font-weight:700; color:#F8FAFC; white-space:nowrap; }
+#title span.year { color:#38BDF8; }
+.title-freshness { font-weight:400; color:#64748B; font-size:12px; }
+#search { flex:0 1 180px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:6px 10px; color:#E2E8F0; font-size:12px; outline:none; }
+.filter-btn { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#CBD5E1; font-size:11px; cursor:pointer; white-space:nowrap; }
+.filter-btn.active { background:rgba(56,189,248,0.2); border-color:#38BDF8; color:#F8FAFC; font-weight:600; }
+#slider-wrap, #slider-wrap-link { display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.05); padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.1); }
+#slider-wrap label, #slider-wrap-link label { font-size:11px; color:#94A3B8; white-space:nowrap; }
+#pop-slider { width:130px; accent-color:#38BDF8; }
+#pop-value { font-size:12px; font-weight:700; color:#38BDF8; min-width:28px; text-align:center; }
+#layout-toggle, #clear-btn, #present-toggle { padding:5px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(168,85,247,0.15); color:#E0D4FF; font-size:11px; cursor:pointer; }
+#present-toggle { position:relative; }
+#path-finder { position:relative; z-index:100; display:flex; align-items:center; gap:8px; padding:6px 14px; height:44px; background:rgba(10,15,30,0.94); backdrop-filter:blur(10px); border-bottom:1px solid rgba(255,255,255,0.06); flex-wrap:wrap; width:1440px; max-width:100%; }
+#path-finder input { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:5px 8px; color:#E2E8F0; font-size:11px; width:150px; }
+#path-finder button { padding:5px 12px; border-radius:6px; border:1px solid rgba(168,85,247,0.4); background:rgba(168,85,247,0.22); color:#E0D4FF; font-size:11px; }
+#canvas-stub { width:1440px; max-width:100%; height:220px; background:radial-gradient(ellipse at center, #0E1629 0%, #0A0F1E 100%); }
+
+/* ---- annotation overlay, not part of production ---- */
+.wrap { max-width:1440px; margin:32px auto; border:1px solid rgba(255,255,255,0.12); border-radius:10px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+.callout { position:absolute; }
+.stage { position:relative; }
+.tag { position:absolute; top:96px; left:14px; background:#FBBF24; color:#1E1400; font-weight:800; font-size:12px; padding:6px 10px; border-radius:6px; box-shadow:0 4px 14px rgba(0,0,0,0.4); }
+.arrow { position:absolute; top:78px; left:60px; width:2px; height:20px; background:#FBBF24; }
+.arrow::after { content:""; position:absolute; top:-6px; left:-4px; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:8px solid #FBBF24; }
+.hint-box { position:absolute; top:56px; left:16px; width:180px; height:24px; border:2px dashed #FBBF24; border-radius:6px; pointer-events:none; }
+header { padding:20px 24px 4px; }
+h1 { font-size:18px; }
+p.sub { color:#94A3B8; font-size:13px; margin-top:6px; max-width:700px; }
+.legend { padding:10px 24px 22px; font-size:12px; color:#94A3B8; display:flex; gap:18px; flex-wrap:wrap; }
+.legend b { color:#F8FAFC; }
+</style>
+</head>
+<body>
+<header>
+  <h1>SHA-253 — View / Present / Clear Selection wrap behind the Path Finder bar</h1>
+  <p class="sub">Reproduced at 1440×900 using the real production markup and CSS for #controls and #path-finder. The controls row has no space left after Title, Search, both sliders, and the 7 category filter chips, so "View: Radial", "Present", and "Clear Selection" wrap to a second line that the Path Finder bar (rendered right below at a fixed position) sits directly on top of. A real mouse click on that spot lands on the Path Finder bar, not the button.</p>
+</header>
+<div class="wrap">
+  <div class="stage">
+    <div id="controls">
+      <div id="title">AI Landscape <span class="year">2026</span><span class="title-freshness"> · Updated Jul 2026</span></div>
+      <input id="search" type="text" placeholder="Search tools, categories…"/>
+      <div id="slider-wrap"><label>Popularity &ge;</label><input id="pop-slider" type="range" min="0" max="100" value="60"/><span id="pop-value">60</span></div>
+      <div id="slider-wrap-link"><label>Link &ge;</label><input id="link-slider" type="range" min="1" max="5" value="1"/><span>1</span></div>
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Hardware</button>
+      <button class="filter-btn">Models</button>
+      <button class="filter-btn">Creative</button>
+      <button class="filter-btn">Tools</button>
+      <button class="filter-btn">Infra</button>
+      <button class="filter-btn">Emerging</button>
+      <button id="layout-toggle">View: Radial</button>
+      <button id="present-toggle">Present</button>
+      <button id="clear-btn">Clear Selection</button>
+    </div>
+    <div id="path-finder">
+      <span style="font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.05em;">PATH</span>
+      <input placeholder="Start node…"/>
+      <span style="color:#64748B;">&rarr;</span>
+      <input placeholder="End node…"/>
+      <button>Find Path</button>
+      <button style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);color:#CBD5E1;">Pick two nodes</button>
+      <span style="font-size:11px;color:#64748B;">Click node to set path endpoints · Find Path traces shortest chain · Click ring to isolate layer</span>
+    </div>
+    <div id="canvas-stub"></div>
+    <div class="hint-box"></div>
+    <div class="arrow"></div>
+    <div class="tag">⬆ View / Present / Clear Selection wrapped here — covered by the Path Finder bar, not clickable</div>
+  </div>
+  <div class="legend">
+    <span><b>Reproduced at:</b> 1366×768 and 1440×900 (two of the most common laptop widths)</span>
+    <span><b>Works fine at:</b> ≥ ~1536–1920px, where everything fits on one row</span>
+    <span><b>Confirmed by:</b> real mouse click (Playwright, no force-click) — click times out, hit-test resolves to #path-finder</span>
+  </div>
+</div>
+</body>
+</html>
