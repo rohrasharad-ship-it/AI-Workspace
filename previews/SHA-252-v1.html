@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHA-252 — Hub Blast-Radius Flag Preview</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #17171f;
+    --border: rgba(255,255,255,0.08);
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #8b5cf6;
+    --accent2: #06b6d4;
+    --warn: #f2994a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2.5rem 1.25rem 5rem;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    border: 1px solid rgba(6,182,212,0.35);
+    background: rgba(6,182,212,0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  h1 { font-size: 1.5rem; margin-bottom: 0.4rem; }
+  .sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2.25rem; }
+  .note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 0.86rem;
+  }
+  .card h2 {
+    font-family: system-ui, sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .snapshot-line { padding: 0.15rem 0; color: var(--muted); }
+  .snapshot-line b { color: var(--text); font-weight: 600; }
+  .impact-line {
+    margin-top: 0.4rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    background: rgba(242,153,74,0.1);
+    border: 1px solid rgba(242,153,74,0.4);
+    color: #fbd8b0;
+  }
+  .impact-line .files {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .file-chip {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: #c4b5fd;
+    border-radius: 6px;
+    padding: 0.1rem 0.45rem;
+    margin: 0.15rem 0.25rem 0 0;
+    font-size: 0.78rem;
+  }
+  .callout {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    font-family: system-ui, sans-serif;
+  }
+  .contrast {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .contrast .col h3 {
+    font-family: system-ui, sans-serif;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  @media (max-width: 620px) {
+    .contrast { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="tag">Minimal-effort mockup · SHA-252</span>
+  <h1>Hub blast-radius flag</h1>
+  <p class="sub">One static frame — the existing Status Snapshot block, before and after, with a computed "Hub impact" line added when a PR touches a file under <code>agents/shared/</code> or <code>agents/*.md</code>.</p>
+
+  <div class="note">Computed automatically from the repo's own dispatch table: grep for every role/routine file that names the changed shared file in a "Read first" or reference line, count them, list them.</div>
+
+  <div class="contrast">
+    <div class="col">
+      <h3>Today</h3>
+      <div class="card">
+        <div class="snapshot-line">--- STATUS ---</div>
+        <div class="snapshot-line"><b>Phase:</b> In Review</div>
+        <div class="snapshot-line"><b>Last update:</b> Jul 27 — tightened cap-check wording in conventions.md</div>
+        <div class="snapshot-line"><b>PR:</b> AI-Workspace#52</div>
+        <div class="snapshot-line"><b>Preview:</b> N/A (infra-only)</div>
+        <div class="snapshot-line">--- END STATUS ---</div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>With hub impact</h3>
+      <div class="card">
+        <div class="snapshot-line">--- STATUS ---</div>
+        <div class="snapshot-line"><b>Phase:</b> In Review</div>
+        <div class="snapshot-line"><b>Last update:</b> Jul 27 — tightened cap-check wording in conventions.md</div>
+        <div class="snapshot-line"><b>PR:</b> AI-Workspace#52</div>
+        <div class="snapshot-line"><b>Preview:</b> N/A (infra-only)</div>
+        <div class="impact-line">
+          ⚠️ Hub impact: affects 6 files
+          <span class="files">
+            <span class="file-chip">builder.md</span>
+            <span class="file-chip">reviewer.md</span>
+            <span class="file-chip">spec-drift.md</span>
+            <span class="file-chip">bug-error.md</span>
+            <span class="file-chip">market-feature.md</span>
+            <span class="file-chip">idea-sweep.md</span>
+          </span>
+        </div>
+        <div class="snapshot-line">--- END STATUS ---</div>
+      </div>
+    </div>
+  </div>
+  <p class="callout">A one-line change to a normal product repo touches one page. A one-line change here — like this run's conventions.md edit — is read by every role, on every project, on every future run. The approval surface should say so before Sharad approves it.</p>
+</div>
+</body>
+</html>
