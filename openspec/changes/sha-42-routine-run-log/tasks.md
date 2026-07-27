@@ -6,6 +6,7 @@
 ## 2. Dashboard UI
 
 - [x] 2.1 Add `routine-log.html` matching v7 layout (no Recent Runs section)
+- [x] 2.2 Refine to v8: stacked project bars for bugs/features, numbers-only cards (no dual bars)
 - [x] 2.2 Link from `index.html` header
 
 ## 3. Routine integration
