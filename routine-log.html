@@ -193,10 +193,16 @@
     }
 
     function shortName(name) {
-      if (name.length <= 14) return name;
-      const words = name.split(/\s+/);
-      if (words.length > 1 && words.every((w) => w.length <= 8)) return name;
-      return name.replace(/\s+20\d{2}$/, "").slice(0, 14);
+      const trimmed = name.replace(/\s+20\d{2}$/, "");
+      if (trimmed.length <= 16) return trimmed;
+      const words = trimmed.split(/\s+/);
+      if (words.length >= 2) {
+        const abbreviated = words
+          .map((w, i) => (i === 0 && w.length > 4 ? `${w.slice(0, 3)}` : w))
+          .join(" ");
+        if (abbreviated.length <= 16) return abbreviated;
+      }
+      return trimmed.slice(0, 16);
     }
 
     function renderStackedBar(projects, field, label) {
