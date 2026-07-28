@@ -1,0 +1,42 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>SHA-261 preview — keyboard-navigable node stepping</title>
+<style>
+body{background:#0B1220;color:#E2E8F0;font-family:system-ui,sans-serif;margin:0;padding:40px;display:flex;flex-direction:column;align-items:center;gap:16px}
+h1{font-size:18px;margin:0}
+.stage{position:relative;width:520px;height:360px;background:radial-gradient(ellipse at center,#111827 0%,#0B1220 70%);border:1px solid #334155;border-radius:12px;overflow:hidden}
+.node{position:absolute;width:56px;height:56px;border-radius:50%;background:#1E293B;border:2px solid #475569;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#CBD5E1}
+.node.active{border-color:#38BDF8;box-shadow:0 0 0 4px rgba(56,189,248,0.25);color:#fff}
+.n1{left:230px;top:150px}
+.n2{left:80px;top:60px}
+.n3{left:380px;top:50px}
+.n4{left:90px;top:250px}
+.n5{left:400px;top:250px}
+line{stroke:#334155;stroke-width:2}
+.hint{position:absolute;left:230px;top:210px;background:#111827;border:1px solid #38BDF8;color:#7DD3FC;font-size:11px;padding:5px 9px;border-radius:6px;white-space:nowrap}
+.arrow{position:absolute;color:#38BDF8;font-size:18px;font-weight:700}
+.a-up{left:253px;top:105px}
+.a-left{left:150px;top:172px}
+.a-right{left:310px;top:172px}
+p{max-width:520px;font-size:14px;color:#94A3B8;line-height:1.5;text-align:center}
+</style></head>
+<body>
+<h1>⌨️ SHA-261 — keyboard-navigable node stepping (proposed)</h1>
+<div class="stage">
+  <svg width="520" height="360" style="position:absolute;left:0;top:0">
+    <line x1="258" y1="178" x2="108" y2="88"></line>
+    <line x1="258" y1="178" x2="408" y2="78"></line>
+    <line x1="258" y1="178" x2="118" y2="278"></line>
+    <line x1="258" y1="178" x2="428" y2="278"></line>
+  </svg>
+  <div class="node active n1">NV</div>
+  <div class="node n2">TS</div>
+  <div class="node n3">AS</div>
+  <div class="node n4">GT</div>
+  <div class="node n5">AM</div>
+  <div class="arrow a-up">&uarr;</div>
+  <div class="arrow a-left">&larr;</div>
+  <div class="arrow a-right">&rarr;</div>
+  <div class="hint">&uarr;&darr;&larr;&rarr; explore connections &middot; Enter opens &middot; Esc clears</div>
+</div>
+<p>When a node is selected, arrow keys step focus to its connected neighbors (same highlight style Find Path already uses); Enter opens the side panel, Escape clears. No mouse required — built for presenters and keyboard-only visitors.</p>
+</body></html>
