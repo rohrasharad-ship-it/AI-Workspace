@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SHA-264 preview — motion &amp; contrast toggle</title>
+<style>
+  body { margin:0; background:#111111; font-family: Arial, Helvetica, sans-serif; color:#F5EDE0; min-height:100vh; }
+  .banner { padding:16px 24px 0; font-size:13px; color:#8A8A8A; font-family: monospace; }
+  .stage { display:flex; justify-content:center; padding:80px 24px; }
+  .nav-pill { display:flex; align-items:center; gap:6px; background:rgba(20,20,20,0.92); border:1px solid rgba(255,255,255,0.08); border-radius:999px; padding:10px 10px 10px 22px; box-shadow:0 12px 30px rgba(0,0,0,0.4); position:relative; }
+  .nav-pill a { color:#F5EDE0; text-decoration:none; font-size:15px; padding:8px 16px; opacity:0.85; }
+  .a11y-btn { width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center; font-size:16px; margin-left:4px; }
+  .panel { position:absolute; top:56px; right:0; width:220px; background:rgba(24,24,24,0.98); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:16px; box-shadow:0 16px 40px rgba(0,0,0,0.5); }
+  .panel h4 { margin:0 0 12px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:#8A8A8A; font-weight:500; }
+  .row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:14px; }
+  .switch { width:36px; height:20px; border-radius:999px; background:#E8351A; position:relative; }
+  .switch.off { background:rgba(255,255,255,0.15); }
+  .knob { position:absolute; top:2px; right:2px; width:16px; height:16px; border-radius:50%; background:#fff; }
+  .switch.off .knob { right:auto; left:2px; }
+</style>
+</head>
+<body>
+  <div class="banner">MOCKUP — SHA-264 — illustrative only, not final visual design</div>
+  <div class="stage">
+    <div class="nav-pill">
+      <a href="#">Journey</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <div class="a11y-btn">♿</div>
+      <div class="panel">
+        <h4>Viewing options</h4>
+        <div class="row"><span>Reduce motion</span><div class="switch"><div class="knob"></div></div></div>
+        <div class="row"><span>High contrast</span><div class="switch off"><div class="knob"></div></div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
