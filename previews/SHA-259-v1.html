@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHA-259 — Cross-Vertical Relationship Map (mockup)</title>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --panel: #15181d;
+    --panel-2: #1b1f26;
+    --border: #262b33;
+    --text: #e7e9ec;
+    --muted: #8b93a1;
+    --accent: #6ee7b7;
+    --travel: #7dd3fc;
+    --health: #a5f0c9;
+    --career: #ffd27d;
+    --center: #f2f4f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 800px at 20% -10%, #171b21 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 80px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  .mock-banner {
+    background: linear-gradient(90deg, #2a2140, #1a2f2a);
+    border: 1px solid #3a3450;
+    color: #d9c9ff;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  header.page-head { margin-bottom: 20px; }
+  header.page-head h1 { font-size: 22px; margin: 0 0 6px; }
+  header.page-head p { color: var(--muted); margin: 0; font-size: 14px; max-width: 640px; line-height: 1.5; }
+
+  .detail-shell {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .detail-top {
+    padding: 18px 20px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .detail-top h2 { margin: 0 0 6px; font-size: 18px; }
+  .detail-top p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.5; max-width: 620px; }
+  .meta-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    color: var(--muted);
+    background: #101317;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .map-section { padding: 18px 20px; }
+  .map-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .map-head h3 { font-size: 13px; margin: 0; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .map-head span.hint { font-size: 12px; color: var(--muted); }
+
+  .map-canvas-wrap {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px;
+  }
+
+  .legend { display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  .below-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 20px 20px;
+  }
+  @media (max-width: 720px) { .below-grid { grid-template-columns: 1fr; } }
+  .linked-card {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+  }
+  .linked-card:hover { border-color: #3a4048; }
+  .linked-card h4 { margin: 0 0 4px; font-size: 13px; }
+  .linked-card p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .linked-card .dot-label { display:flex; align-items:center; gap:6px; margin-bottom:6px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .footnote { font-size: 12px; color: var(--muted); padding: 0 20px 18px; margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mock-banner">🎨 Static mockup for SHA-259 — Cross-Vertical Relationship Map. No live data; illustrates intended layout inside the existing item detail view.</div>
+
+  <header class="page-head">
+    <h1>🕸️ Cross-Vertical Relationship Map</h1>
+    <p>A small node-link map inside the item detail view, radiating the open item out to its linked context and goals &mdash; colored by whichever life area each one actually belongs to. Separate from the existing You-centered orbit graph on the home screen.</p>
+  </header>
+
+  <div class="detail-shell">
+    <div class="detail-top">
+      <div class="breadcrumb">Health &rsaquo; Preference &rsaquo; Detail</div>
+      <h2>Sleeps early, protects an 8am wind-down</h2>
+      <p>Manual entry, high confidence. Linked to 4 other context items across 3 life areas.</p>
+      <div class="meta-row">
+        <span class="tag">Preference</span>
+        <span class="tag">Health</span>
+        <span class="tag">Source: Manual</span>
+        <span class="tag">Approved</span>
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div class="map-head">
+        <h3>Relationship map</h3>
+        <span class="hint">Drag to rearrange · click a node to open it</span>
+      </div>
+      <div class="map-canvas-wrap">
+        <svg id="mapSvg" viewBox="0 0 640 320" width="100%" height="320" style="display:block;"></svg>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--center)"></span>This item (Health)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--health)"></span>Health</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--travel)"></span>Travel</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--career)"></span>Career</div>
+      </div>
+    </div>
+
+    <div class="below-grid">
+      <div class="linked-card">
+        <div class="dot-label"><span class="dot" style="background:var(--travel)"></span>Travel &middot; Goal</div>
+        <h4>Book flights with buffer before 9am meetings</h4>
+        <p>Uses the sleep-early fact to filter flight-time options.</p>
+      </div>
+      <div class="linked-card">
+        <div class="dot-label"><span class="dot" style="background:var(--health)"></span>Health &middot; Note</div>
+        <h4>Wind-down routine: no screens after 9:30pm</h4>
+        <p>Directly supports the early-sleep preference.</p>
+      </div>
+      <div class="linked-card">
+        <div class="dot-label"><span class="dot" style="background:var(--career)"></span>Career &middot; Preference</div>
+        <h4>Prefers meetings scheduled before 4pm</h4>
+        <p>Same horizontal fact, read during a scheduling task.</p>
+      </div>
+    </div>
+    <p class="footnote">Nodes and links are drawn from the item's existing <code>linkedContextIds</code> / <code>linkedGoalIds</code> &mdash; this view visualizes data already stored, it does not add a new field.</p>
+  </div>
+</div>
+
+<script>
+  const svg = document.getElementById('mapSvg');
+  const ns = 'http://www.w3.org/2000/svg';
+
+  const center = { x: 130, y: 160, r: 34, color: getComputedStyle(document.documentElement).getPropertyValue('--center'), label: 'Sleeps early' };
+  const nodes = [
+    { x: 380, y: 60,  r: 26, color: getComputedStyle(document.documentElement).getPropertyValue('--travel'), label: 'Flight booking goal' },
+    { x: 430, y: 170, r: 24, color: getComputedStyle(document.documentElement).getPropertyValue('--health'), label: 'Wind-down routine' },
+    { x: 380, y: 270, r: 26, color: getComputedStyle(document.documentElement).getPropertyValue('--career'), label: 'Meeting time preference' },
+    { x: 560, y: 120, r: 20, color: getComputedStyle(document.documentElement).getPropertyValue('--travel'), label: 'Aisle seat preference' }
+  ];
+
+  function line(x1,y1,x2,y2){
+    const el = document.createElementNS(ns, 'line');
+    el.setAttribute('x1', x1); el.setAttribute('y1', y1);
+    el.setAttribute('x2', x2); el.setAttribute('y2', y2);
+    el.setAttribute('stroke', '#33393f');
+    el.setAttribute('stroke-width', '1.5');
+    svg.appendChild(el);
+  }
+
+  function circle(n, isCenter){
+    const g = document.createElementNS(ns, 'g');
+    g.style.cursor = 'pointer';
+    const c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', n.x); c.setAttribute('cy', n.y); c.setAttribute('r', n.r);
+    c.setAttribute('fill', isCenter ? '#1b1f26' : n.color.trim());
+    c.setAttribute('fill-opacity', isCenter ? '1' : '0.85');
+    c.setAttribute('stroke', isCenter ? n.color.trim() : 'transparent');
+    c.setAttribute('stroke-width', isCenter ? '2.5' : '0');
+    g.appendChild(c);
+
+    const t = document.createElementNS(ns, 'text');
+    t.setAttribute('x', n.x);
+    t.setAttribute('y', n.y + n.r + 16);
+    t.setAttribute('text-anchor', 'middle');
+    t.setAttribute('fill', '#c7cdd6');
+    t.setAttribute('font-size', '11');
+    t.textContent = n.label;
+    g.appendChild(t);
+
+    g.addEventListener('mouseenter', () => c.setAttribute('fill-opacity', '1'));
+    g.addEventListener('mouseleave', () => c.setAttribute('fill-opacity', isCenter ? '1' : '0.85'));
+    svg.appendChild(g);
+  }
+
+  nodes.forEach(n => line(center.x, center.y, n.x, n.y));
+  nodes.forEach(n => circle(n, false));
+  circle(center, true);
+</script>
+</body>
+</html>
