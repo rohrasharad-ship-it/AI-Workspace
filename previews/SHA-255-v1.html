@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview: Zoom Minimap — SHA-255</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:100%; height:100%; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; overflow:hidden; }
+  #tag { position:fixed; top:58px; left:10px; z-index:50; background:rgba(56,189,248,0.15); border:1px solid #38BDF8; color:#7DD3FC; font-size:11px; padding:4px 10px; border-radius:5px; }
+  #controls { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-items:center; gap:14px; padding:0 16px; background:rgba(10,15,30,0.96); border-bottom:1px solid rgba(255,255,255,0.08); z-index:20; }
+  #title { font-size:14px; font-weight:700; color:#F8FAFC; }
+  /* main "zoomed in" canvas: a few big nodes filling the screen */
+  #main { position:absolute; inset:0; top:52px; }
+  .big-node { position:absolute; border-radius:50%; background:radial-gradient(circle at 35% 30%, #4c8ef7, #1d4ed8); box-shadow:0 0 30px rgba(56,189,248,0.35); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#F8FAFC; }
+  .link-big { position:absolute; height:2px; background:#334155; transform-origin:0 0; }
+
+  /* minimap */
+  #minimap { position:fixed; bottom:16px; left:16px; width:200px; height:130px; background:rgba(10,15,30,0.92); border:1px solid rgba(255,255,255,0.18); border-radius:8px; z-index:40; overflow:hidden; }
+  #minimap .mm-node { position:absolute; width:5px; height:5px; border-radius:50%; background:#64748B; }
+  #minimap .mm-node.hub { background:#38BDF8; width:7px; height:7px; }
+  #viewport-box { position:absolute; border:2px solid #F8FAFC; background:rgba(248,250,252,0.08); border-radius:3px; }
+  #mm-label { position:absolute; top:5px; left:8px; font-size:9px; color:#94A3B8; letter-spacing:0.4px; text-transform:uppercase; }
+
+  .callout { position:fixed; background:rgba(15,23,42,0.95); border:1px solid #38BDF8; border-radius:8px; padding:8px 12px; font-size:11px; color:#CBD5E1; max-width:230px; line-height:1.4; }
+  .callout b { color:#7DD3FC; }
+  #note { position:fixed; bottom:12px; right:16px; font-size:11px; color:#64748B; max-width:260px; text-align:right; }
+</style>
+</head>
+<body>
+<div id="tag">MOCKUP — proposed idea, not live</div>
+<div id="controls">
+  <div id="title">AI Landscape <span style="color:#38BDF8">2026</span> — zoomed into Applications layer</div>
+</div>
+
+<div id="main">
+  <div class="link-big" style="top:220px; left:280px; width:220px; transform:rotate(18deg);"></div>
+  <div class="link-big" style="top:340px; left:480px; width:180px; transform:rotate(-25deg);"></div>
+  <div class="big-node" style="top:150px; left:220px; width:130px; height:130px;">OpenAI</div>
+  <div class="big-node" style="top:300px; left:480px; width:100px; height:100px;">Runway</div>
+  <div class="big-node" style="top:420px; left:250px; width:90px; height:90px;">Midjourney</div>
+  <div class="big-node" style="top:120px; left:560px; width:80px; height:80px;">Perplexity</div>
+</div>
+
+<div id="minimap">
+  <div id="mm-label">Full map</div>
+  <!-- scattered dots representing whole ecosystem -->
+  <div class="mm-node" style="top:20px; left:20px;"></div>
+  <div class="mm-node" style="top:35px; left:60px;"></div>
+  <div class="mm-node hub" style="top:50px; left:100px;"></div>
+  <div class="mm-node" style="top:70px; left:40px;"></div>
+  <div class="mm-node" style="top:85px; left:130px;"></div>
+  <div class="mm-node hub" style="top:60px; left:150px;"></div>
+  <div class="mm-node" style="top:100px; left:70px;"></div>
+  <div class="mm-node" style="top:40px; left:170px;"></div>
+  <div class="mm-node" style="top:105px; left:160px;"></div>
+  <div class="mm-node" style="top:25px; left:110px;"></div>
+  <!-- viewport indicator showing current zoomed area -->
+  <div id="viewport-box" style="top:35px; left:75px; width:60px; height:45px;"></div>
+</div>
+
+<div class="callout" style="top:80px; right:40px;"><b>Minimap</b> — persistent thumbnail of the entire six-layer map in a corner</div>
+<div class="callout" style="bottom:170px; left:230px;"><b>Viewport box</b> — moves as the reader pans/zooms, always shows current position</div>
+
+<div id="note">Minimal-effort static mockup for SHA-255 — illustrates a "you are here" minimap when zoomed in, not the real app</div>
+</body>
+</html>
