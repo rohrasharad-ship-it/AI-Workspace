@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Preview: Colorblind-Safe Viewing Mode — SHA-256</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { width:100%; height:100%; background:#0A0F1E; color:#E2E8F0; font-family:system-ui,-apple-system,sans-serif; }
+  #tag { position:fixed; top:58px; left:10px; z-index:50; background:rgba(56,189,248,0.15); border:1px solid #38BDF8; color:#7DD3FC; font-size:11px; padding:4px 10px; border-radius:5px; }
+  #controls { position:fixed; top:0; left:0; right:0; height:52px; display:flex; align-items:center; gap:14px; padding:0 16px; background:rgba(10,15,30,0.96); border-bottom:1px solid rgba(255,255,255,0.08); z-index:20; }
+  #title { font-size:14px; font-weight:700; color:#F8FAFC; }
+  .toggle { display:flex; align-items:center; gap:8px; margin-left:auto; background:rgba(56,189,248,0.18); border:1px solid #38BDF8; border-radius:20px; padding:5px 12px; font-size:12px; color:#F8FAFC; font-weight:600; }
+  .toggle .dot { width:10px; height:10px; border-radius:50%; background:#38BDF8; box-shadow:0 0 8px 2px rgba(56,189,248,0.8); }
+
+  #wrap { display:flex; gap:24px; padding:90px 40px 40px; height:100%; }
+  .panel { flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:20px; }
+  .panel h3 { font-size:13px; color:#94A3B8; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:16px; }
+  .swatch-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:12px; color:#CBD5E1; }
+  .swatch { width:18px; height:18px; border-radius:4px; flex:none; }
+  .lines { margin-top:20px; }
+  .line-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:11px; color:#94A3B8; }
+  .line-sample { width:70px; height:0; border-top-width:3px; border-top-style:solid; }
+
+  #note { position:fixed; bottom:12px; left:0; right:0; text-align:center; font-size:11px; color:#64748B; }
+</style>
+</head>
+<body>
+<div id="tag">MOCKUP — proposed idea, not live</div>
+<div id="controls">
+  <div id="title">AI Landscape <span style="color:#38BDF8">2026</span></div>
+  <div class="toggle"><span class="dot"></span> Colorblind-Safe Mode: ON</div>
+</div>
+
+<div id="wrap">
+  <div class="panel">
+    <h3>Today — color only</h3>
+    <div class="swatch-row"><span class="swatch" style="background:#F97316"></span> Foundry</div>
+    <div class="swatch-row"><span class="swatch" style="background:#EAB308"></span> Chip Designers</div>
+    <div class="swatch-row"><span class="swatch" style="background:#38BDF8"></span> Cloud / Hubs</div>
+    <div class="swatch-row"><span class="swatch" style="background:#6366F1"></span> Foundation Models</div>
+    <div class="swatch-row"><span class="swatch" style="background:#A855F7"></span> Frameworks &amp; Infra</div>
+    <div class="swatch-row"><span class="swatch" style="background:#22C55E"></span> Applications</div>
+    <div class="lines">
+      <div class="line-row"><span class="line-sample" style="border-color:#F97316"></span> manufactures / powers</div>
+      <div class="line-row"><span class="line-sample" style="border-color:#A855F7"></span> hosts / runs</div>
+      <div class="line-row"><span class="line-sample" style="border-color:#38BDF8"></span> built-on</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Colorblind-safe + pattern coded</h3>
+    <div class="swatch-row"><span class="swatch" style="background:#E69F00"></span> Foundry</div>
+    <div class="swatch-row"><span class="swatch" style="background:#F0E442"></span> Chip Designers</div>
+    <div class="swatch-row"><span class="swatch" style="background:#56B4E9"></span> Cloud / Hubs</div>
+    <div class="swatch-row"><span class="swatch" style="background:#0072B2"></span> Foundation Models</div>
+    <div class="swatch-row"><span class="swatch" style="background:#CC79A7"></span> Frameworks &amp; Infra</div>
+    <div class="swatch-row"><span class="swatch" style="background:#009E73"></span> Applications</div>
+    <div class="lines">
+      <div class="line-row"><span class="line-sample" style="border-color:#E69F00; border-top-style:solid;"></span> manufactures / powers — solid</div>
+      <div class="line-row"><span class="line-sample" style="border-color:#CC79A7; border-top-style:dashed;"></span> hosts / runs — dashed</div>
+      <div class="line-row"><span class="line-sample" style="border-color:#56B4E9; border-top-style:dotted;"></span> built-on — dotted</div>
+    </div>
+  </div>
+</div>
+
+<div id="note">Minimal-effort static mockup for SHA-256 — illustrates a colorblind-safe palette + line-pattern toggle, not the real app (palette values are the well-known Okabe-Ito colorblind-safe set)</div>
+</body>
+</html>
