@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHA-258 — Agent Parity Preview (mockup)</title>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --panel: #15181d;
+    --panel-2: #1b1f26;
+    --border: #262b33;
+    --text: #e7e9ec;
+    --muted: #8b93a1;
+    --accent: #6ee7b7;
+    --accent-2: #7dd3fc;
+    --warn: #f5a97f;
+    --claude: #d9a5ff;
+    --codex: #7dd3fc;
+    --gemini: #ffd27d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(1200px 800px at 20% -10%, #171b21 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 80px;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .mock-banner {
+    background: linear-gradient(90deg, #2a2140, #1a2f2a);
+    border: 1px solid #3a3450;
+    color: #d9c9ff;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  header.page-head { margin-bottom: 20px; }
+  header.page-head h1 { font-size: 22px; margin: 0 0 6px; }
+  header.page-head p { color: var(--muted); margin: 0; font-size: 14px; max-width: 620px; line-height: 1.5; }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .controls {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+  .field label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  select {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  .agent-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px 3px 6px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+  }
+  .agent-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .chip-claude { background: rgba(217,165,255,.1); color: var(--claude); }
+  .chip-claude .dot { background: var(--claude); }
+  .chip-codex { background: rgba(125,211,252,.1); color: var(--codex); }
+  .chip-codex .dot { background: var(--codex); }
+  .chip-gemini { background: rgba(255,210,125,.1); color: var(--gemini); }
+  .chip-gemini .dot { background: var(--gemini); }
+
+  .run-btn {
+    background: var(--accent);
+    color: #052e21;
+    border: none;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .result-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .result-head h2 { font-size: 15px; margin: 0; color: var(--muted); font-weight: 600; }
+  .badge {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(110,231,183,.1);
+    color: var(--accent);
+    border: 1px solid rgba(110,231,183,.3);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+
+  .item-card {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .item-card h3 { margin: 0 0 4px; font-size: 14px; }
+  .item-card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .item-meta { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    color: var(--muted);
+    background: #101317;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .withheld-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(245,169,127,.06);
+    border: 1px dashed rgba(245,169,127,.35);
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--warn);
+  }
+  .withheld-item span.count { color: var(--muted); font-size: 12px; }
+
+  pre.payload {
+    background: #0a0c0f;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: #cdeed9;
+    max-height: 420px;
+  }
+  .k { color: #7dd3fc; }
+  .s { color: #d9a5ff; }
+  .n { color: #ffd27d; }
+
+  .footnote { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .col-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mock-banner">🎨 Static mockup for SHA-258 — Agent Parity Preview. No live data; illustrates intended layout and interaction only.</div>
+
+  <header class="page-head">
+    <h1>🔀 Agent Parity Preview</h1>
+    <p>Pick any connected agent and a scope. See exactly what that agent would get back right now &mdash; the same shape it would receive over MCP &mdash; so portability is something you can check, not just something Usercon claims.</p>
+  </header>
+
+  <div class="panel">
+    <div class="controls">
+      <div class="field">
+        <label>Connected agent</label>
+        <select id="agentSelect">
+          <option value="claude">Claude</option>
+          <option value="codex">Codex</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Scope</label>
+        <select id="scopeSelect">
+          <option>Life area: Travel</option>
+          <option>Life area: Health</option>
+          <option>You (profile)</option>
+          <option>Query: "sleep"</option>
+        </select>
+      </div>
+      <button class="run-btn" onclick="renderResult()">Preview read</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="result-head">
+      <h2 id="resultHeading">Preview: Claude · Life area: Travel</h2>
+      <span class="badge" id="agentBadge">🟣 Claude · read_context()</span>
+    </div>
+
+    <div class="grid">
+      <div>
+        <p class="col-title">What Claude would see (3 items)</p>
+
+        <div class="item-card">
+          <h3>Prefers early flights, avoids red-eyes</h3>
+          <p>Booking preference used across Travel bookings.</p>
+          <div class="item-meta"><span class="tag">Preference</span><span class="tag">Travel</span></div>
+        </div>
+
+        <div class="item-card">
+          <h3>Sleeps early, protects an 8am wind-down</h3>
+          <p>Captured under Health, surfaced here for Travel task &mdash; horizontal fact in action.</p>
+          <div class="item-meta"><span class="tag">Preference</span><span class="tag">Health</span><span class="tag">cross-vertical</span></div>
+        </div>
+
+        <div class="item-card">
+          <h3>Aisle seat, no layovers under 45min</h3>
+          <p>Manual entry, high confidence.</p>
+          <div class="item-meta"><span class="tag">Preference</span><span class="tag">Travel</span></div>
+        </div>
+
+        <p class="col-title" style="margin-top:18px;">Withheld from this read (2)</p>
+        <div class="withheld-item"><span>Sensitive context</span><span class="count">1 item</span></div>
+        <div class="withheld-item"><span>Pending review</span><span class="count">1 item</span></div>
+        <p class="footnote">Same withholding rules as a live MCP call &mdash; nothing shown here that Claude wouldn't actually receive.</p>
+      </div>
+
+      <div>
+        <p class="col-title">Raw payload shape</p>
+        <pre class="payload"><span class="k">{</span>
+  <span class="s">"tool"</span>: <span class="s">"list_context"</span>,
+  <span class="s">"agent"</span>: <span class="s">"Claude"</span>,
+  <span class="s">"scope"</span>: <span class="s">{ "lifeArea": "travel" }</span>,
+  <span class="s">"items"</span>: <span class="k">[</span>
+    <span class="k">{</span>
+      <span class="s">"id"</span>: <span class="s">"ctx_01H..."</span>,
+      <span class="s">"title"</span>: <span class="s">"Prefers early flights..."</span>,
+      <span class="s">"lifeAreas"</span>: <span class="k">[</span><span class="s">"travel"</span><span class="k">]</span>,
+      <span class="s">"sourceAgent"</span>: <span class="s">"Claude"</span>
+    <span class="k">}</span>,
+    <span class="k">{</span>
+      <span class="s">"id"</span>: <span class="s">"ctx_02F..."</span>,
+      <span class="s">"title"</span>: <span class="s">"Sleeps early..."</span>,
+      <span class="s">"lifeAreas"</span>: <span class="k">[</span><span class="s">"health"</span><span class="k">]</span>,
+      <span class="s">"crossVertical"</span>: <span class="n">true</span>
+    <span class="k">}</span>
+  <span class="k">]</span>,
+  <span class="s">"withheld"</span>: <span class="k">[</span>
+    <span class="k">{</span> <span class="s">"label"</span>: <span class="s">"Sensitive context"</span>, <span class="s">"count"</span>: <span class="n">1</span> <span class="k">}</span>,
+    <span class="k">{</span> <span class="s">"label"</span>: <span class="s">"Pending review"</span>, <span class="s">"count"</span>: <span class="n">1</span> <span class="k">}</span>
+  <span class="k">]</span>
+<span class="k">}</span></pre>
+        <p class="footnote">Switching the agent dropdown re-renders this panel with that agent's grant scope applied &mdash; same underlying context, agent-shaped output.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <p class="col-title" style="margin-bottom:6px;">Connected agents in this preview</p>
+    <span class="agent-chip chip-claude"><span class="dot"></span>Claude</span>
+    <span class="agent-chip chip-codex"><span class="dot"></span>Codex</span>
+    <span class="agent-chip chip-gemini"><span class="dot"></span>Gemini</span>
+  </div>
+</div>
+
+<script>
+  function renderResult() {
+    const agent = document.getElementById('agentSelect').value;
+    const scope = document.getElementById('scopeSelect').value;
+    const labels = { claude: '🟣 Claude', codex: '🔵 Codex', gemini: '🟡 Gemini' };
+    document.getElementById('resultHeading').textContent = `Preview: ${agent[0].toUpperCase()+agent.slice(1)} · ${scope}`;
+    document.getElementById('agentBadge').textContent = `${labels[agent]} · read_context()`;
+  }
+</script>
+</body>
+</html>
