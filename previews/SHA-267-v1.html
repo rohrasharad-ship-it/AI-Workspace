@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Usercon — Portability Scorecard (mockup)</title>
+<style>
+  :root {
+    --paper: #faf8f4;
+    --ink: #2b2620;
+    --muted: #6f6a60;
+    --line: #e6e0d4;
+    --moss: #4f7a5a;
+    --moss-soft: #e7f0e9;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 4px;
+  }
+  h1 { font-size: 22px; margin: 0 0 24px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card h2 {
+    font-size: 15px;
+    margin: 0 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .headline {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .headline .num {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--moss);
+    line-height: 1;
+  }
+  .headline .label {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+  .divider { border-top: 1px solid var(--line); margin: 18px 0; }
+  .row-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .item:last-child { border-bottom: none; }
+  .item .name { font-weight: 500; }
+  .item .path {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pill {
+    background: var(--moss-soft);
+    color: var(--moss);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .snapshot-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--moss);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 24px;
+    line-height: 1.5;
+  }
+  .tag-life {
+    font-size: 11px;
+    background: #f1efe8;
+    color: var(--muted);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Setup / Portability</p>
+    <h1>Portability Scorecard</h1>
+
+    <div class="card">
+      <h2>📊 Cross-vertical reuse — last 14 days</h2>
+      <div class="headline">
+        <span class="num">7</span>
+        <span class="label">reads where a fact from one life area<br />informed a task in another</span>
+      </div>
+      <p class="sub">Built from existing activity-log entries flagged <code>crossVertical: true</code> — no new writes, no new tools.</p>
+
+      <div class="divider"></div>
+
+      <p class="row-title">What drove it</p>
+      <div class="item">
+        <div>
+          <div class="name">"Sleeps before 10pm most nights"</div>
+          <div class="path">Health → read during a Travel flight-time task<span class="tag-life">Health</span><span class="tag-life">Travel</span></div>
+        </div>
+        <span class="pill">×3</span>
+      </div>
+      <div class="item">
+        <div>
+          <div class="name">"Budget-conscious, avoids impulse spend"</div>
+          <div class="path">Finance → read during a Shopping task<span class="tag-life">Finance</span><span class="tag-life">Shopping</span></div>
+        </div>
+        <span class="pill">×2</span>
+      </div>
+      <div class="item">
+        <div>
+          <div class="name">"Prefers quiet, low-stimulation evenings"</div>
+          <div class="path">Home → read during a Creative-time task<span class="tag-life">Home</span><span class="tag-life">Creative</span></div>
+        </div>
+        <span class="pill">×2</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📎 Self-test snapshot</h2>
+      <p class="sub">Copy today's numbers into the 2-week teardown — same data STRATEGY.md's kill line asks for, already assembled.</p>
+      <button class="snapshot-btn">Copy scorecard snapshot</button>
+    </div>
+
+    <p class="note">
+      Mockup only — static HTML, no live data. Real view reads <code>GET /api/activity?crossVertical=true</code>
+      (already implemented per <code>agent-api</code> / <code>context-usage-insights</code> specs) and renders on <code>/setup</code>.
+    </p>
+  </div>
+</body>
+</html>
