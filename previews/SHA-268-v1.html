@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SHA-268 — GitHub Action failure alert (minimal mockup)</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #1a1d21; color: #d1d2d3; margin: 0; padding: 40px; }
+  .note { color: #9a9a9a; font-size: 13px; margin-bottom: 24px; max-width: 560px; }
+  .slack-channel { max-width: 560px; background: #222529; border-radius: 8px; padding: 16px 20px; }
+  .channel-header { color: #ababad; font-size: 13px; margin-bottom: 12px; border-bottom: 1px solid #35373b; padding-bottom: 8px; }
+  .msg { display: flex; gap: 12px; padding: 8px 0; }
+  .avatar { width: 36px; height: 36px; border-radius: 6px; background: #e01e5a; flex-shrink: 0; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .msg-body { flex: 1; }
+  .msg-head { font-size: 14px; }
+  .msg-head b { color: #fff; }
+  .msg-head .time { color: #797a7d; font-size: 12px; margin-left: 6px; }
+  .msg-text { font-size: 14px; line-height: 1.5; margin-top: 2px; }
+  .msg-text a { color: #1d9bd1; }
+  .badge { display: inline-block; background: #3f0f1a; color: #ff6a80; border-radius: 4px; padding: 1px 6px; font-size: 12px; margin-left: 4px; }
+</style>
+</head>
+<body>
+  <div class="note">Minimal-tier mockup for SHA-268 — plain annotated frame, not a real interaction. Shows the proposed shape of a #pm-ops Slack message the moment a scheduled GitHub Action (idea-sweep housekeeping, archive sweep, etc.) finishes with a failure conclusion — instead of the failure sitting silent until the next manual sweep notices it, as happened with the preview-branch cleanup Action (SHA-266).</div>
+  <div class="slack-channel">
+    <div class="channel-header"># pm-ops</div>
+    <div class="msg">
+      <div class="avatar">🤖</div>
+      <div class="msg-body">
+        <div class="msg-head"><b>GitHub</b><span class="time">9:03 AM</span></div>
+        <div class="msg-text">
+          ⚠️ <b>Action failed:</b> Preview branch cleanup <span class="badge">run #2</span><br>
+          Workflow <code>preview-branch-cleanup.yml</code> failed on schedule (was: manual dispatch also failed Jul 21).<br>
+          <a href="#">View run →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
