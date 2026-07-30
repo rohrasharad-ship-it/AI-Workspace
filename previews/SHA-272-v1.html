@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Preview — Send Yourself This Conversation (SHA-272)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg-dark:#111111; --accent:#E8351A; --accent-warm:#FF8C52;
+    --muted:#8A8A8A; --text-inverse:#F5EDE0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--bg-dark); color:var(--text-inverse);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding:40px 16px; position:relative;
+  }
+  .label{
+    position:absolute; top:20px; left:20px; font-family:ui-monospace,monospace;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    border:1px solid rgba(255,255,255,.15); padding:6px 10px; border-radius:20px;
+  }
+  .stage{width:100%; max-width:480px; display:flex; flex-direction:column; align-items:center; gap:12px;}
+  .transcript{
+    width:100%; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    border-radius:16px; padding:14px 16px; font-size:13px; line-height:1.5; color:rgba(245,237,224,.75);
+  }
+  .transcript .me{color:var(--accent-warm); font-family:ui-monospace,monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:2px;}
+  .transcript .them{color:var(--accent); font-family:ui-monospace,monospace; font-size:11px; text-transform:uppercase; letter-spacing:.06em; display:block; margin:10px 0 2px;}
+  .command-bar{
+    width:100%; min-height:52px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(18,15,14,.97), rgba(34,22,18,.97));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.5);
+    border:1px solid rgba(255,255,255,.12);
+    display:flex; align-items:center; gap:12px; padding:6px 16px 6px 6px;
+  }
+  .s-badge{
+    width:36px; height:36px; border-radius:50%; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; font-weight:700; flex:none;
+  }
+  .bar-text{flex:1; font-size:14px; color:rgba(245,237,224,.5);}
+  .recap-link{
+    display:flex; align-items:center; gap:8px; font-size:13px; color:var(--accent-warm);
+    text-decoration:none; padding:8px 4px; animation:fadeIn .5s ease .3s both;
+  }
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .recap-link svg{flex:none;}
+  .preview-mail{
+    width:100%; margin-top:6px; background:#fff; color:#1A1A1A; border-radius:14px; padding:14px 16px;
+    font-size:12.5px; box-shadow:0 20px 50px rgba(0,0,0,.4); animation:fadeIn .5s ease .5s both;
+  }
+  .preview-mail .row{display:flex; gap:8px; padding:3px 0; border-bottom:1px solid #eee;}
+  .preview-mail .row b{width:44px; color:#8A8A8A; font-weight:600;}
+  .preview-mail .body{padding-top:8px; line-height:1.5; color:#333;}
+  .caption{
+    margin-top:22px; text-align:center; color:var(--muted); font-size:13px; max-width:440px; line-height:1.5;
+  }
+  .caption b{color:var(--text-inverse);}
+</style>
+</head>
+<body>
+  <div class="label">Mockup · SHA-272 · Send Yourself This Conversation</div>
+  <div class="stage">
+    <div class="transcript">
+      <span class="me">You asked</span>
+      Why Amadeus after ISB?
+      <span class="them">Sharad's agent</span>
+      Wanted to apply the MBA on a bigger canvas — Amadeus runs a $2B+ business line through a platform transition. Direct 0→1 ownership at that scale is rare.
+    </div>
+    <a class="recap-link" href="#">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+      Email me this conversation
+    </a>
+    <div class="preview-mail">
+      <div class="row"><b>To</b> sharad@rohra.io</div>
+      <div class="row"><b>From</b> you@yourcompany.com</div>
+      <div class="row"><b>Subj</b> Following up after our chat on your site</div>
+      <div class="body">Hi Sharad — I asked your site's agent "Why Amadeus after ISB?" and wanted to follow up directly. Here's a bit about the role I'm hiring for...</div>
+    </div>
+    <div class="command-bar">
+      <div class="s-badge">S</div>
+      <div class="bar-text">Ask Sharad anything</div>
+    </div>
+  </div>
+  <p class="caption">
+    Illustrative only — not final UI. Concept: after a voice exchange, a small link opens a
+    <b>pre-filled mailto draft</b> (client-side only, no server form) recapping the question and
+    answer — turning an ephemeral chat into a real follow-up the visitor can send.
+  </p>
+</body>
+</html>
