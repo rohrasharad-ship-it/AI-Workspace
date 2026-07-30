@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Preview — Welcome Back nudge (SHA-271)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg-primary:#F5EDE0; --bg-dark:#111111; --accent:#E8351A; --accent-warm:#FF8C52;
+    --muted:#8A8A8A; --text-primary:#1A1A1A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--bg-primary); color:var(--text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    padding:40px 16px; position:relative;
+  }
+  .label{
+    position:absolute; top:20px; left:20px; font-family:ui-monospace,monospace;
+    font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    border:1px solid rgba(0,0,0,.12); padding:6px 10px; border-radius:20px;
+  }
+  .stage{max-width:720px; margin:70px auto 0;}
+  /* fake nav pill */
+  .nav{
+    display:flex; align-items:center; justify-content:center; gap:22px;
+    background:rgba(255,255,255,.75); border:1px solid rgba(0,0,0,.08);
+    border-radius:999px; padding:12px 22px; box-shadow:0 8px 24px rgba(0,0,0,.08);
+    font-size:13px; font-weight:600; letter-spacing:.02em; width:fit-content; margin:0 auto;
+  }
+  .nav span{opacity:.55;}
+  .nav span.active{opacity:1; color:var(--accent);}
+  /* welcome back pill, anchored under nav */
+  .welcome-wrap{display:flex; justify-content:center; margin-top:14px;}
+  .welcome{
+    display:flex; align-items:center; gap:10px;
+    background:#111; color:#F5EDE0; border-radius:999px; padding:10px 10px 10px 16px;
+    box-shadow:0 14px 34px rgba(0,0,0,.25); font-size:13.5px;
+    animation:slideIn .45s cubic-bezier(.2,.9,.3,1.2) both;
+    border:1px solid rgba(232,53,26,.4);
+  }
+  @keyframes slideIn{from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);}}
+  .welcome b{color:#FF8C52;}
+  .welcome button{
+    font-family:inherit; font-size:12.5px; font-weight:700; border:none; cursor:pointer;
+    background:var(--accent); color:#fff; padding:7px 14px; border-radius:999px;
+  }
+  .welcome .dismiss{
+    background:transparent; color:rgba(245,237,224,.5); padding:4px 6px; font-size:16px; line-height:1;
+  }
+  .hint{
+    text-align:center; color:var(--muted); font-size:12.5px; margin-top:10px; font-family:ui-monospace,monospace;
+  }
+  .caption{
+    margin-top:40px; text-align:center; color:var(--muted); font-size:13px; max-width:480px;
+    margin-left:auto; margin-right:auto; line-height:1.5;
+  }
+  .caption b{color:var(--text-primary);}
+</style>
+</head>
+<body>
+  <div class="label">Mockup · SHA-271 · Welcome Back nudge</div>
+  <div class="stage">
+    <div class="nav">
+      <span>Hero</span><span class="active">Journey</span><span>About</span><span>Contact</span>
+    </div>
+    <div class="welcome-wrap">
+      <div class="welcome">
+        <span>👋 Welcome back — continue at <b>Impact Analytics</b>?</span>
+        <button>Jump back in</button>
+        <span class="dismiss">✕</span>
+      </div>
+    </div>
+    <p class="hint">appears once, a few seconds after page load, only for returning visitors</p>
+  </div>
+  <p class="caption">
+    Illustrative only — not final UI. Concept: on a repeat visit (detected client-side via
+    <b>localStorage</b>, no accounts/login), a small dismissible pill drops in near the floating nav
+    offering to scroll back to the era or section last viewed.
+  </p>
+</body>
+</html>
