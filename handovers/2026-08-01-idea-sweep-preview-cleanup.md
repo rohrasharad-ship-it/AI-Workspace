@@ -131,3 +131,12 @@ preview/SHA-99-v1   (SHA-99: Canceled)
 4. Delete this handover file once the cleanup is confirmed complete.
 
 **What not to do:** don't force this through the current session's proxy again — the 403 is a session-level restriction, not a transient error; retrying won't help.
+
+## Second, related blocker: routine-log regeneration
+
+`node scripts/generate-routine-log.mjs` also requires `LINEAR_API_KEY` and could
+not be run in this session after appending to `data/sweep-runs.jsonl` (commit
+`776d949`, 2026-08-01 Resume Website entry). Once `LINEAR_API_KEY` is available,
+re-run it to refresh `data/routine-log.json` for the `/routine-log.html`
+dashboard — it will pick up today's ledger entry along with the preview-branch
+cleanup once that's done.
