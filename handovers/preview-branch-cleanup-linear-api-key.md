@@ -9,6 +9,8 @@
 
 Reconfirmed the identical blocker independently: `git push origin --delete preview/SHA-100-v1` returned `HTTP 403` from this session's local git proxy (`127.0.0.1:.../git/rohrasharad-ship-it/AI-Workspace`), and no `LINEAR_API_KEY` was present as a Bash env var. No MCP tool to delete a git ref was found either.
 
+Same missing secret also blocks `node scripts/generate-routine-log.mjs` (idea-sweep routine's final step, per `routines/idea-sweep.md`) — it exits immediately with `error: LINEAR_API_KEY is required` before touching any git ref, so `data/routine-log.json` is stale as of this run and every prior run blocked the same way. Adding the secret fixes both this cleanup workflow and the sandbox dashboard generator in one shot.
+
 This time I fully paginated **every** issue on the Sharad Rohra Linear team (`list_issues` by `team`, not just a partial pass) and cross-referenced against the complete current `preview/*` branch list (137 branches). The list below is the exhaustive, confirmed replacement for the payload two sections down — it resolves the "not 100% exhaustive" caveat from the 2026-08-02 pass.
 
 ## Payload (exhaustive, confirmed 2026-08-03 — supersedes the 2026-08-02 list below)
