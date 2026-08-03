@@ -1,11 +1,53 @@
 # Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
-**From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
+**From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02. Reconfirmed and superseded by idea-sweep for Resume Website, 2026-08-03 (see Update below).
 **Blocked by:** `.github/workflows/preview-branch-cleanup.yml` requires `secrets.LINEAR_API_KEY`, which is not set on this repo. All 3 runs to date (2026-07-21, 2026-07-27, and the one I triggered manually on 2026-08-02, run IDs 29878193147 / 30266096565 / 30772723638) failed identically at the same line: `error: LINEAR_API_KEY is required`. This session also has no Linear API key as a Bash env var (only Linear MCP tool access, which the shell script can't use), no working `git push` (proxy returns 403 on `push --delete`), and no MCP tool that deletes a git ref — so neither the automated path nor a manual fallback could complete this session.
 **Action:** Add `LINEAR_API_KEY` as a repository secret (Settings → Secrets and variables → Actions → New repository secret), then either re-run the workflow via `workflow_dispatch` or wait for the next Monday 09:00 UTC schedule. That single fix clears the entire backlog below — no per-branch manual work needed once the secret exists.
 
-## Payload
+## Update 2026-08-03 (Resume Website idea-sweep, spec-drift step 11)
+
+Reconfirmed the identical blocker independently: `git push origin --delete preview/SHA-100-v1` returned `HTTP 403` from this session's local git proxy (`127.0.0.1:.../git/rohrasharad-ship-it/AI-Workspace`), and no `LINEAR_API_KEY` was present as a Bash env var. No MCP tool to delete a git ref was found either.
+
+This time I fully paginated **every** issue on the Sharad Rohra Linear team (`list_issues` by `team`, not just a partial pass) and cross-referenced against the complete current `preview/*` branch list (137 branches). The list below is the exhaustive, confirmed replacement for the payload two sections down — it resolves the "not 100% exhaustive" caveat from the 2026-08-02 pass.
+
+## Payload (exhaustive, confirmed 2026-08-03 — supersedes the 2026-08-02 list below)
+
+**Delete** (issue is Done/Canceled/Duplicate, or Backlog/Todo but no longer `spec-needed`) — 101 branches:
+
+```
+preview/SHA-100-v1, preview/SHA-101-v1, preview/SHA-102-v1, preview/SHA-103-v1, preview/SHA-104-v1,
+preview/SHA-115-v1, preview/SHA-116-v1, preview/SHA-117-v1, preview/SHA-123-v1, preview/SHA-124-v1,
+preview/SHA-125-v1, preview/SHA-126-v1, preview/SHA-128-v1, preview/SHA-129-v1, preview/SHA-130-v1,
+preview/SHA-131-v1, preview/SHA-132-v1, preview/SHA-133-v1, preview/SHA-134-v1, preview/SHA-135-v1,
+preview/SHA-138-v1, preview/SHA-139-v1, preview/SHA-140-v1, preview/SHA-141-v1, preview/SHA-142-v1,
+preview/SHA-143-v1, preview/SHA-144-v1, preview/SHA-145-v1, preview/SHA-147-v1, preview/SHA-148-v1,
+preview/SHA-149-v1, preview/SHA-152-v1, preview/SHA-158-v1, preview/SHA-159-v1, preview/SHA-160-v1,
+preview/SHA-161-v1, preview/SHA-163-v1, preview/SHA-164-v1, preview/SHA-173-v1, preview/SHA-176-v1,
+preview/SHA-18-v1, preview/SHA-19-v1, preview/SHA-20-v1, preview/SHA-201-v1, preview/SHA-202-v1,
+preview/SHA-231-v1, preview/SHA-232-v1, preview/SHA-235-v1, preview/SHA-236-v1, preview/SHA-237-v1,
+preview/SHA-238-v1, preview/SHA-239-v1, preview/SHA-24-v1, preview/SHA-240-v1, preview/SHA-241-v1,
+preview/SHA-242-v1, preview/SHA-243-v1, preview/SHA-244-v1, preview/SHA-26-v1, preview/SHA-28-v1,
+preview/SHA-29-v1, preview/SHA-30-v1, preview/SHA-31-v1, preview/SHA-33-v1, preview/SHA-37-v1,
+preview/SHA-38-v1, preview/SHA-44-v1, preview/SHA-47-v1, preview/SHA-48-v1, preview/SHA-50-v1,
+preview/SHA-51-v1, preview/SHA-55-v1, preview/SHA-56-v1, preview/SHA-57-v1, preview/SHA-58-v2,
+preview/SHA-64-v1, preview/SHA-65-v1, preview/SHA-66-v1, preview/SHA-71-v1, preview/SHA-72-v1,
+preview/SHA-73-v1, preview/SHA-74-v1, preview/SHA-75-v1, preview/SHA-76-v1, preview/SHA-81-v1,
+preview/SHA-83-v1, preview/SHA-84-v1, preview/SHA-85-v1, preview/SHA-86-v1, preview/SHA-87-v1,
+preview/SHA-88-v1, preview/SHA-89-v1, preview/SHA-91-v1, preview/SHA-92-v1, preview/SHA-93-v1,
+preview/SHA-94-v1, preview/SHA-95-v1, preview/SHA-96-v1, preview/SHA-97-v1, preview/SHA-98-v1,
+preview/SHA-99-v1
+```
+
+**Also safe to delete, but named outside the automated script's regex** (`^preview/([A-Z]+-[0-9]+)-v([0-9]+)$` requires uppercase team key and a literal `-v<n>` suffix — these won't be picked up by `cleanup-preview-branches.sh` even once the secret is added, so delete manually or fix the branch name pattern):
+`preview/SHA-25-build` (issue SHA-25 is Canceled), `preview/sha-169-v1`, `preview/sha-170-v1`, `preview/sha-171-v1` (lowercase `sha-` — issues SHA-169/170/171 are all Canceled per Linear).
+
+**Do NOT delete** (still Backlog + `spec-needed`, actively awaiting spec/triage) — 20 branches, confirmed current as of 2026-08-03:
+`preview/SHA-251-v1, preview/SHA-252-v1, preview/SHA-253-v1, preview/SHA-254-v1, preview/SHA-255-v1, preview/SHA-256-v1, preview/SHA-258-v1, preview/SHA-259-v1, preview/SHA-260-v1, preview/SHA-261-v1, preview/SHA-262-v1, preview/SHA-263-v1, preview/SHA-264-v1, preview/SHA-265-v1, preview/SHA-267-v1, preview/SHA-268-v1, preview/SHA-269-v1, preview/SHA-270-v1, preview/SHA-271-v1, preview/SHA-272-v1`
+
+Also present but **not** `preview/*` — do not touch: `test-proxy-check-delete-me`, `test-push-permission-check`, `test-push-scope-check` (out of scope for this cleanup; only `preview/*` branches are ever authorized for deletion per `agents/shared/visual-specs.md`).
+
+## Payload (2026-08-02, partial pass — kept for history, use the exhaustive list above instead)
 
 Using Linear MCP (`list_issues` across the whole workspace, all pages) cross-referenced against every `preview/*` branch in this repo, I confirmed these branches are safe to delete under the rule in `agents/spec-drift.md` step 11 (issue no longer `spec-needed`, or terminal status — Done/Canceled/Duplicate):
 
