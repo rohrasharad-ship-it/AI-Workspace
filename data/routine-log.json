@@ -1,30 +1,119 @@
 {
-  "generatedAt": "2026-07-27T12:17:42.043Z",
+  "generatedAt": "2026-08-04T23:43:34.656Z",
   "global": {
-    "pending": 12,
+    "pending": 30,
     "createdToday": 0,
-    "bugs": 0,
-    "features": 12,
-    "bugPercent": 0,
-    "featurePercent": 100,
-    "sweeps30d": 3,
+    "bugs": 1,
+    "features": 29,
+    "bugPercent": 3,
+    "featurePercent": 97,
+    "sweeps30d": 5,
     "projectCount": 5
   },
   "projects": [
     {
-      "name": "PM OS",
+      "name": "Resume Website",
       "pendingBugs": 0,
-      "pendingFeatures": 2,
-      "pendingTotal": 2,
+      "pendingFeatures": 7,
+      "pendingTotal": 7,
       "quiet": false,
       "sweeps": [
+        {
+          "date": "Aug 4",
+          "filedBugs": 0,
+          "filedFeatures": 0,
+          "clean": true,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "filed": 0,
+          "open": 0
+        },
+        {
+          "date": "Jul 30",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "filed": 3,
+          "open": 3
+        },
+        {
+          "date": "Jul 29",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "filed": 1,
+          "open": 1
+        },
+        {
+          "date": "Jul 28",
+          "filedBugs": 0,
+          "filedFeatures": 2,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 2,
+          "filed": 2,
+          "open": 2
+        },
+        {
+          "date": "Jul 23",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "filed": 3,
+          "open": 0
+        }
+      ]
+    },
+    {
+      "name": "AI Workspace (PM OS)",
+      "pendingBugs": 0,
+      "pendingFeatures": 6,
+      "pendingTotal": 6,
+      "quiet": false,
+      "sweeps": [
+        {
+          "date": "Jul 29",
+          "filedBugs": 0,
+          "filedFeatures": 2,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 2,
+          "filed": 2,
+          "open": 2
+        },
+        {
+          "date": "Jul 28",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "filed": 1,
+          "open": 1
+        },
+        {
+          "date": "Jul 27",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "filed": 3,
+          "open": 3
+        },
         {
           "date": "Jul 23",
           "filedBugs": 0,
           "filedFeatures": 5,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 5,
           "open": 0
         },
@@ -32,117 +121,58 @@
           "date": "Jul 22",
           "filedBugs": 0,
           "filedFeatures": 5,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 5,
           "open": 0
-        },
-        {
-          "date": "Jul 21",
-          "filedBugs": 0,
-          "filedFeatures": 4,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 4,
-          "open": 0
-        },
-        {
-          "date": "Jul 20",
-          "filedBugs": 0,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 1,
-          "open": 0
-        },
-        {
-          "date": "Jul 18",
-          "filedBugs": 0,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 1,
-          "open": 0
-        }
-      ]
-    },
-    {
-      "name": "Resume Website",
-      "pendingBugs": 0,
-      "pendingFeatures": 3,
-      "pendingTotal": 3,
-      "quiet": false,
-      "sweeps": [
-        {
-          "date": "Jul 23",
-          "filedBugs": 0,
-          "filedFeatures": 3,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 3,
-          "open": 0
-        },
-        {
-          "date": "Jul 21",
-          "filedBugs": 0,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 1,
-          "open": 0
-        },
-        {
-          "date": "Jul 4",
-          "filedBugs": 0,
-          "filedFeatures": 5,
-          "openBugs": 0,
-          "openFeatures": 1,
-          "clean": false,
-          "filed": 5,
-          "open": 1
-        },
-        {
-          "date": "Jul 3",
-          "filedBugs": 0,
-          "filedFeatures": 3,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 3,
-          "open": 0
-        },
-        {
-          "date": "Jul 2",
-          "filedBugs": 0,
-          "filedFeatures": 6,
-          "openBugs": 0,
-          "openFeatures": 1,
-          "clean": false,
-          "filed": 6,
-          "open": 1
         }
       ]
     },
     {
       "name": "AI Landscape 2026",
-      "pendingBugs": 0,
-      "pendingFeatures": 0,
-      "pendingTotal": 0,
-      "quiet": true,
+      "pendingBugs": 1,
+      "pendingFeatures": 5,
+      "pendingTotal": 6,
+      "quiet": false,
       "sweeps": [
+        {
+          "date": "Aug 2",
+          "filedBugs": 0,
+          "filedFeatures": 0,
+          "clean": true,
+          "openBugs": 0,
+          "openFeatures": 0,
+          "filed": 0,
+          "open": 0
+        },
+        {
+          "date": "Jul 28",
+          "filedBugs": 1,
+          "filedFeatures": 4,
+          "clean": false,
+          "openBugs": 1,
+          "openFeatures": 4,
+          "filed": 5,
+          "open": 5
+        },
+        {
+          "date": "Jul 27",
+          "filedBugs": 0,
+          "filedFeatures": 1,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 1,
+          "filed": 1,
+          "open": 1
+        },
         {
           "date": "Jul 23",
           "filedBugs": 0,
           "filedFeatures": 1,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 1,
           "open": 0
         },
@@ -150,40 +180,10 @@
           "date": "Jul 22",
           "filedBugs": 0,
           "filedFeatures": 3,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 3,
-          "open": 0
-        },
-        {
-          "date": "Jul 21",
-          "filedBugs": 0,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 1,
-          "open": 0
-        },
-        {
-          "date": "Jul 17",
-          "filedBugs": 1,
-          "filedFeatures": 5,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 6,
-          "open": 0
-        },
-        {
-          "date": "Jul 15",
-          "filedBugs": 1,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 2,
           "open": 0
         }
       ]
@@ -191,27 +191,37 @@
     {
       "name": "Application Agent",
       "pendingBugs": 0,
-      "pendingFeatures": 4,
-      "pendingTotal": 4,
+      "pendingFeatures": 6,
+      "pendingTotal": 6,
       "quiet": false,
       "sweeps": [
+        {
+          "date": "Jul 27",
+          "filedBugs": 0,
+          "filedFeatures": 5,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "filed": 5,
+          "open": 3
+        },
         {
           "date": "Jul 23",
           "filedBugs": 0,
           "filedFeatures": 8,
-          "openBugs": 0,
-          "openFeatures": 3,
           "clean": false,
+          "openBugs": 0,
+          "openFeatures": 2,
           "filed": 8,
-          "open": 3
+          "open": 2
         },
         {
           "date": "Jul 22",
           "filedBugs": 0,
           "filedFeatures": 4,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 4,
           "open": 0
         },
@@ -219,9 +229,9 @@
           "date": "Jul 21",
           "filedBugs": 0,
           "filedFeatures": 4,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 4,
           "open": 0
         },
@@ -229,38 +239,48 @@
           "date": "Jul 18",
           "filedBugs": 0,
           "filedFeatures": 9,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 1,
-          "clean": false,
           "filed": 9,
           "open": 1
-        },
-        {
-          "date": "Jul 13",
-          "filedBugs": 0,
-          "filedFeatures": 10,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 10,
-          "open": 0
         }
       ]
     },
     {
       "name": "Usercon",
       "pendingBugs": 0,
-      "pendingFeatures": 3,
-      "pendingTotal": 3,
+      "pendingFeatures": 5,
+      "pendingTotal": 5,
       "quiet": false,
       "sweeps": [
+        {
+          "date": "Jul 29",
+          "filedBugs": 0,
+          "filedFeatures": 2,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 2,
+          "filed": 2,
+          "open": 2
+        },
+        {
+          "date": "Jul 28",
+          "filedBugs": 0,
+          "filedFeatures": 3,
+          "clean": false,
+          "openBugs": 0,
+          "openFeatures": 3,
+          "filed": 3,
+          "open": 3
+        },
         {
           "date": "Jul 24",
           "filedBugs": 0,
           "filedFeatures": 3,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 3,
           "open": 0
         },
@@ -268,40 +288,20 @@
           "date": "Jul 23",
           "filedBugs": 0,
           "filedFeatures": 22,
-          "openBugs": 0,
-          "openFeatures": 3,
           "clean": false,
+          "openBugs": 0,
+          "openFeatures": 0,
           "filed": 22,
-          "open": 3
+          "open": 0
         },
         {
           "date": "Jul 22",
           "filedBugs": 0,
           "filedFeatures": 13,
+          "clean": false,
           "openBugs": 0,
           "openFeatures": 0,
-          "clean": false,
           "filed": 13,
-          "open": 0
-        },
-        {
-          "date": "Jul 20",
-          "filedBugs": 0,
-          "filedFeatures": 1,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 1,
-          "open": 0
-        },
-        {
-          "date": "Jul 19",
-          "filedBugs": 0,
-          "filedFeatures": 4,
-          "openBugs": 0,
-          "openFeatures": 0,
-          "clean": false,
-          "filed": 4,
           "open": 0
         }
       ]
