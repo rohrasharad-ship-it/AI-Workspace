@@ -34,3 +34,31 @@ Still blocked, same root cause: no `LINEAR_API_KEY` in this session's env either
 - **Branch count has grown**: `preview/*` now runs from `preview/SHA-18-v1` through `preview/SHA-272-v1` (~121 branches total, plus 3 stray lowercase `preview/sha-169/170/171-v1` branches that don't match the script's `[A-Z]+-[0-9]+` naming regex and would be skipped/reported as unrecognized by the script, same as `preview/SHA-25-build`). Cross-checking current Linear state for all `SHA-*` issues (not just one project) suggests roughly 90+ of these are now orphaned (issue Done/Canceled/Duplicate, or no longer `spec-needed`), and roughly 20 are still legitimately `spec-needed` and should be kept. Per this handover's own warning above, that count is an unverified cross-check, not something to act on directly — it's here only to show the growing scale/urgency of getting the real script run.
 
 No further action taken this run beyond confirming the blocker persists and is growing. Next session with both `LINEAR_API_KEY` and real push access should just run the script per the instructions above.
+
+---
+
+## Update — 2026-08-05 (idea-sweep for Resume Website)
+
+Still blocked, same two root causes, re-confirmed independently this run:
+
+- `env | grep -i linear` in this session's shell — no match, `LINEAR_API_KEY` not set.
+- Tested push-delete directly against a **nonexistent** branch name
+  (`preview/SHA-000000-nonexistent-test`, so no real ref was ever at risk) to
+  isolate the proxy-permission question from the script: `git push origin
+  --delete refs/heads/preview/SHA-000000-nonexistent-test` → `HTTP 403` from
+  the git proxy, `send-pack: unexpected disconnect`. Same failure mode as the
+  2026-08-02 update above. Only this session's own `claude/*` working branch
+  and this `handover/*` branch appear push-writable.
+- Per this handover's own instruction ("Do not hand-roll the branch-deletion
+  logic outside the script"), did **not** attempt to reconstruct the
+  keep/delete list via Linear MCP + raw `git push --delete` as a workaround —
+  respecting that guidance rather than re-litigating it.
+- `preview/*` branch count is now **~140+** (`git branch -r --list
+  'origin/preview/*' | wc -l`), up from ~121 on 2026-08-02. Growth continues
+  at roughly the pace idea-sweep runs create new issues.
+
+No deletions performed this run. Reported to the Resume Website idea-sweep
+consolidated Slack summary as "0 deleted — blocked, see handover." Next
+session with both `LINEAR_API_KEY` and real (non-proxied) push access should
+run the script per the instructions above; until then, every idea-sweep run
+across every project will keep hitting this same wall at step 11.
