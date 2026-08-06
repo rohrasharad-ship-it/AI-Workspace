@@ -34,3 +34,16 @@ Also present but **not** `preview/*` — do not touch: `test-proxy-check-delete-
 2. Trigger `preview-branch-cleanup.yml` via `workflow_dispatch` (or let the Monday cron do it).
 3. Confirm the run's conclusion is `success` and check the job log for the actual delete count.
 4. If it succeeds, this handover file can be deleted — the backlog above will be cleared programmatically, no need to hand-verify my list against it.
+
+## Update — 2026-08-06 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved. The scheduled Monday run (2026-08-03, run ID 30813814116) also failed
+with the identical `LINEAR_API_KEY is required` error — 4 failures now. This session hit
+the same wall independently: no `LINEAR_API_KEY` env var, `git push origin --delete` on a
+confirmed-safe branch (`preview/SHA-100-v1`) still returns HTTP 403 from the proxy, and no
+GitHub MCP tool exists to delete a ref. Also newly confirmed: `node
+scripts/generate-routine-log.mjs` (the routine-log dashboard refresh, also referenced from
+`routines/idea-sweep.md`) fails at the same line for the same reason — so the missing
+secret is now blocking two structural-backup paths, not just this one. No new branches
+deleted this run; the payload list above has not been re-verified but is likely still
+accurate since nothing else can act on it. Fix remains: add the repo secret.
