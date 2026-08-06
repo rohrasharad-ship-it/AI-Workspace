@@ -1,4 +1,4 @@
-# Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
+Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
@@ -34,3 +34,41 @@ Also present but **not** `preview/*` — do not touch: `test-proxy-check-delete-
 2. Trigger `preview-branch-cleanup.yml` via `workflow_dispatch` (or let the Monday cron do it).
 3. Confirm the run's conclusion is `success` and check the job log for the actual delete count.
 4. If it succeeds, this handover file can be deleted — the backlog above will be cleared programmatically, no need to hand-verify my list against it.
+
+## Update — 2026-08-06 (idea-sweep for Usercon, spec-drift step 11)
+
+Still blocked, same root cause: no `LINEAR_API_KEY` secret for the Action, no
+`LINEAR_API_KEY` env var in this session either, `git push origin --delete`
+still returns `HTTP 403` from this session's egress proxy (org policy blocks
+raw git-over-HTTPS push to github.com — see `/root/.ccr/README.md`, "403/407
+from the proxy... report the blocked host, do not retry or route around it"),
+and the GitHub MCP server available here still has no branch/ref-delete tool
+(`create_branch`, `delete_file`, `create_or_update_file` exist; nothing to
+delete a ref). Confirmed both blockers are still open as of today, four days
+after the original handover.
+
+**This time I paginated Linear MCP `list_issues` workspace-wide to completion
+(2 pages, no project filter, 250/page) and cross-referenced against the full,
+current `origin/preview/*` branch list (125 branches).** This closes the gap
+the original handover flagged ("SHA-18/19/20/24/26/28/29/30 predate the range
+I paginated through"). Full re-derived result, current as of 2026-08-06:
+
+- **101 branches confirmed safe to delete** — this is the original list above
+  **plus** `preview/SHA-18-v1, SHA-19-v1, SHA-20-v1, SHA-24-v1, SHA-26-v1,
+  SHA-28-v1, SHA-29-v1, SHA-30-v1` (all Canceled or Done in Linear, none
+  `spec-needed`).
+- **20 branches to keep** — unchanged from the original list (SHA-251 through
+  SHA-272, still Backlog + `spec-needed`).
+- **One correction to the original list:** `preview/sha-169-v1`,
+  `preview/sha-170-v1`, `preview/sha-171-v1` (lowercase `sha-` prefix) are
+  semantically safe to delete (their issues are Canceled) but the actual
+  script's branch-name regex (`^preview/([A-Z]+-[0-9]+)-v([0-9]+)$`) is
+  case-sensitive and will **skip** them without evaluating, same as
+  `preview/SHA-25-build` (wrong suffix shape, no `-vN`). If someone runs the
+  script itself rather than deleting by hand, expect these 4 to survive the
+  run and need a manual `git push origin --delete` (or a regex fix in the
+  script as a small follow-up).
+
+No new branches need creating or updating this run — this update only
+confirms and completes the existing backlog list. The fix is still the same
+single action: add the `LINEAR_API_KEY` repo secret.
