@@ -2,7 +2,7 @@
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
-**Blocked by:** `.github/workflows/preview-branch-cleanup.yml` requires `secrets.LINEAR_API_KEY`, which is not set on this repo. All 3 runs to date (2026-07-21, 2026-07-27, and the one I triggered manually on 2026-08-02, run IDs 29878193147 / 30266096565 / 30772723638) failed identically at the same line: `error: LINEAR_API_KEY is required`. This session also has no Linear API key as a Bash env var (only Linear MCP tool access, which the shell script can't use), no working `git push` (proxy returns 403 on `push --delete`), and no MCP tool that deletes a git ref — so neither the automated path nor a manual fallback could complete this session.
+**Blocked by:** `.github/workflows/preview-branch-cleanup.yml` requires `secrets.LINEAR_API_KEY`, which is not set on this repo. All runs to date (2026-07-21, 2026-07-27, 2026-08-02, 2026-08-03) failed identically at the same line: `error: LINEAR_API_KEY is required`. This session also has no Linear API key as a Bash env var (only Linear MCP tool access, which the shell script can't use), no working `git push` (proxy returns 403 on `push --delete`), and no MCP tool that deletes a git ref — so neither the automated path nor a manual fallback could complete this session.
 **Action:** Add `LINEAR_API_KEY` as a repository secret (Settings → Secrets and variables → Actions → New repository secret), then either re-run the workflow via `workflow_dispatch` or wait for the next Monday 09:00 UTC schedule. That single fix clears the entire backlog below — no per-branch manual work needed once the secret exists.
 
 ## Payload
@@ -47,3 +47,18 @@ scripts/generate-routine-log.mjs` (the routine-log dashboard refresh, also refer
 secret is now blocking two structural-backup paths, not just this one. No new branches
 deleted this run; the payload list above has not been re-verified but is likely still
 accurate since nothing else can act on it. Fix remains: add the repo secret.
+
+## Update — 2026-08-07 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved, independently re-confirmed a fourth time. `env | grep -i linear` — no
+match. Tested `git push origin --delete refs/heads/preview/SHA-000000-nonexistent-test-idea-sweep`
+against a nonexistent ref (no real branch at risk) from a fresh clone — same `HTTP 403`,
+`send-pack: unexpected disconnect` failure as every prior session. `preview/*` branch count
+is now ~155 (through at least `preview/SHA-272-v1`, plus the 3 stray lowercase
+`sha-169/170/171-v1` branches). Per this handover's own instruction, did not hand-roll the
+deletion logic via Linear MCP + raw git push. Application Agent's own idea-sweep run this
+cycle skipped issue-filing entirely (project at cap, 6 active pipeline issues ≥ 5) — this
+housekeeping step ran regardless per `routines/idea-sweep.md`. Reported to the Application
+Agent idea-sweep Slack summary as "0 deleted — blocked, see handover." Fix remains
+unchanged: add `LINEAR_API_KEY` as a repo secret — that single fix also unblocks the
+`preview-branch-cleanup.yml` scheduled workflow and `generate-routine-log.mjs`.
