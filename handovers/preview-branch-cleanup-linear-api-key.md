@@ -47,3 +47,16 @@ scripts/generate-routine-log.mjs` (the routine-log dashboard refresh, also refer
 secret is now blocking two structural-backup paths, not just this one. No new branches
 deleted this run; the payload list above has not been re-verified but is likely still
 accurate since nothing else can act on it. Fix remains: add the repo secret.
+
+## Update — 2026-08-07 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+Still unresolved. Re-confirmed both failure points directly in this session: `bash
+scripts/cleanup-preview-branches.sh --dry-run` and `node
+scripts/generate-routine-log.mjs` both exit 1 with `error: LINEAR_API_KEY is required` —
+no `LINEAR_API_KEY` env var is present in this session either. Re-listed `origin/preview/*`
+(135 branches) and it matches the 2026-08-06 state plus a few newer Resume Website items
+(`SHA-263`, `SHA-265`, `SHA-267`, `SHA-268` alongside the already-noted `SHA-262`,
+`SHA-264`, `SHA-269`, `SHA-270`, `SHA-271`, `SHA-272`) — all still Backlog + `spec-needed`
+per this run's Linear check, so none of those are deletable regardless of the key. No
+branches deleted, no dashboard regenerated this run. Fix remains: add the `LINEAR_API_KEY`
+repo secret; nothing session-side can substitute for it.
