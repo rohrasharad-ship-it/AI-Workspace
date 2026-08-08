@@ -1,4 +1,4 @@
-# Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
+it # Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
@@ -47,3 +47,20 @@ scripts/generate-routine-log.mjs` (the routine-log dashboard refresh, also refer
 secret is now blocking two structural-backup paths, not just this one. No new branches
 deleted this run; the payload list above has not been re-verified but is likely still
 accurate since nothing else can act on it. Fix remains: add the repo secret.
+
+## Update — 2026-08-08 (spec-drift housekeeping, idea-sweep run for Usercon)
+
+Still unresolved — 5th consecutive independent hit on the same blocker. This session
+(Claude Code, not Cursor cloud) has GitHub MCP tools only, no shell git/gh access is
+permitted for GitHub interactions per this session's own operating instructions, and no
+Linear API key as a raw env var. Confirmed again: no MCP tool exists anywhere in this
+session's toolset to delete a git ref. Branch count has grown since the last update —
+`preview/SHA-251` through `preview/SHA-272` plus a `sha-169`/`sha-170`/`sha-171` lowercase
+trio are now present in addition to everything listed above, and the Usercon project's own
+issue set (SHA-257, SHA-258, SHA-259 all still Backlog + `spec-needed` as of this run —
+confirmed via Linear MCP) confirms `preview/SHA-258-v1` and `preview/SHA-259-v1` still
+belong on the do-not-delete list. Separately, `openspec/changes/` in this repo currently
+has no active (non-archived) change folders, so step 12 (archive housekeeping) had nothing
+to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
+unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
+shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
