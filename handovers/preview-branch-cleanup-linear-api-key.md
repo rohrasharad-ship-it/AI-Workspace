@@ -64,3 +64,39 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-08 (idea-sweep run for Resume Website, issue-cap pre-flight — steps 10-11 only)
+
+Still unresolved — 6th consecutive independent hit, same session-type as the previous
+update (this session also has `git` CLI + a `GITHUB_TOKEN` env var, unlike Cursor cloud
+sessions, but the push itself is still rejected: `git push origin --delete
+preview/SHA-100-v1` returned `HTTP 403` / `RPC failed` from the proxy on every one of 105
+attempted deletions this run, and no LINEAR_API_KEY env var is set for the shell script
+either). Resume Website itself was at the issue cap (7 active pipeline issues ≥ 5), so this
+run only executed spec-drift steps 10-11, not full gap-filing.
+
+**Full re-verification this run** (Linear MCP `list_issues` across the whole `Sharad Rohra`
+team, both pages, cross-referenced against all 125 current `preview/*` branches — a
+strictly larger and fresher pull than any prior update): confirms the exact same 105-branch
+delete-list as implied above, now fully exhaustive and version-checked (no branch is an
+older version of another for the same issue — every issue has exactly one preview branch
+except SHA-58, which only has a v2, no orphaned v1). The 20 branches on the keep-list are
+unchanged in shape but the specific issue IDs have shifted: **SHA-251 through SHA-272**
+(all Backlog + `spec-needed` as of this run) are the current keep-list — SHA-257 and
+SHA-266 also exist as Backlog/spec-needed issues in Linear but have no corresponding
+preview branch, so they don't appear in either list. Full computed delete-list (105
+branches, superset of everything in the original payload above plus branches created
+since): SHA-18, SHA-19, SHA-20, SHA-24, SHA-25-build, SHA-26, SHA-28, SHA-29, SHA-30,
+SHA-31, SHA-33, SHA-37, SHA-38, SHA-44, SHA-47, SHA-48, SHA-50, SHA-51, SHA-55, SHA-56,
+SHA-57, SHA-58-v2, SHA-64, SHA-65, SHA-66, SHA-71, SHA-72, SHA-73, SHA-74, SHA-75, SHA-76,
+SHA-81, SHA-83, SHA-84, SHA-85, SHA-86, SHA-87, SHA-88, SHA-89, SHA-91, SHA-92, SHA-93,
+SHA-94, SHA-95, SHA-96, SHA-97, SHA-98, SHA-99, SHA-100, SHA-101, SHA-102, SHA-103,
+SHA-104, SHA-115, SHA-116, SHA-117, SHA-123, SHA-124, SHA-125, SHA-126, SHA-128, SHA-129,
+SHA-130, SHA-131, SHA-132, SHA-133, SHA-134, SHA-135, SHA-138, SHA-139, SHA-140, SHA-141,
+SHA-142, SHA-143, SHA-144, SHA-145, SHA-147, SHA-148, SHA-149, SHA-152, SHA-158, SHA-159,
+SHA-160, SHA-161, SHA-163, SHA-164, sha-169, sha-170, sha-171, SHA-173, SHA-176, SHA-201,
+SHA-202, SHA-231, SHA-232, SHA-235, SHA-236, SHA-237, SHA-238, SHA-239, SHA-240, SHA-241,
+SHA-242, SHA-243, SHA-244. Nothing was deleted this run — fix remains unchanged: add the
+`LINEAR_API_KEY` repo secret so the scheduled Action's real `git push` access can finally
+clear this end to end (its git push does not go through whatever is rejecting these
+sessions' pushes with 403).
