@@ -64,3 +64,18 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-09 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved — 6th consecutive independent hit. This session (Claude Code) has a real
+local git checkout with push access, unlike the prior MCP-only session, so I tested directly:
+`env | grep -i linear` finds no `LINEAR_API_KEY`, and `git push origin --delete
+refs/heads/preview/this-branch-does-not-exist-test` still returns `HTTP 403` from the proxy
+(same failure mode as the 2026-08-02 report, now confirmed with real git rather than
+inferred). Remote branch count is now 125 `preview/*` branches (`git ls-remote --heads
+origin 'preview/*'`), up from the last count — did not re-triage all 125 against current
+Linear status individually since deletion is blocked either way and the existing payload
+list above already covers the bulk of them; a future session with a working delete path
+should re-run the script fresh rather than trust either list as current. Application Agent's
+own project stayed at cap this run (6 active pipeline issues), so no new preview branches
+were created by this session. Fix remains unchanged: add the `LINEAR_API_KEY` repo secret.
