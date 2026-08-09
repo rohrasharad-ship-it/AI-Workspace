@@ -64,3 +64,22 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-09 (spec-drift housekeeping, idea-sweep run for Usercon)
+
+Still unresolved — 6th consecutive independent hit on the same blocker. Usercon was at
+the issue cap this cycle (5 active pipeline issues: SHA-257, SHA-258, SHA-259, SHA-265,
+SHA-267, all still Backlog + `spec-needed`), so this run did steps 10-11 only, no new
+issues filed. Step 10 (stale-issue sweep) cross-checked all 5 Backlog issues against the
+current Usercon codebase (`scripts/usercon-mcp-server.mjs`, `src/components/review-workspace.tsx`,
+`src/`) and found none already shipped — 0 flagged, all genuine open gaps. Step 11 hit the
+identical wall: no `LINEAR_API_KEY` env var in this session, GitHub MCP has no
+ref-deletion tool, and this session's own operating instructions route all GitHub
+interaction through GitHub MCP rather than shell `git`/`gh`, so no fallback path exists
+here either. `preview/*` branch count on `origin` is now 125 (confirmed via
+`git ls-remote --heads`), up from the last count — the backlog keeps growing every cycle
+this stays unfixed. Step 12 (OpenSpec archive sweep) again had nothing to do:
+`openspec/changes/` in this repo contains only the `archive/` folder, no active change
+folders. Fix remains unchanged and is now the single highest-leverage unblock across every
+project's idea-sweep housekeeping: add the `LINEAR_API_KEY` repository secret so the
+scheduled Action can clear this end to end.
