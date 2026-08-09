@@ -1,1 +1,170 @@
-IyBIYW5kb3ZlcjogaWRlYS1zd2VlcCBwcmV2aWV3LWJyYW5jaCBjbGVhbnVwIGNvdWxkIG5vdCBkZWxldGUgYnJhbmNoZXMgKG5vIHJlZi1kZWxldGUgcGVybWlzc2lvbikKCioqRm9yOioqIEFueSBhZ2VudC9zZXNzaW9uIHdpdGggYGdpdCBwdXNoIG9yaWdpbiAtLWRlbGV0ZWAgb3IgYSBHaXRIdWIgcmVmLWRlbGV0ZQpjYXBhYmlsaXR5IGFnYWluc3QgYHJvaHJhc2hhcmFkLXNoaXAtaXQvQUktV29ya3NwYWNlYAoqKkZyb206KiogaWRlYS1zd2VlcCByb3V0aW5lIChzcGVjLWRyaWZ0IHN0ZXAgMTEsIG9yY2hlc3RyYXRpbmcgc2Vzc2lvbiksIHRyaWdnZXJlZApmb3IgQUkgTGFuZHNjYXBlLCAyMDI2LTA4LTA5CioqQmxvY2tlZCBieToqKiBgZ2l0IHB1c2ggb3JpZ2luIC0tZGVsZXRlIDxicmFuY2g+YCByZXR1cm5zIGBIVFRQIDQwM2AgZm9yIHRoaXMKc2Vzc2lvbidzIEdpdEh1YiBjcmVkZW50aWFsLCBldmVuIGZvciBhIGJyYW5jaCB0aGUgc2FtZSBzZXNzaW9uIGp1c3QgY3JlYXRlZAppdHNlbGYgdHdvIG1pbnV0ZXMgZWFybGllciAoY29uZmlybWVkIG5vdCBhIHN0YWxlL3Byb3RlY3RlZC1icmFuY2ggaXNzdWUg4oCUCm5vcm1hbCBicmFuY2ggY3JlYXRpb24gYW5kIGNvbnRlbnQgcHVzaGVzIHN1Y2NlZWQgZmluZSwgb25seSByZWYgZGVsZXRpb24gaXMKcmVqZWN0ZWQpLiBObyBHaXRIdWIgTUNQIHRvb2wgaW4gdGhpcyBzZXNzaW9uJ3MgdG9vbHNldCBleHBvc2VzIGJyYW5jaC9yZWYKZGVsZXRpb24gZWl0aGVyIChgY3JlYXRlX2JyYW5jaGAgZXhpc3RzOyB0aGVyZSBpcyBubyBgZGVsZXRlX2JyYW5jaGApLgoqKkFjdGlvbjoqKiBEZWxldGUgdGhlIDEwMSBvcnBoYW5lZCBgcHJldmlldy8qYCBicmFuY2hlcyBsaXN0ZWQgYmVsb3cgZnJvbQpgcm9ocmFzaGFyYWQtc2hpcC1pdC9BSS1Xb3Jrc3BhY2VgLCBjb21wdXRlZCBieSByZXBsaWNhdGluZwpgc2NyaXB0cy9jbGVhbnVwLXByZXZpZXctYnJhbmNoZXMuc2hgJ3MgZXhhY3QgbG9naWMgKG9sZGVyLXZlcnNpb24tdGhhbi1sYXRlc3QsCm9yIExpbmVhciBpc3N1ZSBzdGF0ZSBpcyBgY29tcGxldGVkYC9gY2FuY2VsZWRgL2BkdXBsaWNhdGVgLCBvciBpc3N1ZSBubwpsb25nZXIgbGFiZWxlZCBgc3BlYy1uZWVkZWRgKSBhZ2FpbnN0IGEgZnVsbCBMaW5lYXIgd29ya3NwYWNlIGlzc3VlIGR1bXAuCmBzY3JpcHRzL2NsZWFudXAtcHJldmlldy1icmFuY2hlcy5zaGAgaXRzZWxmIGNvdWxkIG5vdCBiZSBydW4gdGhpcyBzZXNzaW9uCmVpdGhlciDigJQgYExJTkVBUl9BUElfS0VZYCBpcyBub3QgcHJlc2VudCBpbiB0aGlzIHNlc3Npb24ncyBlbnZpcm9ubWVudC4KKipJc3N1ZToqKiBOL0Eg4oCUIHRoaXMgaXMgcm91dGluZSBob3VzZWtlZXBpbmcgKGBpZGVhLXN3ZWVwYCDihpIgc3BlYy1kcmlmdCBzdGVwIDExCmZvciBBSSBMYW5kc2NhcGUpLCBub3QgdGllZCB0byBhIHNpbmdsZSBMaW5lYXIgaXNzdWUuCgojIyBQYXlsb2FkCgpSdW4gKGZyb20gYSBzZXNzaW9uIHdpdGggcmVhbCBkZWxldGUgYWNjZXNzKToKCmBgYGJhc2gKY2QgQUktV29ya3NwYWNlCmdpdCBmZXRjaCBvcmlnaW4gLS1wcnVuZQp3aGlsZSByZWFkIC1yIGI7IGRvIGdpdCBwdXNoIG9yaWdpbiAtLWRlbGV0ZSAiJGIiOyBkb25lIDwgZGVsZXRlLWxpc3QudHh0CmBgYAoKV2hlcmUgYGRlbGV0ZS1saXN0LnR4dGAgY29udGFpbnMgZXhhY3RseSB0aGVzZSAxMDEgYnJhbmNoZXMgKHZlcmlmaWVkIGFnYWluc3QKTGluZWFyIGlzc3VlIHN0YXRlIGFzIG9mIDIwMjYtMDgtMDkpOgoKYGBgCnByZXZpZXcvU0hBLTEwMC12MQpwcmV2aWV3L1NIQS0xMDEtdjEKcHJldmlldy9TSEEtMTAyLXYxCnByZXZpZXcvU0hBLTEwMy12MQpwcmV2aWV3L1NIQS0xMDQtdjEKcHJldmlldy9TSEEtMTE1LXYxCnByZXZpZXcvU0hBLTExNi12MQpwcmV2aWV3L1NIQS0xMTctdjEKcHJldmlldy9TSEEtMTIzLXYxCnByZXZpZXcvU0hBLTEyNC12MQpwcmV2aWV3L1NIQS0xMjUtdjEKcHJldmlldy9TSEEtMTI2LXYxCnByZXZpZXcvU0hBLTEyOC12MQpwcmV2aWV3L1NIQS0xMjktdjEKcHJldmlldy9TSEEtMTMwLXYxCnByZXZpZXcvU0hBLTEzMS12MQpwcmV2aWV3L1NIQS0xMzItdjEKcHJldmlldy9TSEEtMTMzLXYxCnByZXZpZXcvU0hBLTEzNC12MQpwcmV2aWV3L1NIQS0xMzUtdjEKcHJldmlldy9TSEEtMTM4LXYxCnByZXZpZXcvU0hBLTEzOS12MQpwcmV2aWV3L1NIQS0xNDAtdjEKcHJldmlldy9TSEEtMTQxLXYxCnByZXZpZXcvU0hBLTE0Mi12MQpwcmV2aWV3L1NIQS0xNDMtdjEKcHJldmlldy9TSEEtMTQ0LXYxCnByZXZpZXcvU0hBLTE0NS12MQpwcmV2aWV3L1NIQS0xNDctdjEKcHJldmlldy9TSEEtMTQ4LXYxCnByZXZpZXcvU0hBLTE0OS12MQpwcmV2aWV3L1NIQS0xNTItdjEKcHJldmlldy9TSEEtMTU4LXYxCnByZXZpZXcvU0hBLTE1OS12MQpwcmV2aWV3L1NIQS0xNjAtdjEKcHJldmlldy9TSEEtMTYxLXYxCnByZXZpZXcvU0hBLTE2My12MQpwcmV2aWV3L1NIQS0xNjQtdjEKcHJldmlldy9TSEEtMTczLXYxCnByZXZpZXcvU0hBLTE3Ni12MQpwcmV2aWV3L1NIQS0xOC12MQpwcmV2aWV3L1NIQS0xOS12MQpwcmV2aWV3L1NIQS0yMC12MQpwcmV2aWV3L1NIQS0yMDEtdjEKcHJldmlldy9TSEEtMjAyLXYxCnByZXZpZXcvU0hBLTIzMS12MQpwcmV2aWV3L1NIQS0yMzItdjEKcHJldmlldy9TSEEtMjM1LXYxCnByZXZpZXcvU0hBLTIzNi12MQpwcmV2aWV3L1NIQS0yMzctdjEKcHJldmlldy9TSEEtMjM4LXYxCnByZXZpZXcvU0hBLTIzOS12MQpwcmV2aWV3L1NIQS0yNC12MQpwcmV2aWV3L1NIQS0yNDAtdjEKcHJldmlldy9TSEEtMjQxLXYxCnByZXZpZXcvU0hBLTI0Mi12MQpwcmV2aWV3L1NIQS0yNDMtdjEKcHJldmlldy9TSEEtMjQ0LXYxCnByZXZpZXcvU0hBLTI2LXYxCnByZXZpZXcvU0hBLTI4LXYxCnByZXZpZXcvU0hBLTI5LXYxCnByZXZpZXcvU0hBLTMwLXYxCnByZXZpZXcvU0hBLTMxLXYxCnByZXZpZXcvU0hBLTMzLXYxCnByZXZpZXcvU0hBLTM3LXYxCnByZXZpZXcvU0hBLTM4LXYxCnByZXZpZXcvU0hBLTQ0LXYxCnByZXZpZXcvU0hBLTQ3LXYxCnByZXZpZXcvU0hBLTQ4LXYxCnByZXZpZXcvU0hBLTUwLXYxCnByZXZpZXcvU0hBLTUxLXYxCnByZXZpZXcvU0hBLTU1LXYxCnByZXZpZXcvU0hBLTU2LXYxCnByZXZpZXcvU0hBLTU3LXYxCnByZXZpZXcvU0hBLTU4LXYyCnByZXZpZXcvU0hBLTY0LXYxCnByZXZpZXcvU0hBLTY1LXYxCnByZXZpZXcvU0hBLTY2LXYxCnByZXZpZXcvU0hBLTcxLXYxCnByZXZpZXcvU0hBLTcyLXYxCnByZXZpZXcvU0hBLTczLXYxCnByZXZpZXcvU0hBLTc0LXYxCnByZXZpZXcvU0hBLTc1LXYxCnByZXZpZXcvU0hBLTc2LXYxCnByZXZpZXcvU0hBLTgxLXYxCnByZXZpZXcvU0hBLTgzLXYxCnByZXZpZXcvU0hBLTg0LXYxCnByZXZpZXcvU0hBLTg1LXYxCnByZXZpZXcvU0hBLTg2LXYxCnByZXZpZXcvU0hBLTg3LXYxCnByZXZpZXcvU0hBLTg4LXYxCnByZXZpZXcvU0hBLTg5LXYxCnByZXZpZXcvU0hBLTkxLXYxCnByZXZpZXcvU0hBLTkyLXYxCnByZXZpZXcvU0hBLTkzLXYxCnByZXZpZXcvU0hBLTk0LXYxCnByZXZpZXcvU0hBLTk1LXYxCnByZXZpZXcvU0hBLTk2LXYxCnByZXZpZXcvU0hBLTk3LXYxCnByZXZpZXcvU0hBLTk4LXYxCnByZXZpZXcvU0hBLTk5LXYxCmBgYAoKKipBbHNvIGNsZWFuIHVwOioqIGB0ZXN0LXB1c2gtcHJvYmUtZGVsZXRlLW1lYCDigJQgYSB0aHJvd2F3YXkgZW1wdHktY29tbWl0CmJyYW5jaCB0aGlzIHNlc3Npb24gcHVzaGVkIHRvIGNvbmZpcm0gcHVzaC12cy1kZWxldGUgYmVoYXZpb3IgZGlmZmVycyAocHVzaApzdWNjZWVkZWQsIGRlbGV0ZSBvZiB0aGlzIHNhbWUgYnJhbmNoIGFsc28gNDAzJ2QpLiBIYXJtbGVzcyBidXQgc2hvdWxkIGJlCmRlbGV0ZWQgYWxvbmdzaWRlIHRoZSBhYm92ZS4KCioqQnJhbmNoZXMga2VwdCAodmVyaWZpZWQgc3RpbGwgYHNwZWMtbmVlZGVkYCwgZG8gbm90IGRlbGV0ZSk6KioKYHByZXZpZXcvU0hBLTI1MS12MWAsIGBTSEEtMjUyLXYxYCwgYFNIQS0yNTMtdjFgLCBgU0hBLTI1NC12MWAsIGBTSEEtMjU1LXYxYCwKYFNIQS0yNTYtdjFgLCBgU0hBLTI1OC12MWAsIGBTSEEtMjU5LXYxYCwgYFNIQS0yNjAtdjFgLCBgU0hBLTI2MS12MWAsCmBTSEEtMjYyLXYxYCwgYFNIQS0yNjMtdjFgLCBgU0hBLTI2NC12MWAsIGBTSEEtMjY1LXYxYCwgYFNIQS0yNjctdjFgLApgU0hBLTI2OC12MWAsIGBTSEEtMjY5LXYxYCwgYFNIQS0yNzAtdjFgLCBgU0hBLTI3MS12MWAsIGBTSEEtMjcyLXYxYC4KCioqU2tpcHBlZCwgbm90IGV2YWx1YXRlZCAoYnJhbmNoIG5hbWUgZG9lc24ndCBtYXRjaCB0aGUgc2NyaXB0J3MKYHByZXZpZXcvW0EtWl0rLVswLTldKy12WzAtOV0rYCBwYXR0ZXJuKToqKiBgcHJldmlldy9TSEEtMjUtYnVpbGRgLApgcHJldmlldy9zaGEtMTY5LXYxYCwgYHByZXZpZXcvc2hhLTE3MC12MWAsIGBwcmV2aWV3L3NoYS0xNzEtdjFgIChsb3dlcmNhc2UKYHNoYS1gIHByZWZpeCkuIFNhbWUgYmVoYXZpb3IgYXMgdGhlIHNoZWxsIHNjcmlwdCDigJQgbGVmdCB1bnRvdWNoZWQKZGVsaWJlcmF0ZWx5LCBub3QgYSBidWcgaW4gdGhpcyBhbmFseXNpcy4KCiMjIEluc3RydWN0aW9ucyBmb3IgcmVjZWl2aW5nIGFnZW50CgoxLiBDb25maXJtIHlvdXIgc2Vzc2lvbidzIGdpdC9HaXRIdWIgY3JlZGVudGlhbCBjYW4gYWN0dWFsbHkgZGVsZXRlIGEgcmVmCiAgICh0cnkgb25lIGJyYW5jaCBmaXJzdCwgZS5nLiBgdGVzdC1wdXNoLXByb2JlLWRlbGV0ZS1tZWAsIGJlZm9yZSB0aGUgYmF0Y2gpLgoyLiBJZiBgTElORUFSX0FQSV9LRVlgIGlzIGF2YWlsYWJsZSwgcHJlZmVyIGp1c3QgcnVubmluZwogICBgYmFzaCBzY3JpcHRzL2NsZWFudXAtcHJldmlldy1icmFuY2hlcy5zaGAgZnJlc2ggcmF0aGVyIHRoYW4gdHJ1c3RpbmcgdGhpcwogICBsaXN0IGJsaW5kbHkg4oCUIExpbmVhciBzdGF0ZSBtYXkgaGF2ZSBtb3ZlZCBzaW5jZSAyMDI2LTA4LTA5LiBJZiBub3QKICAgYXZhaWxhYmxlLCB0aGUgbGlzdCBhYm92ZSBpcyBhIGZhaXRoZnVsIHNuYXBzaG90OyByZWNoZWNrIGFueSBpc3N1ZSB5b3UncmUKICAgdW5zdXJlIGFib3V0IHdpdGggdGhlIExpbmVhciBNQ1AgYmVmb3JlIGRlbGV0aW5nLgozLiBEZWxldGUgdGhlIDEwMSBicmFuY2hlcyAocGx1cyB0aGUgcHJvYmUgYnJhbmNoKSB3aXRoCiAgIGBnaXQgcHVzaCBvcmlnaW4gLS1kZWxldGUgPGJyYW5jaD5gLgo0LiBEZWxldGUgdGhpcyBoYW5kb3ZlciBmaWxlIG9uY2UgZG9uZSDigJQgaXRzIGpvYiBpcyBmaW5pc2hlZCBhcyBzb29uIGFzIHRoZQogICBicmFuY2hlcyBhcmUgZ29uZS4KNS4gRG8gbm90IHRvdWNoIGBtYWluYCBvciBhbnkgYnJhbmNoIG5vdCBsaXN0ZWQgYWJvdmUu
+# Handover: idea-sweep preview-branch cleanup could not delete branches (no ref-delete permission)
+
+**For:** Any agent/session with `git push origin --delete` or a GitHub ref-delete
+capability against `rohrasharad-ship-it/AI-Workspace`
+**From:** idea-sweep routine (spec-drift step 11, orchestrating session), triggered
+for AI Landscape, 2026-08-09
+**Blocked by:** `git push origin --delete <branch>` returns `HTTP 403` for this
+session's GitHub credential, even for a branch the same session just created
+itself two minutes earlier (confirmed not a stale/protected-branch issue —
+normal branch creation and content pushes succeed fine, only ref deletion is
+rejected). No GitHub MCP tool in this session's toolset exposes branch/ref
+deletion either (`create_branch` exists; there is no `delete_branch`).
+**Action:** Delete the 101 orphaned `preview/*` branches listed below from
+`rohrasharad-ship-it/AI-Workspace`, computed by replicating
+`scripts/cleanup-preview-branches.sh`'s exact logic (older-version-than-latest,
+or Linear issue state is `completed`/`canceled`/`duplicate`, or issue no
+longer labeled `spec-needed`) against a full Linear workspace issue dump.
+`scripts/cleanup-preview-branches.sh` itself could not be run this session
+either — `LINEAR_API_KEY` is not present in this session's environment.
+**Issue:** N/A — this is routine housekeeping (`idea-sweep` → spec-drift step 11
+for AI Landscape), not tied to a single Linear issue.
+
+## Payload
+
+Run (from a session with real delete access):
+
+```bash
+cd AI-Workspace
+git fetch origin --prune
+while read -r b; do git push origin --delete "$b"; done < delete-list.txt
+```
+
+Where `delete-list.txt` contains exactly these 101 branches (verified against
+Linear issue state as of 2026-08-09):
+
+```
+preview/SHA-100-v1
+preview/SHA-101-v1
+preview/SHA-102-v1
+preview/SHA-103-v1
+preview/SHA-104-v1
+preview/SHA-115-v1
+preview/SHA-116-v1
+preview/SHA-117-v1
+preview/SHA-123-v1
+preview/SHA-124-v1
+preview/SHA-125-v1
+preview/SHA-126-v1
+preview/SHA-128-v1
+preview/SHA-129-v1
+preview/SHA-130-v1
+preview/SHA-131-v1
+preview/SHA-132-v1
+preview/SHA-133-v1
+preview/SHA-134-v1
+preview/SHA-135-v1
+preview/SHA-138-v1
+preview/SHA-139-v1
+preview/SHA-140-v1
+preview/SHA-141-v1
+preview/SHA-142-v1
+preview/SHA-143-v1
+preview/SHA-144-v1
+preview/SHA-145-v1
+preview/SHA-147-v1
+preview/SHA-148-v1
+preview/SHA-149-v1
+preview/SHA-152-v1
+preview/SHA-158-v1
+preview/SHA-159-v1
+preview/SHA-160-v1
+preview/SHA-161-v1
+preview/SHA-163-v1
+preview/SHA-164-v1
+preview/SHA-173-v1
+preview/SHA-176-v1
+preview/SHA-18-v1
+preview/SHA-19-v1
+preview/SHA-20-v1
+preview/SHA-201-v1
+preview/SHA-202-v1
+preview/SHA-231-v1
+preview/SHA-232-v1
+preview/SHA-235-v1
+preview/SHA-236-v1
+preview/SHA-237-v1
+preview/SHA-238-v1
+preview/SHA-239-v1
+preview/SHA-24-v1
+preview/SHA-240-v1
+preview/SHA-241-v1
+preview/SHA-242-v1
+preview/SHA-243-v1
+preview/SHA-244-v1
+preview/SHA-26-v1
+preview/SHA-28-v1
+preview/SHA-29-v1
+preview/SHA-30-v1
+preview/SHA-31-v1
+preview/SHA-33-v1
+preview/SHA-37-v1
+preview/SHA-38-v1
+preview/SHA-44-v1
+preview/SHA-47-v1
+preview/SHA-48-v1
+preview/SHA-50-v1
+preview/SHA-51-v1
+preview/SHA-55-v1
+preview/SHA-56-v1
+preview/SHA-57-v1
+preview/SHA-58-v2
+preview/SHA-64-v1
+preview/SHA-65-v1
+preview/SHA-66-v1
+preview/SHA-71-v1
+preview/SHA-72-v1
+preview/SHA-73-v1
+preview/SHA-74-v1
+preview/SHA-75-v1
+preview/SHA-76-v1
+preview/SHA-81-v1
+preview/SHA-83-v1
+preview/SHA-84-v1
+preview/SHA-85-v1
+preview/SHA-86-v1
+preview/SHA-87-v1
+preview/SHA-88-v1
+preview/SHA-89-v1
+preview/SHA-91-v1
+preview/SHA-92-v1
+preview/SHA-93-v1
+preview/SHA-94-v1
+preview/SHA-95-v1
+preview/SHA-96-v1
+preview/SHA-97-v1
+preview/SHA-98-v1
+preview/SHA-99-v1
+```
+
+**Also clean up:** `test-push-probe-delete-me` — a throwaway empty-commit
+branch this session pushed to confirm push-vs-delete behavior differs (push
+succeeded, delete of this same branch also 403'd). Harmless but should be
+deleted alongside the above.
+
+**Branches kept (verified still `spec-needed`, do not delete):**
+`preview/SHA-251-v1`, `SHA-252-v1`, `SHA-253-v1`, `SHA-254-v1`, `SHA-255-v1`,
+`SHA-256-v1`, `SHA-258-v1`, `SHA-259-v1`, `SHA-260-v1`, `SHA-261-v1`,
+`SHA-262-v1`, `SHA-263-v1`, `SHA-264-v1`, `SHA-265-v1`, `SHA-267-v1`,
+`SHA-268-v1`, `SHA-269-v1`, `SHA-270-v1`, `SHA-271-v1`, `SHA-272-v1`.
+
+**Skipped, not evaluated (branch name doesn't match the script's
+`preview/[A-Z]+-[0-9]+-v[0-9]+` pattern):** `preview/SHA-25-build`,
+`preview/sha-169-v1`, `preview/sha-170-v1`, `preview/sha-171-v1` (lowercase
+`sha-` prefix). Same behavior as the shell script — left untouched
+deliberately, not a bug in this analysis.
+
+## Instructions for receiving agent
+
+1. Confirm your session's git/GitHub credential can actually delete a ref
+   (try one branch first, e.g. `test-push-probe-delete-me`, before the batch).
+2. If `LINEAR_API_KEY` is available, prefer just running
+   `bash scripts/cleanup-preview-branches.sh` fresh rather than trusting this
+   list blindly — Linear state may have moved since 2026-08-09. If not
+   available, the list above is a faithful snapshot; recheck any issue you're
+   unsure about with the Linear MCP before deleting.
+3. Delete the 101 branches (plus the probe branch) with
+   `git push origin --delete <branch>`.
+4. Delete this handover file once done — its job is finished as soon as the
+   branches are gone.
+5. Do not touch `main` or any branch not listed above.
