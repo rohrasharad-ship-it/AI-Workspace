@@ -1,4 +1,4 @@
-it # Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
+# Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
@@ -64,3 +64,21 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-10 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+Still unresolved — 6th consecutive independent hit on the same blocker. AI Landscape hit
+the Issue Cap this run (6 active Backlog issues ≥ cap of 5: SHA-253, 254, 255, 256, 260,
+261), so only steps 10–11 ran. This session (Claude Code) had a real `git clone` + `git
+push` available via a proxy-injected GitHub token (unlike the two prior updates above) —
+`git clone` and `git ls-remote` both succeeded, so I directly tested `git push origin
+--delete preview/SHA-100-v1` (SHA-100 is Done, confirmed via Linear MCP, and was already on
+the confirmed-safe list above). Result: `HTTP 403` from the proxy on the push RPC itself —
+same failure mode as previous sessions, just confirmed via a different tool path (real git
+over HTTPS instead of an MCP-tool gap). No branches deleted this run. Branch list as of this
+run still tops out at `preview/SHA-272-v1` plus the `sha-169/170/171` lowercase trio — no
+growth since the 2026-08-08 update, and the do-not-delete set for AI Landscape's own Backlog
+(SHA-253/254/255/256/260/261) is unchanged and confirmed current. Did not re-attempt `node
+scripts/generate-routine-log.mjs` this run since the 2026-08-06 update already confirmed it
+fails identically without the same secret — no reason to expect a different result. Fix
+remains unchanged: add the `LINEAR_API_KEY` repo secret.
