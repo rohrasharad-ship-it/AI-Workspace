@@ -64,3 +64,19 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-10 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved — 6th consecutive failure, and the freshest evidence yet: the scheduled
+run that fired *this morning* (2026-08-10T10:21:01Z, run ID 31378743001) also completed
+with `conclusion: failure` — checked via `actions_list` → `list_workflow_runs` this run,
+not assumed from prior updates. Same root cause each time: `LINEAR_API_KEY is required`.
+This session independently re-confirmed there is still no MCP tool anywhere in the
+available toolset that deletes a git ref (searched explicitly this run), and per this
+session's own operating instructions GitHub access is MCP-only — no shell `git`/`gh`
+credentials are provisioned for repo interaction by design, not merely blocked by a proxy.
+The Application Agent project itself was at the idea-sweep issue cap this run (6 active
+pipeline issues, cap 5), so only the stale-issue sweep and this housekeeping step ran;
+0 branches deleted, 0 new safe-to-delete branches identified beyond the existing payload.
+Fix remains unchanged and is now the single highest-leverage unblock across five routine
+runs: add the `LINEAR_API_KEY` repo secret.
