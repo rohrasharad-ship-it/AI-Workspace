@@ -1,4 +1,4 @@
-it # Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
+# Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
@@ -64,3 +64,20 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-10 (spec-drift housekeeping, idea-sweep run for Usercon)
+
+Still unresolved — 6th consecutive independent hit, and the scheduled Action itself agrees:
+the most recent scheduled run (2026-08-10T10:21:01Z, run ID 31378743001) is also `completed`/
+`failure`, same as every prior run (29878193147, 30266096565, 30772723638, 30813814116). This
+session again has GitHub MCP tools only (confirmed no branch-delete tool exists anywhere in
+the toolset) and no raw `LINEAR_API_KEY`, so neither the script nor a manual per-branch
+fallback is possible here. Usercon's own Backlog issues this cycle are SHA-257, SHA-258,
+SHA-259, SHA-265, SHA-267 (5 active — this run hit the idea-sweep issue cap, so only the
+stale-issue sweep and this housekeeping step ran, no new issues filed). Checked the three
+oldest Backlog issues for the stale-issue sweep (SHA-257, SHA-258, SHA-259) against the
+current Usercon codebase: none look resolved (confirmed `scripts/usercon-mcp-server.mjs`
+`bulk_add_context` still omits `habit` and `visibilityLevel`/`visibilityHint` for SHA-257;
+no "Agent Parity" or force-directed/node-link graph code exists yet for SHA-258/SHA-259) —
+0 stale comments posted, which is expected, not a new finding. Fix remains unchanged: add
+the `LINEAR_API_KEY` repo secret.
