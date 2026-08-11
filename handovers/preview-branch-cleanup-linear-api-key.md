@@ -1,4 +1,4 @@
-it # Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
+# Handover: preview-branch-cleanup.yml has never succeeded — missing LINEAR_API_KEY repo secret
 
 **For:** Any agent/human with repo Settings → Secrets access on `rohrasharad-ship-it/AI-Workspace`
 **From:** spec-drift housekeeping (step 11), idea-sweep routine run for AI Landscape 2026, 2026-08-02
@@ -64,3 +64,22 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-11 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved — 6th consecutive independent hit. Checked the scheduled Action's run
+history directly this time (`actions_list` on `preview-branch-cleanup.yml`): the most
+recent run (2026-08-10T10:21:01Z, run ID 31378743001, `schedule` trigger) also completed
+with `conclusion: failure` — same as every prior run (2026-07-21, 2026-07-27, 2026-08-02,
+2026-08-03, and now 2026-08-10). The repo secret has still not been added. This session
+is Claude Code with GitHub MCP tools only; confirmed (again) there is no MCP tool anywhere
+in this toolset to delete a git ref, and shell `git push` is out of scope for GitHub
+interactions per this session's own operating instructions, so no manual fallback was
+attempted. `preview/*` branch count is now ~90+ (grew further since the last update — a
+handful of new issue IDs, e.g. `SHA-267`–`SHA-272`, were already present; nothing higher
+observed this run). This routine run was itself gated by the Issue Cap pre-flight (6
+active pipeline issues on Application Agent, cap 5) — Application Agent's spec-drift
+stale-issue sweep (step 10) found nothing to flag (see reasoning below), so this step 11
+housekeeping check was the only other action taken. No branches deleted. Fix remains
+unchanged and is now the single blocker on two structural-backup paths (this cleanup +
+`scripts/generate-routine-log.mjs`): add the `LINEAR_API_KEY` repo secret.
