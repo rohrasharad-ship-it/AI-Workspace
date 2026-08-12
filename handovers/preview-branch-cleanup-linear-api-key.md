@@ -64,3 +64,16 @@ has no active (non-archived) change folders, so step 12 (archive housekeeping) h
 to do this run regardless of tooling — not a new blocker, just a clean 0. Fix remains
 unchanged: add the `LINEAR_API_KEY` repo secret so the scheduled Action (which has real
 shell + git push, unlike any idea-sweep session) can finally clear this backlog end to end.
+
+## Update — 2026-08-12 (spec-drift housekeeping, idea-sweep run for Application Agent — issue cap hit)
+
+Still unresolved — 6th consecutive independent hit. Application Agent was at/over the
+issue cap this run (6 active pipeline issues vs. cap 5: SHA-247 In Progress; SHA-246,
+SHA-245, SHA-226, SHA-223 Backlog; SHA-150 Todo), so gap-filing (steps 1–9) was skipped
+per `routines/idea-sweep.md` pre-flight and only steps 10–11 ran. Same wall as every prior
+session: no `LINEAR_API_KEY` env var, no GitHub MCP tool to delete a git ref, and this
+session's operating instructions prohibit shell `git`/`gh` for GitHub interactions in favor
+of MCP tools only. `preview/SHA-115-v1`, `preview/SHA-116-v1`, `preview/SHA-117-v1` (all
+Application Agent issues, all `Done`) remain on the confirmed-safe-to-delete list above and
+are still present in the branch list — 0 branches deleted this run. Fix remains unchanged:
+add the repo secret.
