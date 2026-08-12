@@ -141,3 +141,19 @@ not a new blocker.
 secret does not need to re-derive it, just run the workflow.** Fix remains unchanged and is
 now the single blocker across 6 runs: add the `LINEAR_API_KEY` repository secret so the
 GitHub Action itself (real runner, not this proxy) can execute the deletes.
+
+## Update — 2026-08-12 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+7th consecutive independent hit, same day as the previous update. This run was itself
+skipped at the idea-sweep pre-flight (Resume Website is at the issue cap — 7 active
+pipeline issues, cap 5), so only steps 10–11 ran. Re-confirmed the block firsthand rather
+than trusting the prior update alone: no `LINEAR_API_KEY` in this session's shell env, and
+`git push origin --delete refs/heads/preview/nonexistent-test-probe-delete-me` (a ref that
+does not exist, so nothing real was at risk) still returns `error: RPC failed; HTTP 403`
+from the proxy before ever reaching GitHub, identical to every prior session. No MCP
+delete-ref tool exists in this session's toolset either. Cross-checked the six
+Resume-Website preview branches (`preview/SHA-262-v1`, `-264-v1`, `-269-v1`, `-270-v1`,
+`-271-v1`, `-272-v1`) against current Linear state: all six issues are still `Backlog` +
+`spec-needed`, so all six remain correctly on the do-not-delete list — no drift from the
+classification above. 0 branches deleted this run. Fix remains unchanged: add the
+`LINEAR_API_KEY` repository secret.
