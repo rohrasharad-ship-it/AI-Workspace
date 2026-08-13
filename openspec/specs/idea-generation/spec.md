@@ -61,7 +61,7 @@ Before any idea-generation role runs for a project, the orchestrator MUST count 
 
 #### Scenario: Backlog at cap
 - **WHEN** a project has 5 or more issues in Backlog, Todo, In Progress, or In Review
-- **THEN** the routine posts a skip message to Slack and does not run spec-drift, bug-error, or market-feature for that project
+- **THEN** the routine does not run spec-drift's gap-filing steps, bug-error, or market-feature for that project — no Slack notice is posted
 
 #### Scenario: Done or canceled issues excluded
 - **WHEN** a project has Done, Canceled, or Duplicate issues

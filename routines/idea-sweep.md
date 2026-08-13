@@ -24,7 +24,7 @@ modules) — this routine does not duplicate their instructions, it only says
 The trigger names one or more projects by their `projects.md` name (e.g.
 "Resume Website"), or says "all projects" to run against every row in
 `projects.md`. Resolve each name to its repo, Linear project, Linear project ID,
-Slack channel, and prod URL before running the roles.
+and prod URL before running the roles.
 
 ## Pre-flight, per project
 
@@ -32,8 +32,7 @@ Before running any of the three roles for a given project, do the Issue Cap
 check from `agents/shared/issue-cap.md` **once** for that project (use the
 **Linear Project ID** from `projects.md`, not the display name). If it's at or
 over the cap (5 active pipeline issues in Backlog, Todo, In Progress, or In
-Review), post the skip message to that project's Slack
-channel, then **still run spec-drift steps 10–11 only** (stale-issue sweep +
+Review), **still run spec-drift steps 10–11 only** (stale-issue sweep +
 preview-branch housekeeping — these shrink the backlog and do not file new
 issues). Skip spec-drift steps 1–9 and skip bug-error and market-feature
 entirely for this project this cycle. Projects under the cap proceed normally
@@ -72,22 +71,14 @@ When the trigger names **two or more projects** (or "all projects"):
   its own file.
 - **Multi-project run:** the orchestrator files after each role's grouping step;
   roles supply candidates only.
-- After all roles finish for all named projects, post **one consolidated
-  Slack message per project** (not per role) to that project's Slack channel.
-  When any cross-project grouped issues were filed to PM OS, also note them in
-  the **#pm-ops** summary (`Cross-project: [N] grouped issue(s) filed to PM OS`
-  with links). Per-project channel template:
-  ```
-  🧭 Idea sweep — [Project Name]
-  Spec-drift: [N] issues filed, [M] stale issues flagged
-  Bug/error: [N] issues filed
-  Market/feature: [N] issues filed
-  [links to each new issue and each stale-flagged issue]
-  ```
-- If a role found nothing, say so ("Bug/error: clean, nothing filed") rather
-  than omitting it — Sharad should be able to tell the sweep actually ran.
-- **Sweep ledger (routine run log):** after the consolidated Slack message for
-  each project, append one JSON line to `data/sweep-runs.jsonl` in
+- **No Slack updates.** The routine does not post a summary (or a skip
+  notice) to Slack — Linear is the record. Filed issues, stale-issue comments,
+  and the sweep ledger below are the only output.
+- If a role found nothing, note it in the run's own output (e.g. to the user
+  or session log) rather than silently doing nothing — but this no longer
+  goes to Slack.
+- **Sweep ledger (routine run log):** after finishing each project, append one
+  JSON line to `data/sweep-runs.jsonl` in
   AI-Workspace (commit on the same branch if you have repo access, or note it
   for the next infra touch):
   ```json
@@ -98,15 +89,10 @@ When the trigger names **two or more projects** (or "all projects"):
   combined. Then run `node scripts/generate-routine-log.mjs` (needs
   `LINEAR_API_KEY`) to refresh `data/routine-log.json` for the sandbox
   dashboard at `/routine-log.html`.
-- If any issues were filed, note whether Linear per-issue notifications should
-  have appeared in the channel (see `agents/shared/linear-slack.md`). If the
-  bell was never smoke-tested, flag that rather than assuming it works.
-- **A project skipped at the pre-flight step (see above) gets the skip message
-  plus a partial spec-drift summary** (`stale issues flagged`, `preview branches
-  deleted`) if steps 10–11 ran — never the full consolidated summary with
-  bug-error/market-feature counts, since those roles did not run. One Slack
-  message per project for the skip; a second message only if the partial
-  spec-drift run found something worth reporting.
+- **A project skipped at the pre-flight step (see above)** still gets a partial
+  spec-drift summary (`stale issues flagged`, `preview branches deleted`) if
+  steps 10–11 ran — never the full run with bug-error/market-feature counts,
+  since those roles did not run.
 
 ## Example trigger
 

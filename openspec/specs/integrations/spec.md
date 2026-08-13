@@ -1,6 +1,7 @@
 ## Purpose
 
-External service wiring: project registry and Linear → Slack notifications.
+External service wiring: project registry, Linear Project ID resolution, and
+Linear's (optional, not agent-managed) Slack bell.
 ## Requirements
 ### Requirement: Project registry in projects.md
 `projects.md` MUST be the single source of truth for every project an agent or routine operates on, including repo, Linear project name, Linear Project ID (UUID), Slack channel, and Vercel prod URL.
@@ -20,22 +21,22 @@ Agents MUST filter Linear `list_issues` by Linear Project ID (UUID), not display
 - **WHEN** idea-sweep checks open issue count
 - **THEN** it uses the UUID from `projects.md`, paginates all results, verifies each issue's `projectId` matches, and counts only issues whose status is Backlog, Todo, In Progress, or In Review
 
-### Requirement: Dual Slack notification paths
-Idea-generation MUST use two independent Slack paths: (1) routine summary posted by the orchestrating agent at end of run, (2) per-issue Linear bot cards via project bell integration.
+### Requirement: Agents never post to Slack for idea-generation
+Idea-generation routines and roles MUST NOT post any message to Slack — no routine summary, no cap-skip notice, no per-issue message. Linear is the only surface these roles write to.
 
 #### Scenario: New issue filed by spec-drift
 - **WHEN** spec-drift creates an issue during idea-sweep
-- **THEN** the routine summary mentions it at end of run AND Linear's bell posts a per-issue card (if configured)
+- **THEN** the agent posts nothing to Slack; Linear's own project bell (a separate, Linear-side setting) may independently post a per-issue card if a human has enabled it
 
 #### Scenario: Agents do not post per-issue Slack
 - **WHEN** an idea-generation role creates an issue
-- **THEN** the role does NOT post a separate Slack message — only Linear's bell handles per-issue notifications
+- **THEN** the role does NOT post a separate Slack message
 
-### Requirement: Linear bell configured per project
-Each Linear project MUST have Slack bell notifications enabled for at least "Issue created" events, pointing to the channel in `projects.md`. Smoke test required after setup.
+### Requirement: Linear bell is optional and not agent-managed
+Linear's per-project Slack bell (Issue created events) is a Linear workspace setting, not something any routine or role in this repo configures or depends on. It MAY be enabled or disabled per project at Sharad's discretion, independent of routine behavior.
 
-#### Scenario: Bell verification
-- **WHEN** onboarding a new project or verifying cron health
+#### Scenario: Bell verification (only if intentionally enabled)
+- **WHEN** a human has enabled the bell for a project and wants to confirm it works
 - **THEN** a throwaway test issue confirms a Linear bot card appears in the project's Slack channel within ~1 minute
 
 ### Requirement: PM OS project registered

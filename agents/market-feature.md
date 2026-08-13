@@ -27,8 +27,7 @@ to avoid.
 already checked once for this project before you started — skip straight to
 step 1. If you were triggered standalone (not via `idea-sweep`), do the check
 yourself first: see `agents/shared/issue-cap.md`. If the
-project is at or over the cap, stop here — post the skip message to Slack and
-do not proceed to step 1.
+project is at or over the cap, stop here and do not proceed to step 1.
 
 1. Read `openspec/project.md` in full — the vision, non-negotiables, and
    Out of Scope section. Never propose anything listed as Out of Scope.
