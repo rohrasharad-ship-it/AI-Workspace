@@ -110,12 +110,6 @@ issue).
 3. For each cluster:
    - If 1 project → file in that project's Linear project (normal Issue Brief).
    - If 2+ projects → file in PM OS with **Affects:** line and merged first comment.
-4. Record filed issue URLs for the Slack summary.
-5. Add to the PM OS channel summary when any grouped issues were filed:
-   `Cross-project: [N] grouped issue(s) filed to PM OS` with links.
 
-## Slack summary note
-
-Per-project channel summaries stay the same shape. When grouping filed issues
-to PM OS, the **#pm-ops** consolidated summary also lists those grouped issues
-so Sharad sees them in one place.
+Grouped issues filed to PM OS are visible there directly — no separate
+notification is posted.

@@ -66,15 +66,13 @@ again.
    role completes all projects, the orchestrator groups and files per
    `agents/shared/cross-project-grouping.md`. Single-project runs file directly.
 4. Each role that creates issues does so directly in Linear, following its own
-   file and `agents/shared/conventions.md`.
-5. After all pairs finish, post one consolidated Slack summary (not one
-   message per sub-agent) to the project's Slack channel: how many issues
-   were filed by which role, with links.
+   file and `agents/shared/conventions.md`. Linear is the record of the run —
+   idea-generation routines do not post a Slack summary.
 
 ## Pre-flight: Issue Cap (mandatory, before any idea-generation role creates issues)
 
 Follow `agents/shared/issue-cap.md` exactly — that module has the full
-counting procedure, skip message, and the known Linear MCP pitfall.
+counting procedure and the known Linear MCP pitfall.
 
 **In short:** count active pipeline issues per project (cap: 5). Filter
 `list_issues` by the **Linear Project ID** from `projects.md`, not the display
@@ -95,8 +93,8 @@ unbounded.
 **Check once per project per routine run, not once per role.** If `idea-sweep`
 is running all three roles for a project, do this check a single time before
 any of them start — if the cap is hit, skip bug-error and market-feature and
-run spec-drift steps 10–11 only, rather than checking (and posting to Slack)
-three separate times for the same project.
+run spec-drift steps 10–11 only, rather than checking three separate times
+for the same project.
 
 ## Shared guardrails (every idea-generation role, every routine)
 
@@ -119,8 +117,10 @@ three separate times for the same project.
   it in the issue description
 - Take a real screenshot per `agents/shared/visual-self-qa.md` and attach it
   to the issue — mandatory for every issue any of these three roles create
-- **Per-issue Slack notifications** come from Linear's project bell, not from
-  agents — see `agents/shared/linear-slack.md` for setup and verification
+- **Agents do not post to Slack.** Idea-generation routines are Linear-only —
+  no routine summary, no cap-skip notice. Linear's own per-issue project bell
+  (if configured) is a separate, Linear-side setting, not something these
+  roles trigger — see `agents/shared/linear-slack.md`.
 
 ## Idea Feeder Sources
 

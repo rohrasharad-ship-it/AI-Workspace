@@ -44,23 +44,20 @@ Always use the **Linear Project ID** (UUID) from `projects.md`.
    - `projectId` equals the target Linear Project ID from step 1, **and**
    - `status` matches one of the four active stages above (case-insensitive;
      treat `To Do` and `Todo` as the same stage).
-5. If the count is **≥ 5**, the project is at cap — post the skip message below
-   and stop **creating new issues** for this project. Spec-drift still runs its
-   stale-issue sweep and preview-branch housekeeping (steps 10–11 in
-   `agents/spec-drift.md`) even at cap.
+5. If the count is **≥ 5**, the project is at cap — stop **creating new
+   issues** for this project (no Slack notice needed; Linear's own issue count
+   is the record). Spec-drift still runs its stale-issue sweep and
+   preview-branch housekeeping (steps 10–11 in `agents/spec-drift.md`) even at
+   cap.
 6. **Sanity check:** if the count is **0** but the project should have open
    work, call `list_projects` and confirm the ID in `projects.md` still
    matches. Update `projects.md` if Linear was reorganized, then recount once.
 
-## Skip message
+## Skip
 
-Post to the project's Slack channel from `projects.md`:
-
-```
-⛔ Idea-sweep skipped — [Project Name from projects.md]
-Linear already has [N] active pipeline issues (cap: 5 per project). Triage the backlog
-before more get added.
-```
+No Slack notice is posted when a project is at cap — the routine simply
+skips filing for that project this cycle. Linear's own active-issue count is
+the record; check it there if you want to know why a project was skipped.
 
 **Check once per project per routine run** — if `idea-sweep` is running all
 three roles, do this a single time before any of them start.

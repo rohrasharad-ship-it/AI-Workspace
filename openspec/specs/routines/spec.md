@@ -18,16 +18,16 @@ The `idea-sweep` routine MUST run spec-drift, bug-error, and market-feature in o
 - **WHEN** the trigger says "all projects"
 - **THEN** the orchestrator loops every row in `projects.md`, running the cap check and all three roles per project under cap
 
-### Requirement: Consolidated Slack summary per project
-After all roles finish for a project, the orchestrator MUST post one Slack message per project (not per role) summarizing issues filed or "clean" status per role.
+### Requirement: No Slack output from idea-generation routines
+Idea-sweep MUST NOT post to Slack — not a per-project summary, not a cap-skip notice. Linear (filed issues, stale-issue comments, the sweep ledger) is the only record of a run.
 
 #### Scenario: Sweep completes with findings
 - **WHEN** idea-sweep finishes for Resume Website
-- **THEN** one message posts to `#resume-website` with counts and links per role
+- **THEN** issues are filed in Linear and no message is posted to any Slack channel
 
 #### Scenario: Project skipped at cap
 - **WHEN** a project hits the issue cap
-- **THEN** only the skip message posts — no consolidated summary
+- **THEN** the orchestrator skips filing for that project — no Slack notice of any kind
 
 ### Requirement: Cross-project gap grouping on multi-project sweeps
 When idea-sweep runs against two or more projects in one trigger, the orchestrator MUST collect gap candidates from each role per project, group candidates that describe the same underlying gap within the same role, and file one Linear issue per group instead of one per project.
