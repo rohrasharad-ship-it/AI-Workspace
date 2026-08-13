@@ -173,3 +173,33 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-13 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+8th consecutive independent hit. Resume Website's own idea-generation was at cap this run
+(7 active pipeline issues ≥ 5), so per `routines/idea-sweep.md` pre-flight only steps 10–11
+ran. Step 11 hit this exact blocker again: `git push origin --delete preview/SHA-100-v1`
+(and the rest of a 104-branch batch) failed identically — `HTTP 403`, `RPC failed`. Not
+re-verifying the REST API angle again per the note directly above; this update exists only
+to confirm the branch classification is still accurate, not to re-derive the proxy finding.
+
+Re-ran the full classification (paginated all Linear issues, cross-referenced every
+`preview/*` branch) as a sanity check rather than trusting a 1-day-old list blindly — it is
+**byte-for-byte identical** to the 2026-08-12 AI Landscape update: same 104 safe-to-delete
+branches (the 101 listed above plus `SHA-25-build` is still the one ambiguous-name
+exception, correctly excluded from automated deletion by name pattern, not by staleness),
+same 20 keep (`SHA-251`...`SHA-272`, still Backlog + `spec-needed`). No drift in the last 24
+hours. Still nothing this session can do about the delete itself — no `LINEAR_API_KEY` env
+var either, so the local script route is also unavailable, same as every prior run.
+
+Resume Website's own stale-issue sweep (step 10) also ran this session: all 6 of its
+Backlog issues (SHA-262, SHA-264, SHA-269, SHA-270, SHA-271, SHA-272) were cross-checked
+against the current `resume-website` codebase (`Hero.tsx`, `About.tsx`,
+`opengraph-image.tsx`, `Contact.tsx`, `VoiceAgent.tsx`, `lib/voice/`) — none of the proposed
+features (headshot wiring, motion/contrast toggle, turnabout interview mode, answer cards,
+welcome-back nudge, conversation-recap email) have any trace of implementation. 0 comments
+posted, correctly — nothing to flag as already-done.
+
+Fix remains unchanged and is now the single blocker across 8 runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action itself (real runner, not this proxy)
+can finally execute the 104 pending deletes end to end.
