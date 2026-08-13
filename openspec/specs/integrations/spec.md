@@ -33,7 +33,7 @@ Idea-generation routines and roles MUST NOT post any message to Slack — no rou
 - **THEN** the role does NOT post a separate Slack message
 
 ### Requirement: Linear bell is optional and not agent-managed
-Linear's per-project Slack bell (Issue created events) is a Linear workspace setting, not something any routine or role in this repo configures or depends on. It MAY be enabled or disabled per project at Sharad's discretion, independent of routine behavior.
+No routine or role in this repo MUST configure, depend on, or assume the state of Linear's per-project Slack bell (Issue created events) — it is a Linear workspace setting Sharad controls directly, independent of routine behavior.
 
 #### Scenario: Bell verification (only if intentionally enabled)
 - **WHEN** a human has enabled the bell for a project and wants to confirm it works
