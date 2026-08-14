@@ -173,3 +173,15 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-14 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+Still unresolved. Checked the scheduled Action's run history rather than re-deriving branch
+classification (per the note above): latest run (31378743001, 2026-08-10) still failed with
+the same `LINEAR_API_KEY is required` error, and no run has fired since — confirms the
+secret still hasn't been added. Not re-verifying branch classification or the proxy block
+again, per the prior update's guidance. Application Agent's own stale-issue sweep (step 10)
+found nothing to flag this run — its Backlog is per-application tracking tickets (job
+listings, not feature specs), so the "already shipped in code" check doesn't apply to it;
+0 comments posted, correctly. Step 12 (openspec archive) also a clean 0 — no active change
+folders. Fix remains unchanged: add the `LINEAR_API_KEY` repository secret.
