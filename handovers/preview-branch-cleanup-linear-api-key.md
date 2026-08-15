@@ -173,3 +173,15 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-15 (spec-drift housekeeping, idea-sweep run for Usercon)
+
+8th consecutive hit, same wall (`git push origin --delete` → HTTP 403; no MCP ref-delete
+tool). Independently recomputed the full classification via Linear MCP (paginated all
+issues) cross-referenced against every `preview/*` branch — result is byte-for-byte
+identical to the 2026-08-12 lists above (101 safe-to-delete, 20 keep, same 4
+unrecognized-name branches). No re-verification of the proxy block itself was performed —
+already conclusively confirmed twice above. Usercon itself was at its idea-sweep issue cap
+(5 active pipeline issues) this run, so only spec-drift steps 10-11 ran; step 10's
+stale-issue sweep flagged 0 (all 5 Backlog issues checked against current code/openspec,
+none resolved). Fix remains unchanged: add the `LINEAR_API_KEY` repository secret.
