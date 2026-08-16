@@ -173,3 +173,23 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-16 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+8th consecutive independent hit — same blocker, no new information, not re-verifying the
+git/REST delete-path block per the 2026-08-12 note above (it's settled). This session again
+had a working `GITHUB_TOKEN`/`GH_TOKEN` (clone + normal push both succeeded fine — this
+session's own ledger commit on `claude/kind-archimedes-2w10wx` landed without issue) but
+`LINEAR_API_KEY` was absent from the environment entirely, so `scripts/cleanup-preview-branches.sh`
+was not run at all this session (never even reached the delete step — the script's own
+upfront guard `error: LINEAR_API_KEY is required` fired immediately, confirmed by running it
+directly). `node scripts/generate-routine-log.mjs` failed identically for the same reason
+(also not blocking per `routines/idea-sweep.md`). Preview-branch deletion count for this run:
+0 (script did not execute). Fix remains unchanged and still the single blocker: add the
+`LINEAR_API_KEY` repository secret so the scheduled GitHub Action can finally clear this.
+
+Separately, this session's spec-drift step 10 (stale-issue sweep) re-confirmed the same
+result as the 2026-08-12 update: all 6 Backlog issues in AI Landscape 2026 (SHA-253, SHA-254,
+SHA-255, SHA-256, SHA-260, SHA-261) cross-checked against the current codebase (`index.html`,
+commit `f580b488` — unchanged since before any of these 6 issues were even filed) and
+OpenSpec — none show evidence of being shipped, so 0 comments posted this run too.
