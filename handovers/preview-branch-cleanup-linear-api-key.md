@@ -173,3 +173,31 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-16 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+Resume Website was at the issue cap (7 active pipeline issues ≥ 5) this run, so per
+`routines/idea-sweep.md` pre-flight only spec-drift steps 10–11 ran (no new issues filed).
+Did **not** re-attempt the git push / REST API delete this time — that's confirmed blocked
+from three independent angles above and re-testing it again adds no new information, per the
+note directly above. Confirmed via `mcp__github__actions_list` instead of a live retry: the
+workflow's most recent run (id `31378743001`, 2026-08-10, scheduled) is still the latest run
+and still `conclusion: failure` — no successful run has landed since the 2026-08-12 update,
+consistent with the secret still being unset. Fix remains unchanged.
+
+Resume Website's own slice of the backlog is unchanged from the 2026-08-12 classification:
+`preview/SHA-262-v1`, `preview/SHA-264-v1`, `preview/SHA-269-v1`, `preview/SHA-270-v1`,
+`preview/SHA-271-v1`, `preview/SHA-272-v1` are still correctly on the do-not-delete list
+(all 6 issues still Backlog + `spec-needed`, confirmed via Linear MCP `list_issues` filtered
+on the Resume Website project ID) — no new Resume Website preview branches since. (The other
+`SHA-25x`/`26x` IDs in the do-not-delete list above belong to PM OS and UserCon, not Resume
+Website — Linear's issue numbering is workspace-wide, not per-project, which is why they
+don't show up when filtering `list_issues` by the Resume Website project ID.)
+
+Resume Website's stale-issue sweep (spec-drift step 10) also ran this session: all 6 of its
+open Backlog issues were cross-checked against the current codebase (`Hero.tsx`, `About.tsx`,
+`VoiceAgent.tsx`, `Contact.tsx`, `app/api/agent/route.ts`) — none of the described features
+(real headshot wiring, motion/contrast toggle, voice-agent turnabout mode, voice answer
+cards, welcome-back nudge, email-me-this-conversation) are implemented yet, so 0 comments
+posted, correctly. `openspec/changes/` still has no active (non-archived) folders relevant to
+this repo's own housekeeping pass, consistent with prior runs.
