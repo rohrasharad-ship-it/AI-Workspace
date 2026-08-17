@@ -173,3 +173,32 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-17 (spec-drift housekeeping, idea-sweep run for Application Agent, at issue cap)
+
+8th consecutive independent hit — root cause unchanged, still just the missing repo
+secret. Did not re-verify the proxy-level block (already confirmed from three independent
+angles in the 2026-08-12 update above; not worth re-spending tokens on). Confirmed the
+scheduled Action has failed every week since, most recently **run 32017022813 on
+2026-08-17** (today), same `LINEAR_API_KEY is required` error — 8 failures total now.
+
+Re-derived the full branch classification fresh this run (paginated all Linear issues for
+the `Sharad Rohra` team + all current `preview/*` branches) and diffed it against the
+2026-08-12 snapshot above: **exactly one change** — `preview/SHA-256-v1` moved from "do not
+delete" to "safe to delete" (its issue, SHA-256, is now `Canceled`; it was Backlog +
+`spec-needed` on 2026-08-12). Nothing else shifted. Updated counts: **105 safe to delete**
+(the 2026-08-12 list of 101 plus `SHA-256-v1`), **19 do-not-delete** (the prior 20 minus
+`SHA-256-v1`), `SHA-25-build` still the one ambiguous-name branch. No new junk branches
+observed.
+
+Application Agent itself is at the idea-generation issue cap (6 active pipeline issues,
+cap is 5) this run, so only spec-drift steps 10–11 ran per `routines/idea-sweep.md`'s
+pre-flight rule — step 10 (stale-issue sweep) found 0 flaggable issues: its 4 Backlog
+issues (SHA-223, SHA-226, SHA-245, SHA-246) are all per-application job-tracker tickets
+(cover letter / resume / screening-answer drafts for a specific job posting), not
+feature-gap issues — the "already shipped in code" check this sweep exists for doesn't
+apply to them, so correctly 0 comments posted rather than misapplying the check.
+
+Fix remains unchanged and is now the single blocker across 8 runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action itself (real runner, not this
+proxy) can execute the deletes.
