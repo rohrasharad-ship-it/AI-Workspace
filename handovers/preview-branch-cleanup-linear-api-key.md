@@ -173,3 +173,35 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-17 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+8th consecutive independent hit. Did not re-test the proxy block itself (git protocol and
+REST API paths are already confirmed blocked three ways above — re-testing would just burn
+tokens); confirmed once more that `git push origin --delete` still 403s and no GitHub MCP
+tool exposes a ref-delete, then moved straight to refreshing the classification from live
+Linear data.
+
+**Classification refreshed this run — one change since 2026-08-12:** `SHA-256` moved from
+Backlog to **Canceled**, so `preview/SHA-256-v1` now belongs on the safe-to-delete list
+(was previously on do-not-delete). Full current split:
+
+- Safe to delete — 102 branches: the 101 listed in the 2026-08-12 update above, **plus
+  `preview/SHA-256-v1`**.
+- Do NOT delete — 19 branches (unchanged list minus SHA-256): `preview/SHA-251-v1,
+  preview/SHA-252-v1, preview/SHA-253-v1, preview/SHA-254-v1, preview/SHA-255-v1,
+  preview/SHA-258-v1, preview/SHA-259-v1, preview/SHA-260-v1, preview/SHA-261-v1,
+  preview/SHA-262-v1, preview/SHA-263-v1, preview/SHA-264-v1, preview/SHA-265-v1,
+  preview/SHA-267-v1, preview/SHA-268-v1, preview/SHA-269-v1, preview/SHA-270-v1,
+  preview/SHA-271-v1, preview/SHA-272-v1`.
+
+Resume Website's own stale-issue sweep (spec-drift step 10) also ran this session: all 6 of
+its Backlog issues (SHA-262, SHA-264, SHA-269, SHA-270, SHA-271, SHA-272) were cross-checked
+against the current codebase (`Hero.tsx`, `About.tsx`, `opengraph-image.tsx`,
+`VoiceAgent.tsx`, `PageSpotlight.tsx`) — none are implemented yet (all still reference the
+placeholder photo / lack the proposed mechanism), so 0 comments posted, correctly. Resume
+Website was also at the issue cap (7 active pipeline issues ≥ 5), so spec-drift steps 1–9
+and bug-error/market-feature were skipped entirely per `routines/idea-sweep.md` pre-flight.
+
+Fix remains unchanged: add the `LINEAR_API_KEY` repository secret so the GitHub Action
+runner (not this proxy) can execute the deletes.
