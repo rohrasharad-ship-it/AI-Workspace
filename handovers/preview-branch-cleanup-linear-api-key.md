@@ -173,3 +173,69 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-17 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+Still unresolved. The scheduled Action failed again this morning (run ID 32017022813,
+2026-08-17T09:47:52Z, same `LINEAR_API_KEY is required` error) — 8th consecutive failure.
+This session independently re-confirmed the `git push origin --delete` 403 (both via the
+normal credential helper and via a direct `https://x-access-token:$GITHUB_TOKEN@...` URL)
+before finding this handover; did not re-run the REST API probe since the prior update
+already settled that question.
+
+One real change since 2026-08-12: **SHA-256** (`🎨 Colorblind-Safe Viewing Mode`) has since
+been triaged to `Canceled`, so `preview/SHA-256-v1` moves from the do-not-delete list to
+safe-to-delete. Full re-check (all ~280 Linear issues, paginated, cross-referenced against
+every current `preview/*` branch) otherwise matches the 2026-08-12 list exactly — same 101
+branches plus `SHA-256-v1` (102 safe-to-delete now), same 19 remaining do-not-delete
+branches (SHA-256 removed from that list), `SHA-25-build` still the one ambiguous-name
+branch the script itself would skip. AI Landscape 2026's stale-issue sweep also ran this
+session: all 5 of its current Backlog issues (SHA-253, SHA-254, SHA-255, SHA-260, SHA-261)
+cross-checked against the codebase — `main` is still at commit `f580b48` (2026-07-23,
+unchanged since before any of these issues were filed), so none can plausibly be resolved
+yet; 0 comments posted, correctly. `openspec/changes/` still has no active folders — step
+12 remains a clean 0.
+
+Updated safe-to-delete list (102 branches, supersedes 2026-08-12's 101):
+```
+preview/SHA-18-v1, preview/SHA-19-v1, preview/SHA-20-v1, preview/SHA-24-v1,
+preview/SHA-25-build, preview/SHA-26-v1, preview/SHA-28-v1, preview/SHA-29-v1,
+preview/SHA-30-v1, preview/SHA-31-v1, preview/SHA-33-v1, preview/SHA-37-v1,
+preview/SHA-38-v1, preview/SHA-44-v1, preview/SHA-47-v1, preview/SHA-48-v1,
+preview/SHA-50-v1, preview/SHA-51-v1, preview/SHA-55-v1, preview/SHA-56-v1,
+preview/SHA-57-v1, preview/SHA-58-v2, preview/SHA-64-v1, preview/SHA-65-v1,
+preview/SHA-66-v1, preview/SHA-71-v1, preview/SHA-72-v1, preview/SHA-73-v1,
+preview/SHA-74-v1, preview/SHA-75-v1, preview/SHA-76-v1, preview/SHA-81-v1,
+preview/SHA-83-v1, preview/SHA-84-v1, preview/SHA-85-v1, preview/SHA-86-v1,
+preview/SHA-87-v1, preview/SHA-88-v1, preview/SHA-89-v1, preview/SHA-91-v1,
+preview/SHA-92-v1, preview/SHA-93-v1, preview/SHA-94-v1, preview/SHA-95-v1,
+preview/SHA-96-v1, preview/SHA-97-v1, preview/SHA-98-v1, preview/SHA-99-v1,
+preview/SHA-100-v1, preview/SHA-101-v1, preview/SHA-102-v1, preview/SHA-103-v1,
+preview/SHA-104-v1, preview/SHA-115-v1, preview/SHA-116-v1, preview/SHA-117-v1,
+preview/SHA-123-v1, preview/SHA-124-v1, preview/SHA-125-v1, preview/SHA-126-v1,
+preview/SHA-128-v1, preview/SHA-129-v1, preview/SHA-130-v1, preview/SHA-131-v1,
+preview/SHA-132-v1, preview/SHA-133-v1, preview/SHA-134-v1, preview/SHA-135-v1,
+preview/SHA-138-v1, preview/SHA-139-v1, preview/SHA-140-v1, preview/SHA-141-v1,
+preview/SHA-142-v1, preview/SHA-143-v1, preview/SHA-144-v1, preview/SHA-145-v1,
+preview/SHA-147-v1, preview/SHA-148-v1, preview/SHA-149-v1, preview/SHA-152-v1,
+preview/SHA-158-v1, preview/SHA-159-v1, preview/SHA-160-v1, preview/SHA-161-v1,
+preview/SHA-163-v1, preview/SHA-164-v1, preview/SHA-173-v1, preview/SHA-176-v1,
+preview/SHA-201-v1, preview/SHA-202-v1, preview/SHA-231-v1, preview/SHA-232-v1,
+preview/SHA-235-v1, preview/SHA-236-v1, preview/SHA-237-v1, preview/SHA-238-v1,
+preview/SHA-239-v1, preview/SHA-240-v1, preview/SHA-241-v1, preview/SHA-242-v1,
+preview/SHA-243-v1, preview/SHA-244-v1, preview/SHA-256-v1, preview/sha-169-v1,
+preview/sha-170-v1, preview/sha-171-v1
+```
+
+**Do NOT delete** (19 branches, still Backlog + `spec-needed`):
+```
+preview/SHA-251-v1, preview/SHA-252-v1, preview/SHA-253-v1, preview/SHA-254-v1,
+preview/SHA-255-v1, preview/SHA-258-v1, preview/SHA-259-v1, preview/SHA-260-v1,
+preview/SHA-261-v1, preview/SHA-262-v1, preview/SHA-263-v1, preview/SHA-264-v1,
+preview/SHA-265-v1, preview/SHA-267-v1, preview/SHA-268-v1, preview/SHA-269-v1,
+preview/SHA-270-v1, preview/SHA-271-v1, preview/SHA-272-v1
+```
+
+Fix remains unchanged and is now the single blocker across 8 consecutive runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action's own runner (unaffected by this
+proxy) can execute the deletes.
