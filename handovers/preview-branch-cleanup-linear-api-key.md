@@ -173,3 +173,18 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-18 (spec-drift housekeeping, idea-sweep run for Application Agent)
+
+8th consecutive hit, no new information — checked only what could have changed
+(`LINEAR_API_KEY` as an env var: still absent; `preview/*` branch count: now 125, up from
+101+20 last count) and did not re-attempt the already-proven-blocked push/REST-API delete
+paths. `node scripts/generate-routine-log.mjs` also still fails identically (`error:
+LINEAR_API_KEY is required`), consistent with the 2026-08-06 finding. Application Agent's
+own stale-issue sweep (step 10) also ran this session: 4 Backlog issues (SHA-223, SHA-226,
+SHA-245, SHA-246) were candidates, but all four are per-application job-tracking tickets
+(draft/fill-agent status for specific job applications), not feature/spec issues — the
+`data/drafts/` and tracker state they'd need to be cross-checked against is gitignored and
+not present in the repo, so there is no codebase signal to confirm any of them are
+"already done." 0 comments posted, correctly (no false positives). Fix remains unchanged:
+add the `LINEAR_API_KEY` repository secret so the scheduled Action can finally clear this.
