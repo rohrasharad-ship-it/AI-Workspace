@@ -173,3 +173,34 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-18 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+8th consecutive independent hit, same signature as every prior run: `git push origin
+--delete` on a real `preview/*` branch returns `HTTP 403 curl 22`, empty body, connection
+closed before `git-receive-pack` responds — confirmed on a single-branch probe and again
+across a 102-branch batch attempt (all 102 failed identically, 0 succeeded). Not
+re-verifying the REST-API or dry-run angles again — already confirmed twice before and adds
+no new information, per the prior update's own guidance.
+
+Freshly recomputed branch classification this run (paginated all Linear issues + all
+`preview/*` branches, matched against the script's exact `^preview/([A-Z]+-[0-9]+)-v([0-9]+)$`
+logic): **102 safe to delete, 19 to keep**. Only change since the 2026-08-12 classification:
+`SHA-256` moved from Backlog/`spec-needed` to `Canceled` since then, so
+`preview/SHA-256-v1` now joins the delete list (was in the keep list on 2026-08-12).
+Everything else — set of branches, terminal-status reasoning, the `SHA-25-build` /
+`sha-169`/`sha-170`/`sha-171` lowercase-name skips (regex mismatch, script would never
+touch these regardless of Linear state) — is unchanged from the 2026-08-12 list above.
+
+Do NOT delete (19, still Backlog + `spec-needed`): `preview/SHA-251-v1` through
+`preview/SHA-255-v1`, `preview/SHA-258-v1` through `preview/SHA-265-v1`,
+`preview/SHA-267-v1` through `preview/SHA-272-v1`.
+
+`openspec/changes/` (excluding `archive/`) is still empty — step 12 remains a clean 0.
+
+Fix remains unchanged and is now the single blocker across 8 runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action itself (real runner, not this
+proxy) can execute the deletes. Future idea-sweep sessions should treat this as confirmed
+and skip straight to noting "still blocked, see handover" rather than re-deriving the
+branch list from scratch every time, unless the visible branch/issue set has clearly moved
+since the last dated update above.
