@@ -173,3 +173,65 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-18 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+8th consecutive independent hit. Resume Website was at the issue cap (7 active-pipeline
+issues ≥ 5), so this run did spec-drift steps 10–11 only (stale-issue sweep + this
+housekeeping), per `routines/idea-sweep.md`'s pre-flight branch — steps 1–9 and the
+bug-error/market-feature roles did not run.
+
+Not re-verifying the proxy block itself (already confirmed 3x from independent angles per
+the note above) — `git push origin --delete preview/SHA-100-v1` reproduced the same `403`
+one more time as a sanity check before falling back to this handover, nothing new there.
+
+**Branch classification refreshed this run** (paginated all Linear issues + all `preview/*`
+branches): 102 safe-to-delete, 19 keep, 4 skip (unrecognized names: `SHA-25-build`,
+`sha-169-v1`, `sha-170-v1`, `sha-171-v1`). This is the 2026-08-12 list above with exactly
+one change: **`SHA-256` moved from keep to delete** (its issue is now `Canceled`, was
+`Backlog` as of 2026-08-12). Full current delete list:
+
+```
+preview/SHA-100-v1, preview/SHA-101-v1, preview/SHA-102-v1, preview/SHA-103-v1,
+preview/SHA-104-v1, preview/SHA-115-v1, preview/SHA-116-v1, preview/SHA-117-v1,
+preview/SHA-123-v1, preview/SHA-124-v1, preview/SHA-125-v1, preview/SHA-126-v1,
+preview/SHA-128-v1, preview/SHA-129-v1, preview/SHA-130-v1, preview/SHA-131-v1,
+preview/SHA-132-v1, preview/SHA-133-v1, preview/SHA-134-v1, preview/SHA-135-v1,
+preview/SHA-138-v1, preview/SHA-139-v1, preview/SHA-140-v1, preview/SHA-141-v1,
+preview/SHA-142-v1, preview/SHA-143-v1, preview/SHA-144-v1, preview/SHA-145-v1,
+preview/SHA-147-v1, preview/SHA-148-v1, preview/SHA-149-v1, preview/SHA-152-v1,
+preview/SHA-158-v1, preview/SHA-159-v1, preview/SHA-160-v1, preview/SHA-161-v1,
+preview/SHA-163-v1, preview/SHA-164-v1, preview/SHA-173-v1, preview/SHA-176-v1,
+preview/SHA-18-v1, preview/SHA-19-v1, preview/SHA-20-v1, preview/SHA-201-v1,
+preview/SHA-202-v1, preview/SHA-231-v1, preview/SHA-232-v1, preview/SHA-235-v1,
+preview/SHA-236-v1, preview/SHA-237-v1, preview/SHA-238-v1, preview/SHA-239-v1,
+preview/SHA-24-v1, preview/SHA-240-v1, preview/SHA-241-v1, preview/SHA-242-v1,
+preview/SHA-243-v1, preview/SHA-244-v1, preview/SHA-256-v1, preview/SHA-26-v1,
+preview/SHA-28-v1, preview/SHA-29-v1, preview/SHA-30-v1, preview/SHA-31-v1,
+preview/SHA-33-v1, preview/SHA-37-v1, preview/SHA-38-v1, preview/SHA-44-v1,
+preview/SHA-47-v1, preview/SHA-48-v1, preview/SHA-50-v1, preview/SHA-51-v1,
+preview/SHA-55-v1, preview/SHA-56-v1, preview/SHA-57-v1, preview/SHA-58-v2,
+preview/SHA-64-v1, preview/SHA-65-v1, preview/SHA-66-v1, preview/SHA-71-v1,
+preview/SHA-72-v1, preview/SHA-73-v1, preview/SHA-74-v1, preview/SHA-75-v1,
+preview/SHA-76-v1, preview/SHA-81-v1, preview/SHA-83-v1, preview/SHA-84-v1,
+preview/SHA-85-v1, preview/SHA-86-v1, preview/SHA-87-v1, preview/SHA-88-v1,
+preview/SHA-89-v1, preview/SHA-91-v1, preview/SHA-92-v1, preview/SHA-93-v1,
+preview/SHA-94-v1, preview/SHA-95-v1, preview/SHA-96-v1, preview/SHA-97-v1,
+preview/SHA-98-v1, preview/SHA-99-v1, preview/sha-169-v1, preview/sha-170-v1,
+preview/sha-171-v1
+```
+
+**Do NOT delete** (still Backlog + `spec-needed`) — 19 branches: SHA-251, SHA-252, SHA-253,
+SHA-254, SHA-255, SHA-258, SHA-259, SHA-260, SHA-261, SHA-262, SHA-263, SHA-264, SHA-265,
+SHA-267, SHA-268, SHA-269, SHA-270, SHA-271, SHA-272.
+
+Also confirmed Resume Website's own stale-issue sweep (spec-drift step 10) this run: the 3
+oldest Backlog issues (SHA-262 avatar-photo wiring, SHA-264 motion/contrast toggle, SHA-269
+turnabout interview mode) were cross-checked against the current codebase
+(`components/sections/Hero.tsx`, `About.tsx`, `app/opengraph-image.tsx`, and a repo-wide
+grep for toggle/turnabout logic) — none are implemented yet, so 0 comments posted this run,
+correctly.
+
+Fix remains unchanged and is now the single blocker across 8 runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action (real runner, not this proxy) can
+finally clear this backlog end to end.
