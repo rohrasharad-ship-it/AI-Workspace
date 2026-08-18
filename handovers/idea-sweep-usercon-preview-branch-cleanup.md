@@ -47,3 +47,14 @@ preview/SHA-98-v1  preview/SHA-99-v1
 4. Delete this handover file once the branches are cleaned up.
 
 **Do not** attempt to force through the 403 with alternate git protocols, tokens, or admin overrides you don't already have — that's exactly the kind of privilege-escalation workaround this handover exists to avoid. Wait for a session with legitimate delete access.
+
+## Related, smaller blocker: routine-log dashboard refresh also skipped
+
+Same root cause (`LINEAR_API_KEY` unset in this session), separate script:
+`node scripts/generate-routine-log.mjs` (refreshes `data/routine-log.json`
+for the `/routine-log.html` sandbox dashboard) also failed with
+`error: LINEAR_API_KEY is required`. The `data/sweep-runs.jsonl` ledger line
+for this run was appended correctly by hand, so no data is lost — only the
+derived dashboard JSON is stale until a session with the key re-runs the
+generator. Lower priority than the branch cleanup above; a future run with
+`LINEAR_API_KEY` set will pick this back up automatically.
