@@ -173,3 +173,41 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-19 (spec-drift housekeeping, idea-sweep run for Usercon)
+
+8th consecutive hit. Not re-testing the proxy block itself this run — it's already been
+confirmed from three independent angles (git protocol, REST API, dry-run-vs-real
+divergence) and the 2026-08-12 update explicitly asked future sessions not to re-verify it
+again with no new information; I did confirm it once more incidentally (two branches,
+identical `HTTP 403`) before finding this handover, consistent with every prior run.
+
+Usercon itself was at the idea-sweep issue cap this cycle (5 active Backlog issues:
+SHA-257, SHA-258, SHA-259, SHA-265, SHA-267 — no Todo/In Progress/In Review), so only
+spec-drift steps 10-11 ran; bug-error and market-feature did not run. Step 10 stale-issue
+sweep: all 5 Backlog issues cross-checked against the current codebase (confirmed
+`scripts/usercon-mcp-server.mjs`'s `bulk_add_context` schema still omits `habit`/
+`visibilityLevel` for SHA-257; confirmed `review-workspace.tsx` still has only single-item
+approve/reject for SHA-265; confirmed no code/spec trace of SHA-258/259/267's proposed
+features) — none look resolved, 0 comments posted.
+
+One classification change since the 2026-08-12 list: `SHA-256` has since moved from
+Backlog/`spec-needed` to `Canceled`, so `preview/SHA-256-v1` moves from the do-not-delete
+list to the safe-to-delete list. Full re-paginated classification this run (all ~273 Linear
+issues, all `preview/*` branches) otherwise matches the 2026-08-12 list exactly:
+
+**Safe to delete — 102 branches:** the 101 listed in the 2026-08-12 update, **plus**
+`preview/SHA-256-v1`.
+
+**Do NOT delete — 19 branches (SHA-256 removed):**
+```
+preview/SHA-251-v1, preview/SHA-252-v1, preview/SHA-253-v1, preview/SHA-254-v1,
+preview/SHA-255-v1, preview/SHA-258-v1, preview/SHA-259-v1, preview/SHA-260-v1,
+preview/SHA-261-v1, preview/SHA-262-v1, preview/SHA-263-v1, preview/SHA-264-v1,
+preview/SHA-265-v1, preview/SHA-267-v1, preview/SHA-268-v1, preview/SHA-269-v1,
+preview/SHA-270-v1, preview/SHA-271-v1, preview/SHA-272-v1
+```
+
+`openspec/changes/` in Usercon still has no active (non-archived) change folders — step 12
+remains a clean 0, not a new blocker. Fix remains unchanged: add the `LINEAR_API_KEY`
+repository secret so the GitHub Action's own runner (not this proxy) can clear the backlog.
