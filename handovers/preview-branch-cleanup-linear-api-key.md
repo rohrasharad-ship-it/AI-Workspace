@@ -173,3 +173,22 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-20 (spec-drift housekeeping, idea-sweep run for AI Workspace (PM OS))
+
+Brief reconfirmation only, not a new angle: `git push origin --delete` on all 102 currently
+safe-to-delete branches failed identically (`HTTP 403`) this run too. Branch classification
+refreshed against a full re-paginated Linear workspace snapshot — unchanged in substance
+except `preview/SHA-256-v1` has since flipped from "keep" to "safe to delete" now that
+SHA-256 moved to `Canceled`. Current do-not-delete set (still Backlog + `spec-needed`):
+SHA-251, SHA-252, SHA-253, SHA-254, SHA-255, SHA-258, SHA-259, SHA-260, SHA-261, SHA-262,
+SHA-263, SHA-264, SHA-265, SHA-267, SHA-268, SHA-269, SHA-270, SHA-271, SHA-272 (19 branches).
+Everything else `preview/*` (102 branches, full list reconstructable from Linear + branch
+list, not re-pasted here to avoid duplicating the 2026-08-12 payload) is safe to delete once
+the secret exists. `preview/SHA-25-build` and the lowercase `preview/sha-169/170/171-v1`
+trio still don't match the cleanup script's `-v[0-9]+` / uppercase-team-key regex, so the
+script itself would report them as unrecognized rather than delete them even after the fix —
+worth a one-line regex loosen in `scripts/cleanup-preview-branches.sh` when someone's next in
+there, not urgent enough to block on. Fix remains unchanged: add the `LINEAR_API_KEY`
+repository secret. This is the last update needed until the secret is added — future sessions
+can skip straight to checking whether the workflow has succeeded yet.
