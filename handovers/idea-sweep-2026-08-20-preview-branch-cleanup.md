@@ -91,3 +91,15 @@ the `-v<n>` suffix pattern either) — also left alone, same reasoning.
    prefer just running `scripts/cleanup-preview-branches.sh` fresh instead of
    trusting this stale list — it will recompute against live Linear state.
 5. Delete this handover file once the branches are cleaned up.
+
+## Related: `data/routine-log.json` also stale
+
+`node scripts/generate-routine-log.mjs` (run after every sweep, per
+`routines/idea-sweep.md`) also requires `LINEAR_API_KEY` and failed for the
+same reason this session has none set. `data/sweep-runs.jsonl` got this run's
+line appended correctly (that part needs no Linear access), but
+`data/routine-log.json` was not regenerated from it — it's one run behind.
+Whoever picks up the branch-deletion action above should also just run
+`node scripts/generate-routine-log.mjs` once `LINEAR_API_KEY` is set; no
+separate handover needed for that, it's a 10-second follow-up once the key is
+available.
