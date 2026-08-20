@@ -173,3 +173,32 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-20 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+8th consecutive independent hit — not re-litigating the proxy diagnosis (already confirmed
+three ways above); this run reproduced only the minimal check (`git push --delete` on
+`preview/SHA-18-v1` → identical `HTTP 403`) to confirm the block is still in effect, then
+stopped rather than re-deriving root cause.
+
+AI Landscape 2026 was **at the issue cap** this run (5 active Backlog issues — SHA-253,
+SHA-254, SHA-255, SHA-260, SHA-261 — cap is 5), so per `routines/idea-sweep.md` only
+spec-drift steps 10–11 ran; bug-error and market-feature were skipped entirely, as
+designed. Stale-issue sweep (step 10) cross-checked all 5 against the current
+`index.html` (toolbar/`#path-finder` CSS, `#m-title-row` mobile header CSS, and grepped for
+`hub`/`centrality`/`minimap`/keyboard-arrow-nav code) — none are implemented, so 0 stale
+comments posted, correctly.
+
+**Branch classification refreshed this run** (paginated all Linear issues for the
+`Sharad Rohra` team + all `preview/*` branches) — one change since the 2026-08-12
+snapshot: **`preview/SHA-256-v1` moved from keep to safe-to-delete** (issue SHA-256 is now
+`Canceled`, was still Backlog+`spec-needed` on 2026-08-12). Also new branches have appeared
+for issues already `Canceled`/`Done` and are likewise safe to delete:
+`preview/SHA-256-v1`. No other changes — the 101-branch list above plus `preview/SHA-256-v1`
+(102 total) is the current safe-to-delete set; the do-not-delete set drops to 19
+(`SHA-256` removed): SHA-251, SHA-252, SHA-253, SHA-254, SHA-255, SHA-258, SHA-259, SHA-260,
+SHA-261, SHA-262, SHA-263, SHA-264, SHA-265, SHA-267, SHA-268, SHA-269, SHA-270, SHA-271,
+SHA-272.
+
+Fix remains unchanged and is now the single blocker across 8 runs: add the
+`LINEAR_API_KEY` repository secret so the GitHub Action itself can execute the deletes.
