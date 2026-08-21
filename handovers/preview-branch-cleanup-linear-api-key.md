@@ -173,3 +173,48 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-21 (idea-sweep run for AI Workspace / PM OS) — blocker now wider than branch cleanup alone
+
+8th consecutive hit, and this session found a **new, more fundamental** blocker on top of
+everything above: the **Linear MCP connector itself was unauthenticated this session** —
+not slow to connect, not rate-limited, but requiring OAuth the session cannot complete
+non-interactively. No Linear MCP tools appeared in the tool list at all, and there is still
+no `LINEAR_API_KEY` in the environment. Previous updates (2026-08-02 through 2026-08-12)
+all had working Linear MCP access and were blocked only on the *write* path (git push
+delete / GitHub REST ref-delete via the proxy). This session had no Linear read access
+either, so the blocker was total, not partial:
+
+- **Steps 1–9 of spec-drift (gap filing), all of bug-error, all of market-feature:**
+  could not run — the Issue Cap pre-flight itself requires `list_issues` via Linear MCP,
+  which was unavailable. Did not attempt to file anything without being able to check the
+  cap or dedupe against existing issues first.
+- **Step 10 (stale-issue sweep):** same — requires reading/commenting on Linear issues.
+  Not run.
+- **Step 11 (preview-branch housekeeping):** unchanged blocker, root cause identical to
+  every prior update — `scripts/cleanup-preview-branches.sh` still hard-requires
+  `LINEAR_API_KEY` (`error: LINEAR_API_KEY is required`), confirmed again this run.
+  `origin/preview/*` branch count is now ~132 (grew again since the 2026-08-12
+  classification above) — did **not** re-derive a fresh safe-to-delete/keep split this run
+  since doing so needs Linear issue status, which was unavailable; the last verified
+  classification is still the 2026-08-12 one above, now further stale.
+- **Step 12 (openspec archive sweep):** ran successfully (no Linear dependency) —
+  `npx openspec list --json` shows zero active change folders (only `archive/` exists), so
+  this step is a genuine clean 0, independent of the blockers above.
+- **`scripts/generate-routine-log.mjs`:** also requires `LINEAR_API_KEY` directly (not just
+  MCP) — confirmed it exits with the same error, so `data/routine-log.json` was not
+  refreshed this run.
+- **`data/sweep-runs.jsonl`:** deliberately did **not** append a ledger line for this run.
+  Every existing line represents a role that actually executed and found nothing; appending
+  `{"filed":{"bugs":0,"features":0},"clean":true}` here would misrepresent a fully blocked
+  run as a clean sweep. Leaving no entry rather than a misleading one.
+
+**Fix needed (two separate things now, not one):**
+1. Add the `LINEAR_API_KEY` repository secret (unchanged ask, 8 runs running) — clears
+   step 11/12-script and the GitHub Action backup.
+2. Separately, whoever owns this session's environment needs to authorize the **Linear**
+   connector (claude.ai connector settings, or `claude mcp`/`/mcp` in an interactive
+   session) for the account/environment that runs scheduled `idea-sweep` triggers. Without
+   that, no idea-generation role can even read Linear, regardless of the API key — the two
+   fixes are independent and both are needed for idea-sweep to function end-to-end from
+   this environment.
