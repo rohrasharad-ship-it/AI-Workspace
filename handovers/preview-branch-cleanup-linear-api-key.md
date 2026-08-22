@@ -173,3 +173,43 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-22 (idea-sweep run for Resume Website — scheduled trigger)
+
+New, broader blocker this run, not just the LINEAR_API_KEY-for-the-shell-script gap prior
+sessions hit: **no Linear MCP tool was present in this session's toolset at all.** Every
+prior update above still had Linear MCP available for read/search/create/comment (just not
+a raw `LINEAR_API_KEY` env var for the standalone script) — that let spec-drift's steps 1–10
+and the other two idea-generation roles run normally. This session's connector list showed
+Linear under "requires authentication before its tools can be used," and per this session's
+own operating instructions a non-interactive scheduled session cannot run the OAuth flow to
+connect it. `ToolSearch` for Linear-shaped queries returned zero Linear tools (GitHub MCP
+tools only), confirming there was no hidden/deferred Linear tool to load.
+
+**Net effect:** the entire `idea-sweep` routine was blocked for Resume Website this cycle,
+not just step 11:
+- Issue Cap pre-flight (needs `list_issues` by Linear Project ID) — could not run.
+- spec-drift steps 1–9 (gap-filing) and step 10 (stale-issue sweep, needs to list/read/comment
+  on Linear issues) — could not run.
+- bug-error and market-feature (both need Linear search + issue creation) — could not run.
+- Step 11 (this file's subject, preview-branch cleanup) — unchanged, still blocked on the
+  missing `LINEAR_API_KEY` repo secret as documented above.
+- Step 12 (openspec archive sweep) — **did** run (no Linear dependency): `node_modules` had
+  to be installed first (`npm install`, not previously present in this checkout), then
+  `bash scripts/archive-merged-openspec-changes.sh --sweep` completed cleanly — 0 completed
+  active changes in AI-Workspace's `openspec/changes/` (only an `archive/` folder exists),
+  consistent with every prior run's "clean 0" for this step.
+
+Logged a `"clean": false` ledger line (not `true` — the roles didn't run, they didn't run-and-
+find-nothing) in `data/sweep-runs.jsonl` with a `"blocked"` note explaining why, since the
+documented schema has no field for "blocked" and I didn't want to fabricate a false-clean
+entry. Did not run `scripts/generate-routine-log.mjs` — same `LINEAR_API_KEY` requirement as
+step 11, unresolved for the same reason.
+
+**Action for Sharad / next agent with Linear access:** same fix as every prior update — add
+the `LINEAR_API_KEY` repository secret (clears step 11 + the dashboard generator). Separately,
+if scheduled/non-interactive sessions are expected to run idea-sweep going forward, the
+Linear MCP connector needs to be authorized in a context where the OAuth flow can complete
+(an interactive session), since a scheduled trigger cannot do this itself — otherwise every
+future scheduled `idea-sweep` firing will hit this same full-routine block, not just the
+step-11 piece.
