@@ -173,3 +173,14 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-24 (idea-sweep run for Resume Website)
+
+Confirmed still unset — no `LINEAR_API_KEY` in this session's environment either, so step
+11 remains blocked for the same reason as every prior run. Did not re-attempt the branch
+classification (nothing to act on it with, and the 2026-08-12 classification above is not
+stale enough to be worth re-deriving). This run also hit a **separate, more severe**
+blocker on top of this one: no Linear MCP tool access at all in this session (not just the
+missing shell-script API key) — see the new
+`handovers/idea-sweep-linear-mcp-unavailable.md` for details. That blocker meant steps 0–10
+of the routine couldn't run either, not just step 11.
