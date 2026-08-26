@@ -173,3 +173,19 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-26 (idea-sweep run for Usercon)
+
+Could not attempt step 11 at all this run — this session had no Linear access of *any*
+kind, not just the missing `LINEAR_API_KEY` env var documented above: the Linear MCP
+connector itself was unauthenticated for this non-interactive session, which also blocked
+the Issue Cap pre-flight and all Linear-dependent steps of spec-drift/bug-error/market-feature
+for Usercon this run. See
+`handovers/idea-sweep-usercon-2026-08-26-linear-mcp-unauthenticated.md` for the full
+write-up — that's a distinct, session-level blocker from this file's `LINEAR_API_KEY`
+repo-secret gap, but both point at the same underlying need (Linear credentials reachable
+from wherever idea-sweep runs). Step 12 checked cleanly: `openspec/changes/` in this repo
+still has only an `archive/` folder, no active change folders — clean 0, not a new blocker.
+Did not re-verify the branch classification above (no Linear access to do so this run);
+treat the 2026-08-12 lists as still the best available data until a session with working
+Linear access re-derives them.
