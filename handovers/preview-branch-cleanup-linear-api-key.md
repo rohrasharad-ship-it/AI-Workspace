@@ -173,3 +173,12 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-08-27 (idea-sweep run for AI Workspace / PM OS)
+
+8th consecutive hit, same unchanged blocker (`LINEAR_API_KEY` not set) — not re-verified
+again per the note above. This run also had no Linear MCP tool access at all (separate,
+new blocker — see `handovers/idea-sweep-linear-mcp-unauthenticated.md`), so steps 0–10 of
+the routine didn't run either; step 11 would have been blocked by the missing secret
+regardless. Step 12 (openspec archive sweep) ran fine, nothing to archive. No fix applied;
+still needs the repo secret.
