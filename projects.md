@@ -11,6 +11,7 @@ table to get its repo, Linear project, Slack channel, and prod URL.
 | AI Landscape 2026 | rohrasharad-ship-it/ai-landscape | AI Landscape | 4ef7d096-f5bb-44f4-bac5-417e4488cdb8 | #ai-landscape | https://rohrasharad-ship-it.github.io/ai-landscape/ |
 | Application Agent | rohrasharad-ship-it/Application-Agent | Application Agent | 7dc5202c-a586-4bed-b2d3-fba10f2dd913 | #application-agent | TBD |
 | Usercon | rohrasharad-ship-it/Usercon | UserCon | 47ebefac-a4f4-4bdd-a382-4506f7e79b6b | #usercon | TBD |
+| Grain Business Website | rohrasharad-ship-it/family-business | Grain Business Website | TBD — no Linear MCP tool was available at init time; create the Linear project manually and fill in this ID | none | TBD |
 
 **Linear Project ID** is the UUID used for `list_issues` project filtering and
 other Linear MCP calls. Display names are for humans; IDs are required for
