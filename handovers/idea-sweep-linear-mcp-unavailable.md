@@ -1,0 +1,30 @@
+# Handover: idea-sweep for Application Agent could not run — no Linear MCP tool access this session
+
+**For:** Any agent/session with Linear MCP tools connected and available
+**From:** idea-sweep routine session (scheduled trigger), Application Agent, 2026-09-01
+**Blocked by:** This session has no Linear MCP tools at all — not "read works, write is blocked" like the existing `preview-branch-cleanup-linear-api-key.md` handover, but zero Linear tool access. The session's own tool-connector status explicitly reports: "The following MCP servers require authentication before their tools can be used: Linear" and that this session is non-interactive so it cannot run the OAuth flow. `ToolSearch` for Linear create/search/comment tools returned only GitHub tools — confirmed no Linear tool exists in this session's toolset at all.
+**Action:** Re-run the `idea-sweep` routine for **Application Agent** (`routines/idea-sweep.md`) once a session with a connected Linear MCP is available, starting from Step 0 (Issue Cap pre-flight) for all three roles (spec-drift, bug-error, market-feature).
+**Issue:** No specific Linear issue drives this session — this is a routine (`idea-sweep`) run, not an issue-assignment session.
+
+## Payload
+
+**What this session could and could not do:**
+
+- **Issue Cap pre-flight (`agents/shared/issue-cap.md`)** — could not run. Requires `list_issues` filtered by Application Agent's Linear Project ID (`7dc5202c-a586-4bed-b2d3-fba10f2dd913`, from `projects.md`). No Linear tool available to call.
+- **Spec-drift steps 1–9 (gap filing)** — did the read-only half (read `openspec/project.md` and all 6 capability specs under `openspec/specs/` in the Application-Agent repo, and the top level of `src/application_agent/`). Deliberately did **not** manufacture candidate issues from this, for two reasons: (1) with no Linear access there is no way to search for duplicates first, which every role file requires before filing; (2) this project already self-documents its own gaps unusually well — every capability spec has a `Status` line and an `Open / Next` section, and `openspec/changes/` currently has 13 active (non-archived) change proposals in flight (ats-screening-answers, cdp-fill-session, company-context-brief, draft-quality-self-critique, event-blurb-generation, online-resume-website, portfolio-blurb-generation, profile-foundation-files, replace-capture-attachments, resume-file-export, resume-master-docx-export, save-flagged-screening-policy, slack-only-lead-ingestion). Spec content already references Linear issues up through at least SHA-190, so most items in each spec's "Open / Next" are very likely already-filed Linear issues — guessing at "new" issues from that list without dedupe access would mostly produce noise for whoever triages it. **Next agent with Linear access:** the fastest real gap-check is to diff each capability's "Open / Next" section (and the 13 in-flight `openspec/changes/` proposals) against the actual Linear backlog for project ID `7dc5202c-a586-4bed-b2d3-fba10f2dd913` — anything in Open/Next with no matching Linear issue is a genuine candidate.
+- **Spec-drift step 10 (stale-issue sweep)** — could not run, needs Linear `list_issues` + comment.
+- **Spec-drift steps 11–12 (housekeeping)** — not attempted this run. Step 11 (`cleanup-preview-branches.sh`) has its own long-standing, still-unresolved blocker documented in `handovers/preview-branch-cleanup-linear-api-key.md` (missing `LINEAR_API_KEY` repo secret + proxy blocks git ref deletion from any agent session) — no new information to add there. Step 12 (openspec archive sweep) was not run in AI-Workspace this session since this session's actual work was scoped to reading Application-Agent (a different repo) and there was nothing else this run required a local clone for; a future run should still do it as routine housekeeping.
+- **Bug-error (all steps)** — blocked by Linear as above, and separately has nothing to check regardless: `projects.md` lists Application Agent's Vercel Prod as `TBD` — there is no deployed URL, so there are no production runtime logs to read. This is a pre-existing gap in the project row, not new information, but worth fixing in `projects.md` once Application Agent actually deploys somewhere, so bug-error has something to check in future cycles.
+- **Market-feature steps 1–2 (vision read)** — could do this (read `openspec/project.md`); did not draft candidate features because step 4 (dedupe against Linear) and the mandatory step 7 (Playwright screenshot of the current homepage) are both impossible without Linear access and a live URL respectively (same `Vercel Prod: TBD` gap as bug-error).
+
+**Sweep ledger:** appended a line to `data/sweep-runs.jsonl` for this run with `filed: {bugs: 0, features: 0}` and `clean: false` (not `true` — nothing was verified clean, the run was blocked, which is a different thing from a genuine zero-findings pass).
+
+## Instructions for receiving agent
+
+1. Confirm Linear MCP tools are available in your session (try `list_issues` or equivalent).
+2. Run the Issue Cap pre-flight for Application Agent (project ID `7dc5202c-a586-4bed-b2d3-fba10f2dd913`) per `agents/shared/issue-cap.md`.
+3. If under cap, run spec-drift steps 1–9 using the shortcut above (diff Open/Next + in-flight `openspec/changes/` against the real Linear backlog) rather than re-reading the whole codebase from scratch — this session already did the spec-reading half.
+4. Run spec-drift step 10 (stale-issue sweep) and steps 11–12 (housekeeping) normally.
+5. Bug-error: still has nothing to check until Application Agent has a real Vercel Prod URL in `projects.md`. Either update that row once one exists, or skip bug-error again with a note (not a new blocker).
+6. Market-feature: same live-URL gap blocks the mandatory screenshot step — same call as bug-error.
+7. Delete this handover file once a session with working Linear access has completed a real idea-sweep pass for Application Agent (cap check + dedupe run, even if it results in 0 filed issues).
