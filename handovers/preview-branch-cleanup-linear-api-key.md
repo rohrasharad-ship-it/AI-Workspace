@@ -173,3 +173,14 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-05 (idea-sweep run for Application Agent)
+
+Not re-verified this run — no new information to add on the git-push/secret question, per
+the note above. Separately, this session hit a **harder** blocker than any prior one: no
+Linear MCP tool at all (not just no `LINEAR_API_KEY` for the shell script) — the Issue Cap
+pre-flight itself couldn't run, so steps 1–10 were skipped entirely, not just step 11. See
+the new, dedicated handover:
+`handovers/idea-sweep-application-agent-no-linear-mcp.md`. That's a session/connector
+authorization issue, unrelated to the `LINEAR_API_KEY` repo secret this file tracks — fix
+remains unchanged here: add the `LINEAR_API_KEY` repository secret.
