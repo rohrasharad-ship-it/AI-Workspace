@@ -173,3 +173,20 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-08 (spec-drift housekeeping, idea-sweep run for Resume Website)
+
+8th consecutive independent hit, and a step worse than every prior session: this session
+has **no Linear MCP tool access at all** (the Linear connector is unauthorized for this
+account and the session is non-interactive, so the OAuth flow can't run) — not even the
+read-only Linear MCP access that let the 2026-08-12 sessions build a verified branch
+classification list as a fallback. So step 11 couldn't be attempted in any form this run,
+not even manually. This is a broader blocker than the missing repo secret alone — see the
+new standalone handover `idea-sweep-resume-website-2026-09-08-linear-mcp.md` for the full
+scope (it also blocked the cap check, dedupe search, filing, and step 10 stale-issue sweep
+for this run, none of which are specific to preview-branch cleanup). Did not attempt to
+re-verify or extend the branch classification lists above since there was no tool access to
+do so this run — treat them as unchanged from 2026-08-12. Fix for *this* file remains
+unchanged: add the `LINEAR_API_KEY` repository secret so the GitHub Action can clear the
+backlog independent of any session's own tool access. Fix for the broader Linear MCP gap is
+separate — see the new handover.
