@@ -1,0 +1,1 @@
+$(cat "/tmp/claude-0/-home-user/77c34a6d-3860-5f7b-b94f-d2857ff2532e/scratchpad/handover.md")
