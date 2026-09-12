@@ -173,3 +173,14 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-12 (idea-sweep routine run for Resume Website)
+
+Confirmed again: no `LINEAR_API_KEY` env var in this session's shell. This run hit a
+deeper version of the same blocker, though — the Linear **MCP server itself** was
+unauthenticated for the whole session (not just missing this one secret for the shell
+script), so branch classification couldn't even be attempted this time. See the new,
+separate handover at `handovers/idea-sweep-resume-website-linear-mcp-unavailable.md` for
+the full writeup — that one covers the broader "no Linear MCP at all" blocker for this
+run's actual job (idea-sweep steps 0–10); this file remains the record for the
+narrower `LINEAR_API_KEY`-secret-specific step 11 blocker, unchanged and still open.
