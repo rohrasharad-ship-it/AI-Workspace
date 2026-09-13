@@ -173,3 +173,29 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-13 (idea-sweep run for Resume Website)
+
+Re-confirmed `bash scripts/cleanup-preview-branches.sh --dry-run` still fails immediately
+with `error: LINEAR_API_KEY is required` — unchanged, no new diagnosis needed.
+
+Worth flagging as new information: this session had **no Linear MCP connection at all**
+(`ListConnectors` showed the Linear connector `connected: false`,
+`installState: "connect_incomplete"`), not just the missing `LINEAR_API_KEY` this handover
+tracks. Every prior update above had working Linear MCP tool access and only lacked the
+raw API key the shell script needs — that's what let those sessions still run the Issue Cap
+check, spec-drift's stale-issue sweep, and the full branch reclassification. This session
+could do none of that: no Issue Cap count, no stale-issue sweep, no dedupe search, for
+Resume Website this cycle. Only step 12 (openspec archive sweep, which needs no Linear
+access) could run — `openspec/changes/` has no active folders, so it reported a clean 0,
+consistent with every prior run. Logged as `clean:true`/`0/0` in `data/sweep-runs.jsonl`
+per the existing at-cap-skip precedent, since the ledger schema has no distinct state for
+"could not check" — but the honest status is "unable to run any Linear-dependent step,"
+not "verified clean."
+
+This doesn't change the fix needed (still: add the `LINEAR_API_KEY` repo secret so the
+GitHub Action can clear the branch backlog), but it does mean Sharad should not assume
+Resume Website's Linear backlog was actually reviewed this cycle — it wasn't, because the
+Linear connector itself needs to be (re-)authorized for Claude Code web/cloud sessions,
+separately from the repo secret. That's a `claude.ai` connector-settings action, not
+something any agent session can self-serve.
