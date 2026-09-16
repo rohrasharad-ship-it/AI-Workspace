@@ -173,3 +173,39 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-16 (idea-sweep run for AI Workspace (PM OS)) — broader blocker this run
+
+This session hit a **wider** wall than any prior update above: **no Linear MCP tool access
+at all** (the Linear connector shows as "requires authentication before its tools can be
+used," and this is a non-interactive scheduled session so the OAuth flow can't be run here
+either) — on top of the already-known missing `LINEAR_API_KEY` env var. Every prior session
+logged against this file at least had live Linear MCP access for reads (list_issues,
+search, comments); this one had none.
+
+Practical effect: not just step 11 (preview-branch cleanup) but **step 0 (Issue Cap
+pre-flight) itself could not run** for AI Workspace (PM OS) this cycle — no way to count
+active pipeline issues, so no way to confirm the project is under cap. Per
+`agents/shared/issue-cap.md` and the routine's own guardrails, filing issues without a
+verified cap count is not safe, so this run **skipped spec-drift steps 1–9, bug-error, and
+market-feature entirely** for this project — not because the project is confirmed at cap,
+but because cap status is unknown and unverifiable this session. Step 10 (stale-issue
+sweep) is likewise skipped — it also requires listing/commenting via Linear.
+
+Step 12 (OpenSpec archive housekeeping) does not depend on Linear and ran clean: only
+`openspec/changes/archive/` exists in this repo right now, no active (non-archived) change
+folders — 0 to archive, consistent with the 2026-08-08/08-12 updates above.
+
+Preview-branch count (read-only `git ls-remote`, no Linear cross-reference possible this
+session): **125** `preview/*` branches currently on `origin` (up from the 121
+classified in the 2026-08-12 update). None deleted this run — same underlying blocker
+(no `LINEAR_API_KEY`), now compounded by no Linear MCP to even re-verify which are safe.
+
+**No new action needed beyond the existing fix.** Adding the `LINEAR_API_KEY` repository
+secret (unchanged ask from every update above) fixes the scheduled GitHub Action
+end-to-end regardless of what any given idea-sweep session's own Linear access looks like —
+that's the whole point of the Action being the structural backup. This update exists so the
+next session knows a Linear-MCP-only session (no shell secret) can still make progress on
+future runs, but a session with **neither** MCP nor the secret — like this one — can do
+nothing on the Linear side at all, for any of the three idea-generation roles, not just
+housekeeping.
