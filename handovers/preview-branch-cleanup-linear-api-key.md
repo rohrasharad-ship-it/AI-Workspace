@@ -173,3 +173,12 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-18 (spec-drift housekeeping, idea-sweep run for AI Landscape 2026)
+
+Same blocker, unchanged — did not re-verify the branch list (nothing new to add). Worth
+noting this session had a strictly worse blocker on top: no Linear MCP tool access at all
+(not just the missing `LINEAR_API_KEY` env var), so it couldn't even do read-only Linear
+checks. See `handovers/idea-sweep-ai-landscape-no-linear-mcp.md` for that separate,
+account-level connector-auth issue. Step 12 (archive housekeeping) was a clean 0 again —
+`openspec/changes/` has zero active changes in this repo.
