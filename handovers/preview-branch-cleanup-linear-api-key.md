@@ -173,3 +173,27 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-19 (idea-sweep run for AI Landscape 2026)
+
+New, more fundamental blocker this run, distinct from (and blocking earlier than) the
+`LINEAR_API_KEY`-for-Action gap above: this session has **no Linear MCP tool access at
+all** — Linear is listed as an MCP server requiring authorization that this non-interactive
+session cannot complete, not merely missing an env var for the shell script. That means
+steps 1–10 of `agents/spec-drift.md` (gap-filing, dedupe search, and the stale-issue sweep)
+could not run this session either, on top of the already-confirmed step 11 gap. See the new
+handover `handovers/idea-sweep-linear-mcp-unavailable-2026-09-19.md` for the full writeup
+and this run's findings (bug-error clean via Vercel runtime-error check; spec-drift found no
+built-vs-specced product gaps; market-feature has 3 candidate ideas ready to file once
+Linear access exists).
+
+Because there was no Linear MCP access, I could not redo this run's branch classification
+against Linear issue status, so I did not touch the payload list above — it is unverified
+for this run, not re-confirmed. `openspec/changes/` in **this repo (AI-Workspace)** still has
+no active (non-archived) folders (checked directly via GitHub MCP), so step 12 stays a clean
+0 here — separately, I found two *fully shipped but unarchived* change folders while reading
+**openspec/changes/** in the **ai-landscape** repo itself (`presentation-mode` and
+`last-updated-freshness-stamp`, both merged 2026-07-23, no open PR); that's outside this
+step's literal AI-Workspace-only scope, so I left it for the new handover rather than acting
+on it here. No new information on the proxy git-push-403 problem — not re-verified, per the
+"no further action needed" note above.
