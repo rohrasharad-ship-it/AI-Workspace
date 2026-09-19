@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mockup — Shipped-this-week strip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #F5EDE0;
+    --bg-dark: #111111;
+    --accent: #E8351A;
+    --accent-warm: #FF8C52;
+    --muted: #8A8A8A;
+    --text-primary: #1A1A1A;
+    --text-inverse: #F5EDE0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg-primary);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    padding: 48px 24px;
+  }
+  .note {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 28px 28px 24px;
+    box-shadow: 0 20px 40px -20px rgba(0,0,0,0.15);
+  }
+  .card h3 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .card p.sub {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .strip {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-primary);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+  .chip .days {
+    color: var(--muted);
+  }
+  .headline {
+    max-width: 720px;
+    margin: 40px auto 0;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+  <div class="note">Minimal-effort mockup — market-feature idea, idea-sweep 2026-09-19 · static frame only, not built</div>
+  <div class="card">
+    <h3>Currently building</h3>
+    <p class="sub">Recent ships on this site itself — generated from real git history at build time, no backend.</p>
+    <div class="strip">
+      <div class="chip"><span class="dot"></span>Journey chapter scrubber <span class="days">· 3d ago</span></div>
+      <div class="chip"><span class="dot"></span>Warmer voice avatar <span class="days">· 5d ago</span></div>
+      <div class="chip"><span class="dot"></span>Save Contact vCard <span class="days">· 9d ago</span></div>
+      <div class="chip"><span class="dot"></span>Social share preview <span class="days">· 12d ago</span></div>
+    </div>
+  </div>
+  <div class="headline">Sits under or beside the existing "Currently" section — same card language, new content</div>
+</body>
+</html>

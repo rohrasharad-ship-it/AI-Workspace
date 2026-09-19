@@ -173,3 +173,13 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-19 (idea-sweep run for Resume Website)
+
+Still unresolved (`LINEAR_API_KEY` unset as env var again this session). Not re-verifying the
+branch classification — nothing here to add. Noting for context only: this session's blocker
+was actually broader than this file's scope — no Linear MCP access at all (not even read),
+plus outbound HTTPS blocked entirely by network policy — so it couldn't even attempt the
+git-push angle already exhausted above. See
+`handovers/idea-sweep-resume-website-2026-09-19-no-linear-access.md` for that session's own
+handover; this file's fix (add the repo secret) remains the same unchanged ask.
