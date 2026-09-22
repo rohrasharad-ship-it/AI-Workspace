@@ -173,3 +173,15 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-22 (idea-sweep run for AI Workspace / PM OS)
+
+8th consecutive independent hit — `scripts/cleanup-preview-branches.sh --dry-run` still
+fails immediately with `error: LINEAR_API_KEY is required`; `node
+scripts/generate-routine-log.mjs` fails identically. No env var, no change. Could not
+re-verify or refresh the branch classification above this run — this session also has **no
+Linear MCP tool at all** (a materially bigger blocker than the missing API key alone), so
+`list_issues`/`list_branches` cross-referencing wasn't possible either. See the new
+`handovers/idea-sweep-ai-workspace-linear-mcp-unavailable.md` for that separate issue. Step
+12 (openspec archive) ran clean (0 active changes, nothing to archive). Fix for *this* file
+remains unchanged: add the `LINEAR_API_KEY` repository secret.
