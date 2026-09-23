@@ -173,3 +173,80 @@ No further action needed from any future idea-sweep session on this specific que
 the proxy-level block is now confirmed from three independent angles (git protocol, REST
 API, and dry-run-vs-real divergence). Re-verifying it a 4th time wastes tokens with no new
 information. Fix remains, unchanged: add the `LINEAR_API_KEY` repository secret.
+
+## Update — 2026-09-23 (idea-sweep run for Resume Website — Linear MCP itself also unavailable)
+
+Still unresolved, 6 weeks later. This session (Claude Code on the web) confirms two things
+that change the shape of this blocker slightly:
+
+1. **The `LINEAR_API_KEY` repo secret still does not exist.** `list_workflow_runs` for
+   `preview-branch-cleanup.yml` shows the scheduled job has now failed **12 consecutive
+   times** (run #1 on 2026-07-21 through run #12 on 2026-09-21, weekly, every single run
+   `conclusion: failure`), always at the same `LINEAR_API_KEY is required` line. This is
+   confirmed from the Actions API directly, not inferred from prior handover notes.
+2. **New this run: this session has no Linear MCP tool access either — not even the
+   read-only kind some earlier updates in this thread assumed cloud sessions have.** Linear
+   shows up in this session's tool list explicitly as a connector that **requires OAuth
+   authorization** ("call ToolSearch... ToolSearch returned nothing for query 'Linear'";
+   the system prompt states outright that Linear needs authorizing via claude.ai connector
+   settings before any of its tools exist). So the fix isn't only the repo secret for the
+   GitHub Action — a **second, separate** authorization (the Linear connector for this
+   Claude account, via claude.ai connector settings) is needed before any *session*-based
+   idea-generation role (spec-drift/bug-error/market-feature, all of which call Linear MCP
+   tools directly, not the shell script) can search or file issues at all. These are two
+   independent fixes for two independent execution paths (GitHub Action runner vs. this
+   session), not the same fix twice.
+
+**Practical effect on this run:** the `idea-sweep` trigger named "Resume Website"
+specifically (Linear Project ID `b01a99ac-46a3-4b00-9139-31e00fae781d` per `projects.md`) —
+first time this exact handover has been updated from a Resume Website-triggered run, which
+confirms the blocker is project-agnostic, not specific to the handful of projects in the
+updates above.
+
+- **Issue Cap pre-flight:** could not run (no `list_issues` tool available at all this
+  session) — so, per `agents/shared/issue-cap.md`'s own instruction, could not safely
+  proceed to file anything for this project even before considering the roles themselves.
+- **spec-drift, bug-error, market-feature (steps 1–9 of each):** skipped entirely, not run
+  even partially — no Linear search means no safe dedupe, so nothing was filed. Zero
+  read-only exploration was done for these either, since without Linear there's no way to
+  turn a finding into anything actionable this session, and re-reading the repo cold in a
+  future session (once Linear access exists) is cheaper than trusting stale findings from
+  this one.
+- **spec-drift step 10 (stale-issue sweep):** skipped — needs `list_issues` +
+  `create_comment`, both unavailable.
+- **spec-drift step 11 (preview-branch cleanup):** skipped — `scripts/cleanup-preview-branches.sh`
+  hard-exits on missing `LINEAR_API_KEY` before doing anything (verified by reading the
+  script; did not bother re-attempting it, since the failure mode is deterministic and
+  already proven above by the Action's own 12 failed runs using the identical script).
+- **spec-drift step 12 (openspec archive sweep):** this one has no Linear dependency, so it
+  did run. `AI-Workspace/openspec/changes/` contains only the `archive/` directory — no
+  active change folders — so there was nothing to archive. Clean 0, consistent with every
+  prior update in this thread. (Note: `resume-website`'s own `openspec/changes/` — a
+  separate directory, in the target project's own repo, not AI-Workspace's — currently has
+  7 active, non-archived change folders: `fix-mobile-voice-audio`, `journey-chapter-scrubber`,
+  `mobile-qa-pass`, `save-contact-vcard`, `social-share-preview`, `suggested-prompt-chips`,
+  `warmer-chatbot-avatar`. Left untouched — `agents/spec-drift.md` step 12 scopes this
+  housekeeping to AI-Workspace only, and touching a project's own active change folders
+  isn't this step's job regardless.)
+- **`data/sweep-runs.jsonl`:** deliberately **not** appended for this run. Every prior
+  entry in that ledger (including several logged on dates this very handover thread shows
+  as blocked, e.g. 2026-08-05, 2026-08-06, 2026-08-12) records `"clean": true, "filed":
+  {"bugs":0,"features":0}` — which reads as "all three roles ran and the project was
+  healthy," not "the roles could not run at all." Adding another misleading `clean: true`
+  line for a run where nothing was actually checked would compound that same problem rather
+  than fix it. Flagging this as its own small data-quality issue: whoever eventually
+  reconciles the ledger against this handover thread should treat historical `clean: true`
+  entries from sessions that hit this Linear blocker as unverified, not as evidence the
+  named project was actually clean that day.
+
+**Fix needed (two parts, both still open):**
+1. Add the `LINEAR_API_KEY` repository secret on `rohrasharad-ship-it/AI-Workspace`
+   (Settings → Secrets and variables → Actions) — unblocks the scheduled Action and any
+   session with raw shell + `LINEAR_API_KEY` as an env var.
+2. Authorize the **Linear** connector for this Claude account (via claude.ai connector
+   settings, per this session's own tool instructions) — unblocks Linear MCP tool calls
+   (`list_issues`, `create_issue`, `create_comment`, attachment upload, etc.) inside
+   Claude Code sessions like this one, independent of the repo secret above.
+
+Until at least (2) exists, no idea-generation role can file or dedupe against Linear from a
+Claude Code session, regardless of which project the trigger names.
